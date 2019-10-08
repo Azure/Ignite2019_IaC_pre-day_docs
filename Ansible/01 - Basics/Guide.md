@@ -1,0 +1,2 @@
+# Basic Usage and Typical Workflow
+In this section you will be introduced to the basics of using Ansible to provision resources to Azure. You will learn how to author a playbook. You will then validate that the playbook is correct and that it will do what you expect before running it and in turn provisioning Azure resource.

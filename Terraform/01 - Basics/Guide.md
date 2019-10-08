@@ -1,0 +1,2 @@
+# Basics
+In this section you will be introduced to the basics of using an ARM template to provision resources to Azure. You will learn how to author a template. You will then validate that the configuraiton is correct and that it will do what you expect before running the template and in turn provisioning Azure resource.
