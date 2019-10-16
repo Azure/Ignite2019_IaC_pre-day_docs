@@ -1,0 +1,19 @@
+- hosts: localhost
+  tasks:
+# Start with a resource group so that clean up is easy. This tasks is commented out
+# since you cannot create resource group in the lab.
+#  - name: Create a resource group
+#    azure_rm_resourcegroup:
+#      name: myResource_group
+#      location: eastus2
+  - name: Create a virtual network. 
+    azure_rm_virtualnetwork:
+      resource_group: myResource_group
+      name: myVnet
+      address_prefixes: "10.0.0.0/16"
+  - name: Create a subnet within the virtual network
+    azure_rm_subnet:
+        resource_group: myResource_group
+        virtual_network_name: myVnet
+        name: myVnetSubnet
+        address_prefix_cidr:  "10.0.0.0/24"
