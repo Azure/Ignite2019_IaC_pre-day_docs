@@ -31,16 +31,20 @@ With preliminaries out of the way, you are ready to provision your virtual netwo
 ## Create VNet
 Using [Terraform Azure provider documentation for virtual network](https://www.terraform.io/docs/providers/azurerm/r/virtual_network.html), define VNet with the following properties:
 
-```name``` should be "tfignitepreday"
-```location``` should be "East US 2"
-```resource_group_name``` should be set to the name of the resource group created specifically for you in the demo environment (noted previously)
-```address_space``` should be set to "10.0.0.0/16"
+```
+name should be "tfignitepreday"
+location should be "East US 2"
+resource_group_name should be set to the name of the resource group created specifically for you in the demo environment (noted previously)
+address_space should be set to "10.0.0.0/16"
+```
 
 ## Create Subnet within VNet
 Using [Terraform Azure provider documentation for virtual network](https://www.terraform.io/docs/providers/azurerm/r/virtual_network.html), define a new subnet within the VNet with the following properties:
 
-```name``` should be "subnet1"
-```address_prefix``` should be "10.0.1.0/24"
+```
+name should be "subnet1"
+address_prefix should be "10.0.1.0/24"
+```
 
 Make sure to save vnet.tf before the following step.
 
