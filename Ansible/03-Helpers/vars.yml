@@ -1,0 +1,8 @@
+myResource_group: myResource_group_pc88
+myVnet: myVnet
+myVnetSubNet: "{{ myVnet }}Subnet"
+myPublicIP: myPublicIP
+myNetworkSecurityGroup: myNetworkSecurityGroup
+myNIC: myNIC
+myVM: myVM
+mylist: [{ name: 'SSH', priority: '300', port: '22'},{ name: 'HTTP', priority: '100', port: '80'}, { name: '443', priority: '200', port: '443'}]
