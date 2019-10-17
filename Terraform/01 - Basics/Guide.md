@@ -12,7 +12,7 @@ Another key Terraform strength is the multitude of providers available for diffe
 For our workshop, we will need to specify that we will be using Terraform provider for Azure. First, following Terraform best practices, create a new file that will contain the code indicating the use of Azure provider. Give this new file a name ```provider.tf```. Then, using [Terraform Azure provider documentation](https://www.terraform.io/docs/providers/azurerm/index.html), locate the block of HCL code that specifies the use of Azure provider for Terraform, paste it inside provider.tf and save the file.
 
 ### Create vnet.tf
-Using the tool of your choice (VS Code, Visual Studio, command line, vi), create a new file and call it vnet.tf. You will put all the code related to virtual network in this file.
+Using the tool of your choice (VS Code, Visual Studio, command line, vi), create a new file and call it ```vnet.tf```. You will put all the code related to virtual network in this file.
 
 ### Resource Group
 In the lab environment, you have been given access to a pre-created resource group. To ensure that your infrastructure gets provisioned properly, note the name of the resource group you are using. You will specify it in the VNet provisioning section below.
@@ -84,10 +84,10 @@ provider "azurerm" {
 <summary>Expand for vnet.tf code</summary>
 
 ```
-resource "azurerm_virtual_network" "test" {
+resource "azurerm_virtual_network" "predayvnet" {
   name                = "tfignitepreday"
   location            = "East US 2"
-  resource_group_name = "<<<NAME OF YOUR RESOURCE GROUP>>>"
+  resource_group_name = "<<<NAME OF YOUR ASSIGNED RESOURCE GROUP>>>"
   address_space       = ["10.0.0.0/16"]
 
   subnet {
