@@ -42,14 +42,9 @@ Modify your playbook created in previous lab to replace hard-coded values as var
 
 Public IP addresses allow Internet resources to communicate inbound to Azure resources.
 
-## Create a network security group
-
-Network security groups filter network traffic between Azure resources in a virtual network.
-
-1. Add to your existing playbook a new variable called `myNetworkSecurityGroup`
-2. Use the [azure_rm_securitygroup](https://docs.ansible.com/ansible/latest/modules/azure_rm_securitygroup_module.html) to create a network security group that allows SSH traffic on TCP port 22.
-3. Run your playbook.
-
+1. Add a new variable called `myPublicIP` to your playbook
+1. Use the [azure_rm_publicipaddres](https://docs.ansible.com/ansible/latest/modules/azure_rm_publicipaddress_module.html) to create a Public IP Address.
+1. Run your playbook.
 
 ## Create a Network Interface Card (NIC)
 
@@ -69,7 +64,7 @@ You can now see `myNIC` in your resource group.
 
 You can go to [Azure portal](https://portal.azure.com) to verify that you have created the resources.
 
-You can refer to [lab2.yml](lab2.yml) for a complete sample playbook.
+> **_NOTE:_**  You can refer to [lab2.yml](lab2.yml) for a complete sample playbook.
 
 ## Registering variables
 
@@ -90,21 +85,22 @@ For example:
        when: foo_result.rc == 5
 ```
 
-[playbook sample](https://github.com/Azure-Samples/ansible-playbooks/blob/master/rest/resourcegroup_dump_resources.yml) is a good walk-through to see how you can perform a complete dump of resources using the [azure_resource_facts](https://docs.ansible.com/ansible/latest/modules/azure_rm_resource_facts_module.html) module.
+This [playbook sample](https://github.com/Azure-Samples/ansible-playbooks/blob/master/rest/resourcegroup_dump_resources.yml) is a good walk-through to see how you can perform a complete dump of resources using the [azure_resource_facts](https://docs.ansible.com/ansible/latest/modules/azure_rm_resource_facts_module.html) module.
 
-## Additional notes
+## Additional useful resources
 
-- you can also assign values to variables defined in playbooks as you run your playbook:
+- you can assign values to variables defined in playbooks when you run your playbook by doing so:
 
 ```bash
 ansible-playbook xxx.yml -e "resource_group_name=xxxxxxxxx"
 ```
-- you can also define variables in a included files. You can modify your playbook by doing so:
+
+- you can also define variables in a included files. Use the `vars_files` keyword and modify your playbook by like so:
 
 ```yaml
 - hosts: localhost
   vars_files:
-    - vars.yml
+    - ./vars.yml
   tasks:
   - name: ...
     ...
@@ -112,7 +108,7 @@ ansible-playbook xxx.yml -e "resource_group_name=xxxxxxxxx"
     ...
 ```
 
-And move all the variables to a file called vars.yml:
+Move all the variables to a file called vars.yml. In this example, vars.yml is found in the same directory as the playbook:
 
 ```yaml
 myResource_group: myResource_group
@@ -120,4 +116,8 @@ myVNet: myVNet
 mySubNet: "{{ myVnet }}Subnet"
 ```
 
-Refer to [Ansible documentation](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html) for more details on using variables.
+> If you move all variables to a vars.yml file, you will need to explicitly upload the file to Cloud Shell. 
+> - right clicking vars.yml and select **"Upload to Cloud Shell"**.
+> - in Cloud Shell terminal, move the file to ./clouddrive/ansible-playbooks/ by doing `mv vars.yml ./clouddrive/ansible-playbooks/`
+
+- Refer to [Ansible documentation](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html) for more details and ways to use variables.
