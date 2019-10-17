@@ -1,4 +1,4 @@
-myResource_group: myResource_group_pc88
+myResource_group: myResource_group
 myVnet: myVnet
 myVnetSubNet: "{{ myVnet }}Subnet"
 myPublicIP: myPublicIP

@@ -3,8 +3,10 @@
     - ./vars.yml
     
   tasks:
+# ----------------------------------------------------------------------------------
 # Start with a resource group so that clean up is easy. This tasks is commented out
-# since you cannot create resource group in the lab.
+# since you cannot create resource group in this workshop.
+# ----------------------------------------------------------------------------------
 #  - name: Create a resource group
 #    azure_rm_resourcegroup:
 #      name: {{ myResource_group }}
@@ -14,17 +16,20 @@
       resource_group: "{{ myResource_group }}"
       name: "{{ myVnet }}"
       address_prefixes: "10.0.0.0/16"
+
   - name: Create a subset within the virtual network
     azure_rm_subnet:
         resource_group: "{{ myResource_group }}"
         virtual_network_name: "{{ myVnet }}"
         name: "{{ myVnetSubNet }}"
         address_prefix_cidr:  "10.0.0.0/24"
+
   - name: Create public IP address
     azure_rm_publicipaddress:
       resource_group: "{{ myResource_group }}"
       allocation_method: Static
       name: "{{ myPublicIP }}"
+
   - name: Create Network Security Group that allows SSH
     azure_rm_securitygroup:
       resource_group: "{{ myResource_group }}"
@@ -37,6 +42,7 @@
           priority: "{{ item.priority }}"
           direction: Inbound
     loop: "{{ mylist }}"
+
   - name: Create virtual network interface card(NIC)
     azure_rm_networkinterface:
       resource_group: "{{ myResource_group }}"
@@ -47,6 +53,7 @@
         - name: ipconfig1
           public_ip_address_name: "{{ myPublicIP }}"
       security_group: "{{ myNetworkSecurityGroup }}"
+      
   - name: Create a virtual machines
     azure_rm_virtualmachine:
       resource_group: "{{ myResource_group }}"

@@ -34,9 +34,7 @@ Modify your playbook created in previous lab to replace hard-coded values as var
 1. Save and run your playbook in Cloud Shell.
 1. No change is made since you didn't modify any of the Azure resources.
 
-**Note**:
-
-- to get value from environment variable, do  `"{{ lookup('env', 'AZURE_CLIENT_ID') }}"`
+> **_NOTE:_** To get value from environment variable, do  `"{{ lookup('env', 'AZURE_CLIENT_ID') }}"`
 
 ## Create a public IP address
 
@@ -64,7 +62,7 @@ You can now see `myNIC` in your resource group.
 
 You can go to [Azure portal](https://portal.azure.com) to verify that you have created the resources.
 
-> **_NOTE:_**  You can refer to [lab2.yml](lab2.yml) for a complete sample playbook.
+> **_NOTE:_** You can refer to [lab2.yml](lab2.yml) for a complete sample playbook.
 
 ## Registering variables
 

@@ -39,7 +39,7 @@ When all resources created in this workshop are no longer needed, you can easily
         state: absent
 ```
 
-Since you cannot create resource group in this workshop, this step is **skipped**.
+> **_NOTE:_** Since you cannot create resource group in this workshop, this step is included for completeness. **You can skip this step**.
 
 ## Create a virtual network(VNet)
 
@@ -62,7 +62,7 @@ A virtual network is a virtual, isolated portion of the Azure public network. Ea
 5. Name your task appropriately so that you know precisely which step fails if Ansible runs into an issue.
 6. Run your playbook.
 
-**Note**: the gather_facts module is automatically called by playbooks to gather useful variables about remote hosts that can be used in playbooks. You may also get warnings like below. This is because you have no inventory.
+> **_NOTE:_** The `gather_facts` module is automatically called by playbooks to gather useful variables about remote hosts that can be used in playbooks. You may also get warnings like below. This is because you have no inventory.
 
 ```bash
 pui@Azure:~$ ansible-playbook ./clouddrive/ansible-playbooks/lab1.yml
