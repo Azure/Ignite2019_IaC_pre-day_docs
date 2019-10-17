@@ -76,10 +76,9 @@ provider "azurerm" {
 
 ## Cheat Sheet: vnet.tf
 <details>
-<summary>
-Expand for vnet.tf code
-</summary>
-<code>
+<summary>Expand for vnet.tf code</summary>
+
+```
 resource "azurerm_virtual_network" "test" {
   name                = "tfignitepreday"
   location            = "East US 2"
@@ -90,5 +89,5 @@ resource "azurerm_virtual_network" "test" {
     name           = "subnet1"
     address_prefix = "10.0.1.0/24"
   }
-<code>
+```
 </details>
