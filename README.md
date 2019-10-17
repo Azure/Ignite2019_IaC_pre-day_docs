@@ -7,11 +7,11 @@ Walk throughs for this workshop can be found in the table below. During the work
 
 | Lab Name      | Ansible       | ARM Template  | Terraform |
 |:------------- |:-------------:|:-------------:|:-------------:|
-| Basics        | [Guide](./Ansible/01%20-%20Basics/Guide.md) | [Guide](./ARM%20Template/01%20-%20Basics/Guide.md) | [Guide](./Terraform/01%20-%20Basics/Guide.md) |
-| Variables     | [Guide](./Ansible/02%20-%20Variables/Guide.md) | [Guide](./ARM%20Template/02%20-%20Variables/Guide.md) | [Guide](./Terraform/02%20-%20Variables/Guide.md) |
-| Helpers       | [Guide](./Ansible/03%20-%20Helpers/Guide.md) | [Guide](./ARM%20Template/03%20-%20Helpers/Guide.md) | [Guide](./Terraform/03%20-%20Helpers/Guide.md) |
-| Reusability   | [Guide](./Ansible/04%20-%20Reusability/Guide.md) | [Guide](./ARM%20Template/04%20-%20Reusability/Guide.md) | [Guide](./Terraform/04%20-%20Reusability/Guide.md) |
-| Security      | [Guide](./Ansible/05%20-%20Security/Guide.md) | [Guide](./ARM%20Template/05%20-%20Security/Guide.md) | [Guide](./Terraform/05%20-%20Security/Guide.md) |
+| Basics        | [Guide](./Ansible/01-Basics/Guide.md) | [Guide](./ARM%20Template/01%20-%20Basics/Guide.md) | [Guide](./Terraform/01%20-%20Basics/Guide.md) |
+| Variables     | [Guide](./Ansible/02-Variables/Guide.md) | [Guide](./ARM%20Template/02%20-%20Variables/Guide.md) | [Guide](./Terraform/02%20-%20Variables/Guide.md) |
+| Helpers       | [Guide](./Ansible/03-Helpers/Guide.md) | [Guide](./ARM%20Template/03%20-%20Helpers/Guide.md) | [Guide](./Terraform/03%20-%20Helpers/Guide.md) |
+| Reusability   | [Guide](./Ansible/04-Reusability/Guide.md) | [Guide](./ARM%20Template/04%20-%20Reusability/Guide.md) | [Guide](./Terraform/04%20-%20Reusability/Guide.md) |
+| Security      | [Guide](./Ansible/05-Security/Guide.md) | [Guide](./ARM%20Template/05%20-%20Security/Guide.md) | [Guide](./Terraform/05%20-%20Security/Guide.md) |
 
 
 
