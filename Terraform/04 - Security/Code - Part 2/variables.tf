@@ -5,7 +5,3 @@ variable "rg" {
 variable "secretId" {
   description = "name of secret containing admin password for vms"
 }
-
-variable "labUser" {
-  description = "username for lab account"
-}
