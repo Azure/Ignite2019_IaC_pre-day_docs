@@ -65,13 +65,14 @@ Congratulations, you have just created the first fundamental building block of y
 <summary>
 Expand for provider.tf code
 </summary>
-`
+
+```
 # Configure the Azure Provider
 provider "azurerm" {
   # whilst the `version` attribute is optional, we recommend pinning to a given version of the Provider
   version = "=1.34.0"
 }
-`
+```
 </details>
 
 ## Cheat Sheet: vnet.tf
