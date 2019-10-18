@@ -7,5 +7,13 @@ variable "secretId" {
 }
 
 variable "labUser" {
-  description = "username for lab account"
+  description = "Username for lab account"
+}
+
+variable "tenantId" {
+  description = "Id for tenant"
+}
+
+variable "keyVault" {
+  description = "Name of the pre-existing key vault instance"
 }

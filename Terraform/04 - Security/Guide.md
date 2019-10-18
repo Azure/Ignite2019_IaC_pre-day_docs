@@ -65,16 +65,70 @@ Now lets dig into the configuration (main.tf).
 
 Now that your configuration is completed, let us move on to definining the variables and assigning them values.
 
+#### CHEAT SHEET
+<details>
+<summary>
+Expand for full main.tf code
+</summary>
+
+```
+
+```
+
+</details>
+
 ### Variables
+
+
+
+#### CHEAT SHEETS
+<details>
+<summary>
+Expand for full variables.tf code
+</summary>
+
+```
+
+```
+
+</details>
+
+<details>
+<summary>
+Expand for full terraform.tfvars code
+</summary>
+
+```
+
+```
+
+</details>
+
 
 ### Providers 
 
-
-
-
 Update your providers.tf file 
+
+#### CHEAT SHEETS
+
+<details>
+<summary>
+Expand for full providers.tf code
+</summary>
+
+```
+
+```
+</details>
+
+### Verification
+
+
+
+To view all of the completed code for this part of the lab go [here](Code%20-%20Part%201/).
 
 ## Part 2 - Use Secret
 
 
 
+To view all of the completed code for this part of the lab go [here](Code%20-%20Part%202/).
