@@ -33,7 +33,7 @@ By this point, these files should look familiar.
 
 Now lets dig into the configuration (main.tf). 
 1. Start by reference existing Azure resources using [Terraform data sources](https://www.terraform.io/docs/configuration/data-sources.html) that are required by other resources that you will be using in your configuration as follows:
-    - [Azure resourece group](https://www.terraform.io/docs/providers/azurerm/d/resource_group.html): This is the same resource group where you will be provisioning the resources. Instead of adding the string name in here use a variable named `rg`. 
+    - [Azure resourece group](https://www.terraform.io/docs/providers/azurerm/d/resource_group.html): This is the same resource group, "second resource group" from Environment Details tab in the lab, where you will be provisioning the resources. Instead of adding the string name in here use a variable named `rg`. 
         > **NOTE**: We will define the value of this and other variables later in this lab.  
     - [Active Directory user](https://www.terraform.io/docs/providers/azuread/d/users.html): This data source will be used to get the Active Directory id for your lab user in order to assign the appropriate Azure Key Vault permissions. Use a variable named `labUser` for the `user_principle_name`.
     - [Azure Key Vault instance](https://www.terraform.io/docs/providers/azurerm/d/key_vault.html): As I am sure you have already noticed, your lab environment has a pre-provisioned Key Vault instance. This data source will be used to reference the Key Vault instance in the `azurerm_key_vault_secret` and `azurerm_key_vault_access_policy` resources discussed later. Use a variable named `keyVault` for the Key Vault name.
@@ -71,15 +71,68 @@ Now that your configuration is completed, let us move on to definining the varia
 Expand for full main.tf code
 </summary>
 
-```
+```terraform
+data "azurerm_resource_group" "lab04" {
+  name = var.rg
+}
 
+data "azuread_user" "lab04-user" {
+  user_principal_name = var.labUser
+}
+
+data "azurerm_key_vault" "lab04" {
+  name                = var.keyVault
+  resource_group_name = data.azurerm_resource_group.lab04.name
+}
+
+resource "random_password" "admin_pwd" {
+  length = 24
+  special = true
+}
+
+resource "azurerm_key_vault_access_policy" "lab04" {
+  key_vault_id = data.azurerm_key_vault.lab04.id
+
+  tenant_id = var.tenantId
+  object_id = data.azuread_user.lab04-user.id
+
+  secret_permissions = [
+    "list", "get", "delete", "set"
+  ]
+}
+
+resource "azurerm_key_vault_secret" "lab04" {
+  name         = var.secretId
+  value        = random_password.admin_pwd.result
+  key_vault_id = data.azurerm_key_vault.lab04.id
+}
 ```
 
 </details>
 
 ### Variables
 
+In this part of the lab we will be editing two files: variables.tf and terraform.tfvars. Let's start by defining and describing the variables that will be used in our configuration. We will do this in the variables.tf file. 
 
+Although having a separate file where variables are defined is not required, it is a common practice that makes it easier to find, add and change them. In this file you will be using [variable blocks](https://www.terraform.io/docs/configuration/variables.html) for each Terraform variable required by your configuration. 
+
+Add the following Terraform variables to the file:
+- rg
+- secretId
+- labUser
+- tenantId
+- keyVault
+
+Ensure that you define a type and description for each variable. Although these are not required, it is another best practice that will make using your Terraform coniguration easer for you and your teammates.
+
+Now that the variables are defined, you need to give them values. As you have learned in previousl labs for values that are not secrets, add the values to your terraform.tfvars file so that they will be discovered and used when Terraform is run. 
+
+Add the appropriate string values for your lab environment for all of the variables that were just defined in your variables.tf file. For secretId use the string "`lab04admin`". For tenantId run the following command in the Azure Cloud Shell:
+```bash
+az account show --query "tenantId"
+```
+
+> **NOTE**: You should get the exact resource group name, lab user name and key vault name to use for your variable values from the *Environment Details* tab in your lab.
 
 #### CHEAT SHEETS
 <details>
@@ -87,8 +140,31 @@ Expand for full main.tf code
 Expand for full variables.tf code
 </summary>
 
-```
+```terraform
+variable "rg" {
+  type        = "string"
+  description = "Name of Lab resource group to provision resources to."
+}
 
+variable "secretId" {
+  type        = "string"
+  description = "name of secret containing admin password for vms"
+}
+
+variable "labUser" {
+  type        = "string"
+  description = "Username for lab account"
+}
+
+variable "tenantId" {
+  type        = "string"
+  description = "Id for tenant"
+}
+
+variable "keyVault" {
+  type        = "string"
+  description = "Name of the pre-existing key vault instance"
+}
 ```
 
 </details>
@@ -98,8 +174,12 @@ Expand for full variables.tf code
 Expand for full terraform.tfvars code
 </summary>
 
-```
-
+```terraform
+rg = "" ## Enter the resource group pre-created in your lab
+secretId = "lab04admin"
+labUser = "" ## Enter the lab user name as shown in the Environment Details tab
+keyVault = "" ## Enter the name of the pre-created key vault instance
+tenantId = "" ## Enter the tenant ID for your lab user
 ```
 
 </details>
@@ -107,28 +187,120 @@ Expand for full terraform.tfvars code
 
 ### Providers 
 
-Update your providers.tf file 
+The fourth and final file that we need to update for this part of the lab is the providers.tf file. As you have seen in previous labs, you will utilize the [providers block](https://www.terraform.io/docs/configuration/providers.html) to set the version of the providers that are required for this configuration. Add a block for the following providers that are used in the config:
+- `azurerm` greater than or equal to version 1.35
+- `azured` greater than or equal to version 0.6.0
+- `random` greater than or equal to version 2.2.0
 
-#### CHEAT SHEETS
+#### CHEAT SHEET
 
 <details>
 <summary>
 Expand for full providers.tf code
 </summary>
 
-```
+```terraform
+provider "azurerm" {
+  version = "~>1.35.0"
+}
 
+provider "azuread" {
+  version = "~>0.6.0"
+}
+
+
+provider "random" {
+  version = "~>2.2.0"
+}
+```
+</details>
+
+### Apply the configuration
+
+With the Terrform configuration complete, all that is left to do is to validate that everything is correct, validate that it is going to do what you expect and apply it. As you have learned from the previous 3 labs execute the following steps:
+- Initiallize the working directory
+- Create the execution plan
+- Apply the changes
+
+#### CHEAT SHEET
+
+<details>
+<summary>
+Expand for exact commands to run
+</summary>
+
+```bash
+terraform init
+...
+terraform plan -out tfplan
+...
+terraform apply tfplan
+...
 ```
 </details>
 
 ### Verification
 
-
+Assuming that the configuration completed successfully, you can validate that everything really did do as you expect by browsing to the resource group where you provisioned the resources, then select the Key Vault instance and ensure that the "lab04admin" secret has been created.
 
 To view all of the completed code for this part of the lab go [here](Code%20-%20Part%201/).
 
 ## Part 2 - Use Secret
 
+In this part of the lab you will use the secret that you just created to replace the password for your virtual machine. To do this we will be editing three of the files from the previous lab: variables.tf, terrafrom.tfvars, vm.tf.
+
+Lets start by adding the variable that you will need to reference the secret from your virtual machine resource. Add two new variables with the following names and values:
+- `secretId`= "lab04admin"
+- `keyVault` = "{{ The name of your Key Vault instance }}"
+
+#### CHEAT SHEETS
+
+<details>
+<summary>
+Expand for full terraform.tfvars code
+</summary>
+
+```terraform
+rg = "" ## Enter the resource group pre-created in your lab
+location = "" ## Enter the azure region for your resources
+secretId = "lab04admin"
+keyVault = "" ## Enter the name of the pre-created key vault instance
+```
+</details>
+
+<details>
+<summary>
+Expand for full variables.tf code
+</summary>
+
+```terraform
+variable "rg" {
+  type        = "string"
+  description = "Name of Lab resource group to provision resources to."
+}
+
+variable "location" {
+  type        = "string"
+  description = "Azure region to put resources in"
+}
+
+variable "secretId" {
+  type        = "string"
+  description = "name of secret containing admin password for vms"
+}
+
+variable "keyVault" {
+  type        = "string"
+  description = "Name of the pre-existing key vault instance"
+}
+```
+</details>
+
+Now with the required variables defined, you will update the vm.tf configuration file to accomplish the following:
+
+1. Create a reference to the Azure Key Vault instance that contains the secret. 
+1. Create a reference to the Azure Key Vault Secret. 
+1. Replace the password string containing the vm admin password with a reference to the secret. 
 
 
 To view all of the completed code for this part of the lab go [here](Code%20-%20Part%202/).
