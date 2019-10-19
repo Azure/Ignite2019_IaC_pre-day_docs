@@ -17,3 +17,8 @@ variable "keyVault" {
   type        = "string"
   description = "Name of the pre-existing key vault instance"
 }
+
+variable "tags" {
+  type        = map(string)
+  description = "tags to be used with all resources in the lab"
+}

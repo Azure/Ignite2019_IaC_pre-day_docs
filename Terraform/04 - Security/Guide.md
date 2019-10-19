@@ -48,8 +48,8 @@ Now lets dig into the configuration (main.tf).
     resource "azurerm_key_vault_access_policy" "lab04" {
         key_vault_id = azurerm_key_vault.lab04.id
 
-        tenant_id = azuread_user.lab04-user.tenant_id
-        object_id = azuread_user.lab04-user.object_id
+        tenant_id = var.tenantId
+        object_id = data.azuread_user.lab04-user.id
 
         secret_permissions = [
             "list", "get", "delete", "set"
@@ -243,7 +243,7 @@ terraform apply tfplan
 
 Assuming that the configuration completed successfully, you can validate that everything really did do as you expect by browsing to the resource group where you provisioned the resources, then select the Key Vault instance and ensure that the "lab04admin" secret has been created.
 
-To view all of the completed code for this part of the lab go [here](Code%20-%20Part%201/).
+>**CODE:** To view all of the completed code for this part of the lab go [here](Code%20-%20Part%201/).
 
 ## Part 2 - Use Secret
 
@@ -252,6 +252,27 @@ In this part of the lab you will use the secret that you just created to replace
 Lets start by adding the variable that you will need to reference the secret from your virtual machine resource. Add two new variables with the following names and values:
 - `secretId`= "lab04admin"
 - `keyVault` = "{{ The name of your Key Vault instance }}"
+
+
+Now with the required variables defined, you will update the vm.tf configuration file to accomplish the following tasks:
+
+1. Create a reference to the Azure Key Vault instance that contains the secret. 
+1. Create a reference to the Azure Key Vault Secret. 
+1. Replace the password string containing the vm admin password with a reference to the secret. 
+
+Add Terraform data sources for the first two tasks using the [azurerm_key_vault](azurerm_key_vault) and [azurerm_key_vault_secret](azurerm_key_vault_secret).
+
+Finally for the third task, simply replace the string that is assigned to the value of the `admin_password` property of the `os_profile` in the `azurerm_virtual_machine` resource with a reference to the secret value as follows:
+
+```terraform
+...
+os_profile {
+  computer_name  = "hostname"
+  admin_username = "testadmin"
+  admin_password = data.azurerm_key_vault_secret.tf_pre-day.value
+}
+...
+```
 
 #### CHEAT SHEETS
 
@@ -265,6 +286,13 @@ rg = "" ## Enter the resource group pre-created in your lab
 location = "" ## Enter the azure region for your resources
 secretId = "lab04admin"
 keyVault = "" ## Enter the name of the pre-created key vault instance
+tags = {
+    event           = "Ignite"
+    year            = "2019"
+    session_id      = "PRE04"
+    iac_tool        = "terraform"
+    lab             = "4"
+}
 ```
 </details>
 
@@ -293,14 +321,67 @@ variable "keyVault" {
   type        = "string"
   description = "Name of the pre-existing key vault instance"
 }
+
+variable "tags" {
+  type        = map(string)
+  description = "tags to be used with all resources in the lab"
+}
 ```
 </details>
 
-Now with the required variables defined, you will update the vm.tf configuration file to accomplish the following:
+<details>
+<summary>
+Expand for full vm.tf code
+</summary>
 
-1. Create a reference to the Azure Key Vault instance that contains the secret. 
-1. Create a reference to the Azure Key Vault Secret. 
-1. Replace the password string containing the vm admin password with a reference to the secret. 
+```terraform
+# Data source reference to key vault instance
+data "azurerm_key_vault" "tf_pre-day" {
+  name                = var.keyVault
+  resource_group_name = var.rg
+}
 
+# Data source reference to the secret
+data "azurerm_key_vault_secret" "tf_pre-day" {
+  name         = var.secretId
+  key_vault_id = data.azurerm_key_vault.tf_pre-day.id
+}
 
-To view all of the completed code for this part of the lab go [here](Code%20-%20Part%202/).
+# Configure Virtual Machine
+resource "azurerm_virtual_machine" "tf_pre-day" {
+  name                  = "tfignitepredayvm"
+  location              = var.location
+  resource_group_name   = var.rg
+  vm_size               = "Standard_DS1_v2"
+  network_interface_ids = [azurerm_network_interface.tf_pre-day.id]
+
+  storage_image_reference {
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "16.04-LTS"
+    version   = "latest"
+  }
+
+  storage_os_disk {
+    name              = "myosdisk1"
+    caching           = "ReadWrite"
+    create_option     = "FromImage"
+    managed_disk_type = "Standard_LRS"
+  }
+
+  os_profile {
+    computer_name  = "hostname"
+    admin_username = "testadmin"
+    admin_password = data.azurerm_key_vault_secret.tf_pre-day.value
+  }
+
+  os_profile_linux_config {
+    disable_password_authentication = false
+  }
+
+  tags                = var.tags
+}
+```
+</details>
+
+>**CODE:** To view all of the completed code for this part of the lab go [here](Code%20-%20Part%202/).
