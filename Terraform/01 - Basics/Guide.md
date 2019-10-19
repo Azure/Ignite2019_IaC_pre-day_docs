@@ -1,5 +1,20 @@
-# Basics
+# Terraform Basics
 In this section you will use Terraform to create the fundamental building block of Azure infrastructure - a virtual network. Virtual network (or VNet for short) enables many types of Azure resources, such as virtual machines, to communicate securely with each other, the internet and on-premises network.
+
+## Before diving into Terraform let's get things set up
+
+Create a folder on the lab virtual machine where you will save your Terraform configuration.
+
+We recommend using VS Code for creating and running (in Azure Cloud Shell) Terraform configurations in this lab so open VS Code and browse to the folder that you created for your configurations.
+
+[Azure Terraform](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azureterraform) and [Terraform](https://marketplace.visualstudio.com/items?itemName=mauve.terraform) extensions are required and already installed in your VS Code environment. The [Install and use the Azure Terraform Visual Studio Code extension](https://docs.microsoft.com/en-us/azure/terraform/terraform-vscode-extension) provides good guidance on what you need to do to get started. 
+
+In short (TL;DR):
+- To run the configuration in Cloud Shell simply ensure your configuration is open in VS Code and a Terraform configuration file is selected; from the menu bar, select View > Command Palette... > Azure Terraform: Init.
+- If you have not logged in, the Azure Account extension will prompt you to sign in.
+- Terraform files are copied to the `clouddrive` folder in Cloud Shell upon saving so you don't need to explicitly copy files to Cloud Shell in order to run them there unless otherwise stated in the lab.
+
+> **NOTE**: The first time you launch Cloud Shell from a new folder, you will be asked to set up the web application. Select Open to continue
 
 ## Preliminaries
 By now you have already learned that Terraform uses proprietary domain specific language (DSL) to codify cloud resources. This language, called HashiCorp Language, or HCL for short, with its readability and ease of use, is one of the reasons Terraform is so popular. You will use HCL to define a VNet in this section.
@@ -9,7 +24,7 @@ Terraform executable evaluates all files within the directory it's being execute
 ### Indicate that you will use Azure Terraform provider
 Another key Terraform strength is the multitude of providers available for different cloud environments for infrastructure provisioning. Note that does not imply "write infrastructure once, run everywhere," but rather a common syntax used to codify infrastructure, one set per environment.
 
-For our workshop, we will need to specify that we will be using Terraform provider for Azure. First, following Terraform best practices, create a new file that will contain the code indicating the use of Azure provider. Give this new file a name ```provider.tf```. Then, using [Terraform Azure provider documentation](https://www.terraform.io/docs/providers/azurerm/index.html), locate the block of HCL code that specifies the use of Azure provider for Terraform, paste it inside provider.tf and save the file.
+For our workshop, we will need to specify that we will be using Terraform provider for Azure. First, following Terraform best practices, create a new file that will contain the code indicating the use of Azure provider. Give this new file a name `provider.tf`. Then, using [Terraform Azure provider documentation](https://www.terraform.io/docs/providers/azurerm/index.html), locate the block of HCL code that specifies the use of Azure provider for Terraform, paste it inside provider.tf and save the file.
 
 ## Cheat Sheet: provider.tf
 <details>
@@ -20,8 +35,7 @@ Expand for provider.tf code
 ```
 # Configure the Azure Provider
 provider "azurerm" {
-  # whilst the `version` attribute is optional, we recommend pinning to a given version of the Provider
-  version = "=1.34.0"
+  version = "~>1.35.0"
 }
 ```
 </details>
