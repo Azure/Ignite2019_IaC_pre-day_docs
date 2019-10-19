@@ -29,4 +29,6 @@ resource "azurerm_virtual_machine" "predayvm" {
   os_profile_linux_config {
     disable_password_authentication = false
   }
+
+  tags                = var.tags
 }

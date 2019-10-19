@@ -1,10 +1,9 @@
-# Configure VNet
+# Configure Vnet -- pull subnet out to its own resource to demonstrate references / dependencies
 resource "azurerm_virtual_network" "predayvnet" {
   name                = "tfignitepreday"
   location            = var.location
   resource_group_name = var.rg
   address_space       = ["10.0.0.0/16"]
-  tags                = var.tags
 }
 
 # Configure Subnet

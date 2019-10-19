@@ -1,4 +1,4 @@
-# Configure Network Interface
+#Configure Network Interface# Configure Network Interface
 resource "azurerm_network_interface" "predaynic" {
   name                = "tfignitepredaynic"
   location            = var.location

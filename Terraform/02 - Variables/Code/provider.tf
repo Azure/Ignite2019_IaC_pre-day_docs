@@ -1,5 +1,4 @@
 # Configure the Azure Provider
 provider "azurerm" {
-  # whilst the `version` attribute is optional, we recommend pinning to a given version of the Provider
-  version = "=1.34.0"
+  version = "~>1.35.0"
 }
