@@ -29,6 +29,28 @@ Now, using [Terraform Azure provider documentation for network interface](https:
 }
 ```
 
+## Cheat Sheet: nic.tf
+<details>
+<summary>
+Expand for nic.tf code
+</summary>
+
+```
+#Configure Network Interface
+resource "azurerm_network_interface" "example" {
+  name                = "tfignitepredaynic"
+  location            = "var.location"
+  resource_group_name = "var.my_resource_group"
+
+  ip_configuration {
+    name                          = "tfpredaynicconfig"
+    subnet_id                     = "azurerm_subnet.predayvnet.subnets[0]}"
+    private_ip_address_allocation = "Dynamic"
+  }
+}
+```
+</details>
+
 ## Create vm.tf
 Again, following the pattern of creating a separate file for each resource, create a new file and call it ```vm.tf```. You will put all the code related to virtual machine in this file.
 
@@ -61,68 +83,6 @@ Now, using [Terraform Azure provider documentation for virtual machined](https:/
 
 Make sure to save all the files you were working with before the following step.
 
-## Introducing Variables
-By now, you have seen how you had to specify the same exact value for location to deploy infrastructure into three times. That's three times you could have misspelled it or misconfigured the infrastructure by deploying it into different regions. Finally, if you wanted to change the Azure region to deploy into, you will have to change it in at three different places.
-
-To help you avoid all those potential issues, Terraform allows you to define and use variables. A good practice to follow is to put variables into a separate file called (by convention, not a requirement) variables.tf.
-
-### Create variables.tf
-Create a new ```variables.tf``` file. A variable is defined via the keyword (intuitively enough) ***variable***, like the following:
-
-```
-variable "location" {
-  description = "Azure region to put resources in"
-  default     = "East US"
-}
-```
-Go ahead and put the variable definition from above into your variables.tf file. Additionally, create another variable called ```my_resource_group``` with the value of the resource group you have been assigned to work in. 
-
-### Using variables
-You use variables by prefixing their name with the keyword ```var```, like below:
-
-```  
-location            = "var.location"
-```
-
-Go ahead and replace all previously hard-coded values for Azure regions and resource group name with variable definition.
-
-## Plan your infrastructure via 'terraform plan'
-Now you are ready once again to plan and deploy the infrastructure into Azure. From the console window within the folder with all the .tf files, go ahead and execute the following command:
-
-```terraform plan```
-
-You will deploy your VM in the next step.
-
-## Create your infrastructure via 'terraform apply'
-If the output of ```terraform plan``` looks good to you, go ahead and issue the following command:
-
-```terraform plan```
-
-Finally, confirm that you do want the changes deployed.
-
-Congratulations, you have just created the virtual machine with a network interface in Azure and associated it to the existing VM! In the next section, you will learn how to secure your infrastructure using Terraform while also learning about iterators in helper functions in HCL.
-
-## Cheat Sheet: nic.tf
-<details>
-<summary>
-Expand for nic.tf code
-</summary>
-
-```
-#Configure Network Interface
-resource "azurerm_network_interface" "example" {
-  name                = "tfignitepredaynic"
-  location            = "var.location"
-  resource_group_name = "var.my_resource_group"
-
-  ip_configuration {
-    name                          = "tfpredaynicconfig"
-    subnet_id                     = "azurerm_subnet.predayvnet.subnets[0]}"
-    private_ip_address_allocation = "Dynamic"
-  }
-}
-```
-</details>
 
 ## Cheat Sheet: vm.tf
 <details>
@@ -157,6 +117,31 @@ resource "azurerm_virtual_machine" "example" {
 </details>
 
 
+## Introducing Variables
+By now, you have seen how you had to specify the same exact value for location to deploy infrastructure into three times. That's three times you could have misspelled it or misconfigured the infrastructure by deploying it into different regions. Finally, if you wanted to change the Azure region to deploy into, you will have to change it in at three different places.
+
+To help you avoid all those potential issues, Terraform allows you to define and use variables. A good practice to follow is to put variables into a separate file called (by convention, not a requirement) variables.tf.
+
+### Create variables.tf
+Create a new ```variables.tf``` file. A variable is defined via the keyword (intuitively enough) ***variable***, like the following:
+
+```
+variable "location" {
+  description = "Azure region to put resources in"
+  default     = "East US"
+}
+```
+Go ahead and put the variable definition from above into your variables.tf file. Additionally, create another variable called ```my_resource_group``` with the value of the resource group you have been assigned to work in.
+
+### Using variables
+You use variables by prefixing their name with the keyword ```var```, like below:
+
+```  
+location            = "var.location"
+```
+
+Go ahead and replace all previously hard-coded values for Azure regions and resource group name with variable definition.
+
 ## Cheat Sheet: variables.tf
 <details>
 <summary>Expand for variables.tf code</summary>
@@ -173,3 +158,19 @@ variable "location" {
 }
 ```
 </details>
+
+## Plan your infrastructure via 'terraform plan'
+Now you are ready once again to plan and deploy the infrastructure into Azure. From the console window within the folder with all the .tf files, go ahead and execute the following command:
+
+```terraform plan```
+
+You will deploy your VM in the next step.
+
+## Create your infrastructure via 'terraform apply'
+If the output of ```terraform plan``` looks good to you, go ahead and issue the following command:
+
+```terraform plan```
+
+Finally, confirm that you do want the changes deployed.
+
+Congratulations, you have just created the virtual machine with a network interface in Azure and associated it to the existing VM! In the next section, you will learn how to secure your infrastructure using Terraform while also learning about iterators in helper functions in HCL.

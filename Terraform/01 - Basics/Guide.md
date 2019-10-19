@@ -11,6 +11,21 @@ Another key Terraform strength is the multitude of providers available for diffe
 
 For our workshop, we will need to specify that we will be using Terraform provider for Azure. First, following Terraform best practices, create a new file that will contain the code indicating the use of Azure provider. Give this new file a name ```provider.tf```. Then, using [Terraform Azure provider documentation](https://www.terraform.io/docs/providers/azurerm/index.html), locate the block of HCL code that specifies the use of Azure provider for Terraform, paste it inside provider.tf and save the file.
 
+## Cheat Sheet: provider.tf
+<details>
+<summary>
+Expand for provider.tf code
+</summary>
+
+```
+# Configure the Azure Provider
+provider "azurerm" {
+  # whilst the `version` attribute is optional, we recommend pinning to a given version of the Provider
+  version = "=1.34.0"
+}
+```
+</details>
+
 ### Create vnet.tf
 Using the tool of your choice (VS Code, Visual Studio, command line, vi), create a new file and call it ```vnet.tf```. You will put all the code related to virtual network in this file.
 
@@ -48,37 +63,6 @@ address_prefix should be "10.0.1.0/24"
 
 Make sure to save vnet.tf before the following step.
 
-## Plan your infrastructure via 'terraform plan'
-Now you are ready to plan and deploy the VNet and the associated subnet into Azure. From the console window within the folder where vnet.tf and provider.tf reside, go ahead and execute the following command:
-
-```terraform plan```
-
-This command allows you to visualize infrastructure changes about to be deployed into Azure. This command does not perform any actual infrastructure deployment. You will deploy your VNet in the next step.
-
-## Create your infrastructure via 'terraform apply'
-Terraform ```apply``` command provisions the infrastructure into the cloud. If the output of ```terraform plan``` looks good to you, go ahead and issue the following command:
-
-```terraform plan```
-
-Finally, confirm that you do want the changes deployed.
-
-Congratulations, you have just created the first fundamental building block of your infrastructure!
-
-## Cheat Sheet: provider.tf
-<details>
-<summary>
-Expand for provider.tf code
-</summary>
-
-```
-# Configure the Azure Provider
-provider "azurerm" {
-  # whilst the `version` attribute is optional, we recommend pinning to a given version of the Provider
-  version = "=1.34.0"
-}
-```
-</details>
-
 ## Cheat Sheet: vnet.tf
 <details>
 <summary>Expand for vnet.tf code</summary>
@@ -96,3 +80,19 @@ resource "azurerm_virtual_network" "predayvnet" {
   }
 ```
 </details>
+
+## Plan your infrastructure via 'terraform plan'
+Now you are ready to plan and deploy the VNet and the associated subnet into Azure. From the console window within the folder where vnet.tf and provider.tf reside, go ahead and execute the following command:
+
+```terraform plan```
+
+This command allows you to visualize infrastructure changes about to be deployed into Azure. This command does not perform any actual infrastructure deployment. You will deploy your VNet in the next step.
+
+## Create your infrastructure via 'terraform apply'
+Terraform ```apply``` command provisions the infrastructure into the cloud. If the output of ```terraform plan``` looks good to you, go ahead and issue the following command:
+
+```terraform plan```
+
+Finally, confirm that you do want the changes deployed.
+
+Congratulations, you have just created the first fundamental building block of your infrastructure!
