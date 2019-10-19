@@ -107,6 +107,6 @@ Terraform ```apply``` command provisions the infrastructure into the cloud. If t
 
 ```terraform plan```
 
-Finally, confirm that you do want the changes deployed.
+Finally, confirm that you do want the changes deployed by browsing to your resource group from [portal.azure.com](https://portal.azure.com).
 
 Congratulations, you have just created the first fundamental building block of your infrastructure!

@@ -274,6 +274,12 @@ os_profile {
 ...
 ```
 
+Finally, as you have done in previous sections and labs:
+- Povision the new infrasctructure using Terraform plan and apply
+- Validate that everything was provisioned as expected.
+
+Congratulations, you have securely provisioned your infrastructure!
+
 #### CHEAT SHEETS
 
 <details>
