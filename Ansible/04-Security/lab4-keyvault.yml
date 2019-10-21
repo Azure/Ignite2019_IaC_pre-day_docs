@@ -1,0 +1,28 @@
+# Description
+# ===========
+# This playbook adds a secret in keyvault.
+
+---
+- hosts: localhost
+  vars:
+    keyvault_name: pckeyvault9
+    secret_name: myVMSecret
+  roles:
+    - ./modules
+  gather_facts: no
+
+  tasks:
+  - name: create a Key Vault secret
+    azure_rm_keyvaultsecret:
+      keyvault_uri: "https://{{ keyvault_name }}.vault.azure.net"
+      secret_name: "{{ secret_name }}"
+      secret_value: "Password1234!"
+               
+  - name: Get latest version of a secret
+    azure_rm_keyvaultsecret_info:
+      vault_uri: "https://{{ keyvault_name }}.vault.azure.net"
+      name: "{{ secret_name }}"
+    register: output
+
+  - debug:
+      var: output.secret.value

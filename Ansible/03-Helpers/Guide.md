@@ -6,7 +6,7 @@ In this section you will:
 
 ## Overview
 
-Apart from creating the new Azure resources, you will modify the playbook you created in previous labs to use loops and dynamic inventory.
+Apart from creating the new Azure resource, you will modify the playbook you created in previous labs to use loops.
 
 ## Create a network security group
 
@@ -81,4 +81,4 @@ You can have a list of hashes.
 
 Can you try to reduce the lines of codes from 23 to 11 (not including the loop keyword and list of hashes?
 
-> **_NOTE:_** You can refer to [lab3.yml](lab3.yml) for a complete sample playbook. Make sure you also copy `vars.yml` to clouddrive. 
+> **_NOTE:_** You can refer to [lab3.yml](lab3.yml) for a complete sample playbook.

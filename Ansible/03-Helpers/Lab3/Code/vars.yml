@@ -5,4 +5,4 @@ myPublicIP: myPublicIP
 myNetworkSecurityGroup: myNetworkSecurityGroup
 myNIC: myNIC
 myVM: myVM
-mylist: [{ name: 'SSH', priority: '300', port: '22'},{ name: 'HTTP', priority: '100', port: '80'}, { name: '443', priority: '200', port: '443'}]
+mylist: [{ name: 'SSH', priority: '100', port: '22'},{ name: 'HTTP', priority: '200', port: '80'}, { name: '443', priority: '300', port: '443'}]

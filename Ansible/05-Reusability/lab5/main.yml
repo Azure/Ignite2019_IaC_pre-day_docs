@@ -1,0 +1,60 @@
+- hosts: localhost
+  vars_files: 
+    - ./vars.yml
+  gather_facts: no
+    
+  tasks:
+# ----------------------------------------------------------------------------------
+# Start with a resource group so that clean up is easy. This tasks is commented out
+# since you cannot create resource group in this workshop.
+# ----------------------------------------------------------------------------------
+  - name: Create a resource group
+    azure_rm_resourcegroup:
+      name: "{{ myResource_group }}"
+      location: eastus2
+
+  - name: Create a virtual network. 
+    azure_rm_virtualnetwork:
+      resource_group: "{{ myResource_group }}"
+      name: "{{ myVnet }}"
+      address_prefixes: "10.0.0.0/16"
+
+  - name: Create front-end subnet and NSG rules
+    vars:
+      myVnetSubNet: myVnetSubNet-FE
+      myPublicIP: myPublicIP-FE
+      subnetAddPrefix:  "10.0.1.0/24"
+      myNetworkSecurityGroup: myNSG-FE
+      myNIC: myNIC-FE
+      NSGlist: [{ name: 'SSH', priority: '100', port: '22'},{ name: 'HTTP', priority: '200', port: '80'}, { name: '443', priority: '300', port: '443'}]  
+    include_tasks: ./confignetwork.yml
+
+#  - name: Show NIC details
+#    debug: 
+#      var: NIC
+
+  - name: Create a front-end virtual machines
+    vars:
+      myVM: myVM-FE
+      myTags: "Ansible=web"
+    include: ./createvm.yml
+  
+  - name: Create back-end subnet and NSG rules
+    vars:
+      myVnetSubNet: myVnetSubNet-BE
+      myPublicIP: myPublicIP-BE
+      subnetAddPrefix:  "10.0.2.0/24"
+      myNetworkSecurityGroup: myNSG-BE
+      myNIC: myNIC-BE
+      NSGlist: [{ name: 'SSH', priority: '100', port: '22'}, { name: '3306', priority: '200', port: '3306'}]
+    include_tasks: ./confignetwork.yml
+
+#  - name: Show NIC details
+#    debug: 
+#      var: NIC
+
+  - name: Create a back-end virtual machines
+    vars:
+      myVM: myVM-BE
+      myTags: "Ansible=MYSQL"
+    include: ./createvm.yml

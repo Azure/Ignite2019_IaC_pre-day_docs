@@ -118,4 +118,6 @@ mySubNet: "{{ myVnet }}Subnet"
 > - right clicking vars.yml and select **"Upload to Cloud Shell"**.
 > - in Cloud Shell terminal, move the file to ./clouddrive/ansible-playbooks/ by doing `mv vars.yml ./clouddrive/ansible-playbooks/`
 
+> **_NOTE:_** The [Code](../03-Helpers/Lab3/Code) folder in **Lab #3 - 03-Helpers** contains the sample playbook and vars.yml you can refer to.
+
 - Refer to [Ansible documentation](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html) for more details and ways to use variables.

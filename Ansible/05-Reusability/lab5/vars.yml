@@ -1,0 +1,7 @@
+myResource_group: myResource_group
+myVnet: myVnet
+# myVnetSubNet: myVnet
+# myPublicIP: myPublicIP
+# myNetworkSecurityGroup: myNSG
+# myNIC: myNIC
+myVM: myVM
