@@ -8,6 +8,19 @@ variable "location" {
   description = "Azure region to put resources in"
 }
 
+variable "custom_rules" {
+  description = "Security rules for the network security group"
+  type        = list(object({
+    name                  = string
+    priority              = number
+    direction             = string
+    access                = string
+    protocol              = string
+    destination_port_range= string
+  }))
+  default     = []
+}
+
 variable "securityGroupRules" {
   type        = list(object({
     name                  = string
@@ -16,16 +29,6 @@ variable "securityGroupRules" {
     destinationPortRange  = string
   }))
   description = "List of security group rules"
-}
-
-variable "secretId" {
-  type        = "string"
-  description = "name of secret containing admin password for vms"
-}
-
-variable "keyVault" {
-  type        = "string"
-  description = "Name of the pre-existing key vault instance"
 }
 
 variable "tags" {

@@ -1,0 +1,1 @@
+# Azure VM in VNet with default security group rules
