@@ -1,6 +1,6 @@
 # Configure Subnet
 resource "azurerm_subnet" "predaysubnet" {
-  name                 = "default"
+  name                 = regex("^[[:alpha:]]+", var.host_name)
   resource_group_name  = var.rg
   virtual_network_name = var.vnet_name
   address_prefix       = var.subnet_cidr # Change to variable for module reuse

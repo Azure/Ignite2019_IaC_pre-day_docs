@@ -18,7 +18,7 @@ resource "azurerm_virtual_network" "predayvnet" {
   name                = "tfignitepreday"
   location            = local.location
   resource_group_name = local.rg
-  address_space       = ["10.0.0.0/16"]
+  address_space       = ["172.16.0.0/16"]
   tags                = local.tags
 }
 
@@ -31,7 +31,7 @@ module "frontend" {
   secretId            = "lab04admin"
   keyVault            = local.keyVault
   vnet_name           = azurerm_virtual_network.predayvnet.name
-  subnet_cidr         = "10.0.1.0/24"
+  subnet_cidr         = "172.16.10.0/24"
   securityGroupRules  = [
       {
           name                  = "HTTP"
@@ -59,7 +59,7 @@ module "mysql_db" {
   secretId            = "lab04admin"
   keyVault            = local.keyVault
   vnet_name           = azurerm_virtual_network.predayvnet.name
-  subnet_cidr         = "10.10.1.0/24"
+  subnet_cidr         = "172.16.20.0/24"
   securityGroupRules  = [
       {
           name                  = "SQL"
