@@ -12,7 +12,7 @@ data "azurerm_key_vault_secret" "tf_pre-day" {
 
 # Configure Virtual Machine
 resource "azurerm_virtual_machine" "predayvm" {
-  name                  = "tfignitepredayvm"
+  name                  = var.host_name
   location              = var.location
   resource_group_name   = var.rg
   vm_size               = "Standard_DS1_v2"
@@ -26,14 +26,14 @@ resource "azurerm_virtual_machine" "predayvm" {
   }
 
   storage_os_disk {
-    name              = "myosdisk1"
+    name              = "myosdisk1-${var.host_name}"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "Standard_LRS"
   }
 
   os_profile {
-    computer_name  = "hostname"
+    computer_name  = var.host_name
     admin_username = "testadmin"
     admin_password = data.azurerm_key_vault_secret.tf_pre-day.value
   }
@@ -44,4 +44,3 @@ resource "azurerm_virtual_machine" "predayvm" {
 
   tags                = var.tags
 }
-

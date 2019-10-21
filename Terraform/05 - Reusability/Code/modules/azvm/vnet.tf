@@ -1,9 +1,9 @@
 # Configure Vnet -- pull subnet out to its own resource to demonstrate references / dependencies
 resource "azurerm_virtual_network" "predayvnet" {
-  name                = "tfignitepreday"
+  name                = "tfignitepreday-${var.host_name}"
   location            = var.location
   resource_group_name = var.rg
-  address_space       = ["10.0.0.0/16"]
+  address_space       = [var.vnet_cidr] # Change to variable for module reuse
   tags                = var.tags
 }
 
@@ -12,11 +12,11 @@ resource "azurerm_subnet" "predaysubnet" {
   name                 = "default"
   resource_group_name  = var.rg
   virtual_network_name = azurerm_virtual_network.predayvnet.name
-  address_prefix       = "10.0.1.0/24"
+  address_prefix       = var.subnet_cidr # Change to variable for module reuse
 }
 
 resource "azurerm_network_security_group" "predaysg" {
-  name                = "default-rules"
+  name                = "default-rules-${var.host_name}"
   location            = var.location
   resource_group_name = var.rg
 
