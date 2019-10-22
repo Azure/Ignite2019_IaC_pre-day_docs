@@ -1,7 +1,14 @@
 - hosts: localhost
-  vars_files: 
-    - ./vars.yml
-    
+  vars:
+    myResource_group: myResource_group
+    myVnet: myVnet
+    myVnetSubNet: "{{ myVnet }}Subnet"
+    myPublicIP: myPublicIP
+    myNetworkSecurityGroup: myNetworkSecurityGroup
+    myNIC: myNIC
+    myVM: myVM
+    mylist: [{ name: 'SSH', priority: '100', port: '22'},{ name: 'HTTP', priority: '200', port: '80'}, { name: '443', priority: '300', port: '443'}]  
+  
   tasks:
 # ----------------------------------------------------------------------------------
 # Start with a resource group so that clean up is easy. This tasks is commented out
@@ -22,7 +29,7 @@
         resource_group: "{{ myResource_group }}"
         virtual_network_name: "{{ myVnet }}"
         name: "{{ myVnetSubNet }}"
-        address_prefix_cidr:  "10.0.0.0/24"
+        address_prefix_cidr:  "10.0.1.0/24"
 
   - name: Create public IP address
     azure_rm_publicipaddress:
@@ -30,7 +37,7 @@
       allocation_method: Static
       name: "{{ myPublicIP }}"
 
-  - name: Create Network Security Group that allows SSH
+  - name: Create Network Security Group and rules
     azure_rm_securitygroup:
       resource_group: "{{ myResource_group }}"
       name: "{{ myNetworkSecurityGroup}}"

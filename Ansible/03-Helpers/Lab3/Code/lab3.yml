@@ -1,11 +1,7 @@
 - hosts: localhost
-  vars: 
-    myResource_group: myResource_group
-    myVnet: myVnet
-    myVnetSubNet: "{{ myVnet }}Subnet"
-    myPublicIP: myPublicIP
-    myNIC: myNIC
-    myVM: myVM
+  vars_files: 
+    - ./vars.yml
+    
   tasks:
 # ----------------------------------------------------------------------------------
 # Start with a resource group so that clean up is easy. This tasks is commented out
@@ -15,7 +11,6 @@
 #    azure_rm_resourcegroup:
 #      name: {{ myResource_group }}
 #      location: eastus2
-
   - name: Create a virtual network. 
     azure_rm_virtualnetwork:
       resource_group: "{{ myResource_group }}"
@@ -35,6 +30,19 @@
       allocation_method: Static
       name: "{{ myPublicIP }}"
 
+  - name: Create Network Security Group that allows SSH
+    azure_rm_securitygroup:
+      resource_group: "{{ myResource_group }}"
+      name: "{{ myNetworkSecurityGroup}}"
+      rules:
+        - name: "Allow-{{ item.name }}"
+          protocol: Tcp
+          destination_port_range: "{{ item.port }}"
+          access: Allow
+          priority: "{{ item.priority }}"
+          direction: Inbound
+    loop: "{{ mylist }}"
+
   - name: Create virtual network interface card(NIC)
     azure_rm_networkinterface:
       resource_group: "{{ myResource_group }}"
@@ -44,8 +52,9 @@
       ip_configurations:
         - name: ipconfig1
           public_ip_address_name: "{{ myPublicIP }}"
-
-  - name: Create a virtual machine
+      security_group: "{{ myNetworkSecurityGroup }}"
+      
+  - name: Create a virtual machines
     azure_rm_virtualmachine:
       resource_group: "{{ myResource_group }}"
       name: "{{ myVM }}"
