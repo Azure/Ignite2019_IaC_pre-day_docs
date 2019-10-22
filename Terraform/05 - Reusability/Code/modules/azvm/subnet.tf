@@ -4,6 +4,7 @@ resource "azurerm_subnet" "predaysubnet" {
   resource_group_name  = var.rg
   virtual_network_name = var.vnet_name
   address_prefix       = var.subnet_cidr # Change to variable for module reuse
+  network_security_group_id = azurerm_network_security_group.predaysg.id
 }
 
 resource "azurerm_network_security_group" "predaysg" {
@@ -16,6 +17,7 @@ resource "azurerm_network_security_group" "predaysg" {
 
     content {
       name                       = lower(security_rule.value.name)
+      description                = "Allow inbound traffic for ${security_rule.value.protocol}"
       priority                   = security_rule.value.priority
       direction                  = "Inbound"
       access                     = "Allow"
@@ -26,9 +28,4 @@ resource "azurerm_network_security_group" "predaysg" {
       destination_address_prefix = "VirtualNetwork"
     }
   }
-}
-
-resource "azurerm_subnet_network_security_group_association" "preday" {
-  subnet_id                 = azurerm_subnet.predaysubnet.id
-  network_security_group_id = azurerm_network_security_group.predaysg.id
 }

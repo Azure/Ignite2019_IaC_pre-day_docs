@@ -12,7 +12,6 @@ locals {
   }
 }
 
-
 # Configure Vnet
 resource "azurerm_virtual_network" "predayvnet" {
   name                = "tfignitepreday"
