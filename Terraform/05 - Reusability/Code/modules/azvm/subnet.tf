@@ -29,3 +29,8 @@ resource "azurerm_network_security_group" "predaysg" {
     }
   }
 }
+
+resource "azurerm_subnet_network_security_group_association" "preday" {
+  subnet_id                 = azurerm_subnet.predaysubnet.id
+  network_security_group_id = azurerm_network_security_group.predaysg.id
+}

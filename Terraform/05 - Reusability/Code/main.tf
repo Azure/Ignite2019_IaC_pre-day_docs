@@ -26,7 +26,7 @@ module "frontend" {
 
   host_name           = "web001"
   rg                  = local.rg
-  location            = "East US 2"
+  location            = local.location
   secretId            = "lab04admin"
   keyVault            = local.keyVault
   vnet_name           = azurerm_virtual_network.predayvnet.name
@@ -54,7 +54,7 @@ module "mysql_db" {
   
   host_name           = "mysql001"
   rg                  = local.rg
-  location            = "East US 2"
+  location            = local.location
   secretId            = "lab04admin"
   keyVault            = local.keyVault
   vnet_name           = azurerm_virtual_network.predayvnet.name
