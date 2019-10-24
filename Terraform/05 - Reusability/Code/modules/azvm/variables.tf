@@ -16,26 +16,6 @@ variable "securityGroupRules" {
     destinationPortRange  = string
   }))
   description = "List of security group rules"
-  default     = [
-      {
-          name                  = "DNS"
-          priority              = 100
-          protocol              = "*"
-          destinationPortRange  = "53"
-      },
-      {
-          name = "HTTPS"
-          priority              = 150
-          protocol              = "tcp"
-          destinationPortRange  = "443"
-      },
-      {
-          name = "WHOIS"
-          priority              = 200
-          protocol              = "tcp"
-          destinationPortRange  = "43"
-      },
-  ]
 }
 
 variable "secretId" {
@@ -53,9 +33,9 @@ variable "tags" {
   description = "tags to be used with all resources in the lab"
 }
 
-variable "vnet_cidr" {
+variable "vnet_name" {
   type        = string
-  description = "Network in CIDR format"
+  description = "Azure ID for Virtual Network where subnets will be placed"
 }
 
 variable "subnet_cidr" {

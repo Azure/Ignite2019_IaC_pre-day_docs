@@ -13,6 +13,7 @@ resource "azurerm_subnet" "predaysubnet" {
   resource_group_name  = var.rg
   virtual_network_name = azurerm_virtual_network.predayvnet.name
   address_prefix       = "10.0.1.0/24"
+  network_security_group_id = azurerm_network_security_group.predaysg.id
 }
 
 resource "azurerm_network_security_group" "predaysg" {
@@ -25,6 +26,7 @@ resource "azurerm_network_security_group" "predaysg" {
 
     content {
       name                       = lower(security_rule.value.name)
+      description                = "Allow inbound traffic for ${security_rule.value.protocol}"
       priority                   = security_rule.value.priority
       direction                  = "Inbound"
       access                     = "Allow"
