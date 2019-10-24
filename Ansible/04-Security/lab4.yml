@@ -1,14 +1,28 @@
 - hosts: localhost
   vars:
-    myResource_group: myResource_group_pc10
+    myResource_group: myResource_group
     myVnet: myVnet
     myVnetSubNet: "{{ myVnet }}Subnet"
     myPublicIP: myPublicIP
-    myNetworkSecurityGroup: myNetworkSecurityGroup
+    myNetworkSecurityGroup: myNSG
     myNIC: myNIC
     myVM: myVM
-    mylist: [{ name: 'SSH', priority: '100', port: '22'},{ name: 'HTTP', priority: '200', port: '80'}, { name: '443', priority: '300', port: '443'}]
-    keyvault_name: pckeyvault9
+    mylist: 
+      - name: Allow-SSH
+        access: Allow
+        protocol: Tcp
+        direction: Inbound
+        priority: 300
+        port: 22 
+        source_address_prefix: Internet
+      - name: Allow-HTTP
+        access: Allow
+        protocol: Tcp
+        direction: Inbound
+        priority: 100
+        port: 80
+        source_address_prefix: Internet 
+    keyvault_name: pckeyvault4
     secret_name: myVMSecret  
   roles:
     - ./modules
@@ -26,14 +40,14 @@
     azure_rm_virtualnetwork:
       resource_group: "{{ myResource_group }}"
       name: "{{ myVnet }}"
-      address_prefixes: "10.0.0.0/16"
+      address_prefixes: "172.16.0.0/16"
 
   - name: Create a subset within the virtual network
     azure_rm_subnet:
         resource_group: "{{ myResource_group }}"
         virtual_network_name: "{{ myVnet }}"
         name: "{{ myVnetSubNet }}"
-        address_prefix_cidr:  "10.0.1.0/24"
+        address_prefix_cidr:  "172.16.10.0/24"
 
   - name: Create public IP address
     azure_rm_publicipaddress:
@@ -41,17 +55,18 @@
       allocation_method: Static
       name: "{{ myPublicIP }}"
 
-  - name: Create Network Security Group that allows SSH
+  - name: Create Network Security Group and rules
     azure_rm_securitygroup:
       resource_group: "{{ myResource_group }}"
       name: "{{ myNetworkSecurityGroup}}"
       rules:
-        - name: "Allow-{{ item.name }}"
-          protocol: Tcp
+        - name: "{{ item.name }}"
+          access: "{{ item.access }}"
+          protocol: "{{ item.protocol }}"
+          direction: "{{ item.direction }}"
           destination_port_range: "{{ item.port }}"
-          access: Allow
           priority: "{{ item.priority }}"
-          direction: Inbound
+          source_address_prefix: "{{ item.source_address_prefix }}"
     loop: "{{ mylist }}"
 
   - name: Create virtual network interface card(NIC)
@@ -76,7 +91,7 @@
       resource_group: "{{ myResource_group }}"
       name: "{{ myVM }}"
       admin_username: "testuser"
-      admin_password: output.secret.value
+      admin_password: " {{ output.secret.value }}"
       vm_size: Standard_B1ms
       network_interfaces: "{{ myNIC }}"
       image:

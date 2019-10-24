@@ -1,6 +1,6 @@
-# Iteration and Helpers
+# Iterators and Helpers
 
-In this section you will:
+In this lab you will:
 
 - Create a network security group(NSG) and add rules to the NSG
 
@@ -17,7 +17,7 @@ Network security groups filter network traffic between Azure resources in a virt
 1. Add the NSG to the NIC you created in previous lab.
 1. Run your playbook.
 
-Next, let's add more inbound rules to open ports 80 and 443 as well. A direct way is to do the following:
+Next, let's add more inbound rules to open some ports. A direct way is to do the following:
 
 ```yml
   - name: Create Network Security Group that allows SSH,HTTP and 
@@ -26,32 +26,49 @@ Next, let's add more inbound rules to open ports 80 and 443 as well. A direct wa
       name: "{{ myNetworkSecurityGroup}}"
       rules:
         - name: Allow-SSH
+          access: Allow
           protocol: Tcp
+          direction: Inbound
           destination_port_range: 22
-          access: Allow
           priority: 300
-          direction: Inbound
+          source_address_prefix: Internet
         - name: Allow-HTTP
-          protocol: Tcp
-          destination_port_range: 80
           access: Allow
-          priority: 100
+          protocol: Tcp
           direction: Inbound
+          destination_port_range: 80
+          priority: 100
+          source_address_prefix: Internet
         - name: Allow-443
           protocol: Tcp
           destination_port_range: 443
           access: Allow
           priority: 200
           direction: Inbound
+          source_address_prefix: Internet
 ```
 
-You can make use of `loops` to reduce the lines of codes and improve readability. After all, Ansible is simple and human-readable.
+You may want to block some ports as well so, perhaps you will add another rule like this:
+
+```yml
+        - name: Deny-Internet-all
+          protocol: Tcp
+          destination_port_range: *
+          access: Deny
+          priority: 400
+          direction: Outbound
+          source_address_prefix: *
+```
+
+The number of lines of codes can become really long and hard to manage.
+
+The good news is, you can make use of `loops` to reduce the lines of codes and improve readability. After all, Ansible is simple and the playbooks are human-readable.
 
 ## Loops
 
-[Ansible documentation](https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html) has more detailed information on loops. We will focus on some standard ways to using the `loop` keyword. 
+[Ansible documentation](https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html) has more detailed information on loops. We will focus on some standard ways to use the `loop` keyword in this lab.
 
-Repeated tasks can be written as a standard loops over a simple list of string. 
+Repeated tasks can be written as a standard loop over a simple list of strings.
 
 For example:
 
@@ -79,6 +96,54 @@ You can have a list of hashes.
     - { name: 'testuser2', groups: 'root' }
 ```
 
-Can you try to reduce the lines of codes from 23 to 11 (not including the loop keyword and list of hashes?
+Can you try to reduce the lines of security group configurations by using loop?
 
-> **_NOTE:_** You can refer to [lab3.yml](lab3.yml) for a complete sample playbook.
+#### Cheat Sheet: NSG
+<details>
+<summary>
+Expand to see how you use loop to create the NSG rules
+</summary>
+
+
+```yaml
+  - name: Create Network Security Group and rules
+    azure_rm_securitygroup:
+      resource_group: "{{ myResource_group }}"
+      name: "{{ myNetworkSecurityGroup}}"
+      rules:
+        - name: "{{ item.name }}"
+          access: "{{ item.access }}"
+          protocol: "{{ item.protocol }}"
+          direction: "{{ item.direction }}"
+          destination_port_range: "{{ item.port }}"
+          priority: "{{ item.priority }}"
+          source_address_prefix: "{{ item.source_address_prefix }}"
+    loop: "{{ NSGlist }}"
+```
+
+- the NSG rule list `NSGlist` can be defined as a list of hashes:
+    -  `[{ name: 'Allow-SSH', access: 'Allow', protocol: 'Tcp', direction: 'Inbound', priority: '300', port: '22', source_address_prefix: 'Internet'},{ name: 'Allow-HTTP', access: 'Allow', protocol: 'Tcp', direction: 'Inbound', priority: '100', port: '80', source_address_prefix: 'Internet'}]`
+    -  I prefer to do it this way for readability:
+    
+    ```yml
+        NSGlist: 
+          - name: Allow-SSH
+            access: Allow
+            protocol: Tcp
+            direction: Inbound
+            priority: 300
+            port: 22 
+            source_address_prefix: Internet
+          - name: Allow-HTTP
+            access: Allow
+            protocol: Tcp
+            direction: Inbound
+            priority: 100
+            port: 80
+            source_address_prefix: Internet
+    ```
+</details>
+
+> **CODE**: To view all of the completed codes, go to [lab3.yml](lab3.yml).
+
+**<TODO - add excape hatches for Azure modules>**

@@ -19,11 +19,12 @@
     name: "{{ myNetworkSecurityGroup}}"
     rules:
       - name: "Allow-{{ item.name }}"
-        protocol: Tcp
+        access: "{{ item.access }}"
+        protocol: "{{ item.protocol }}"
         destination_port_range: "{{ item.port }}"
-        access: Allow
         priority: "{{ item.priority }}"
-        direction: Inbound
+        direction: " {{ item.direction }}"
+        source_address_prefix: "{{ item.source_address_prefix }}"
   loop: "{{ NSGlist }}"
   register: NSG
 
@@ -34,7 +35,7 @@
     virtual_network: "{{ myVnet }}"
     subnet: "{{ myVnetSubNet }}"
     ip_configurations:
-      - name: ipconfig1
+      - name: ipconfig
         public_ip_address_name: "{{ myPublicIP }}"
     security_group: "{{ myNetworkSecurityGroup }}"
   register: NIC

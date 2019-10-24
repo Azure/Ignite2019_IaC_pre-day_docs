@@ -15,7 +15,7 @@
     azure_rm_virtualnetwork:
       resource_group: myResource_group
       name: myVnet
-      address_prefixes: "10.0.0.0/16"
+      address_prefixes: "172.16.0.0/16"
 
 # ----------------------------------------------------------------------------------
 # Make sure you replace myResource_group with your resource group name.
@@ -25,4 +25,4 @@
         resource_group: myResource_group
         virtual_network_name: myVnet
         name: myVnetSubnet
-        address_prefix_cidr:  "10.0.1.0/24"
+        address_prefix_cidr:  "172.16.10.0/24"

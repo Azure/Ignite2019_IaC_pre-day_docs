@@ -13,21 +13,21 @@
 # ----------------------------------------------------------------------------------
 #  - name: Create a resource group
 #    azure_rm_resourcegroup:
-#      name: {{ myResource_group }}
+#      name: "{{ myResource_group }}"
 #      location: eastus2
 
   - name: Create a virtual network. 
     azure_rm_virtualnetwork:
       resource_group: "{{ myResource_group }}"
       name: "{{ myVnet }}"
-      address_prefixes: "10.0.0.0/16"
+      address_prefixes: "172.16.0.0/16"
 
   - name: Create a subset within the virtual network
     azure_rm_subnet:
         resource_group: "{{ myResource_group }}"
         virtual_network_name: "{{ myVnet }}"
         name: "{{ myVnetSubNet }}"
-        address_prefix_cidr:  "10.0.1.0/24"
+        address_prefix_cidr:  "172.16.10.0/24"
 
   - name: Create public IP address
     azure_rm_publicipaddress:
@@ -42,14 +42,14 @@
       virtual_network: "{{ myVnet }}"
       subnet: "{{ myVnetSubNet }}"
       ip_configurations:
-        - name: ipconfig1
+        - name: ipconfig
           public_ip_address_name: "{{ myPublicIP }}"
 
   - name: Create a virtual machine
     azure_rm_virtualmachine:
       resource_group: "{{ myResource_group }}"
       name: "{{ myVM }}"
-      admin_username: "testuser"
+      admin_username: "testadmin"
       admin_password: "Password1234!"
       vm_size: Standard_B1ms
       network_interfaces: "{{ myNIC }}"

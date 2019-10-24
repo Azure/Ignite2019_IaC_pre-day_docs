@@ -7,7 +7,9 @@ In this section you will:
 
 ## How to start
 
-We recommend to use VS Code for creating playbooks and running your playbook in Cloud Shell in this lab.
+Create a folder on the lab virtual machine where you will save all your Ansible playbooks.
+
+We recommend using VS Code for creating playbooks and running your playbook in Cloud Shell in this lab.
 
 [Ansible](https://marketplace.visualstudio.com/items?itemName=vscoss.vscode-ansible) and [Azure account](https://marketplace.visualstudio.com/items?itemName=ms-vscode.azure-account) extensions are required and already installed in your VS Code environment. The [Ansible extension overview](https://marketplace.visualstudio.com/items?itemName=vscoss.vscode-ansible) provides good guidance on what you need to do to get started. On a high level:
 
@@ -27,6 +29,13 @@ We recommend to use VS Code for creating playbooks and running your playbook in 
 
 A resource group is a logical container in which Azure resources are deployed and managed. Use the [auzre_rm_resourcegroup](https://docs.ansible.com/ansible/latest/modules/azure_rm_resourcegroup_module.html) module to create a resource group.
 
+```yml
+  - name: Create a resource group
+    azure_rm_resourcegroup:
+      name: myResource_group
+      location: myLocation
+```
+
 When all resources created in this workshop are no longer needed, you can easily delete them by running the following playbook:
 
 ```yml
@@ -39,11 +48,11 @@ When all resources created in this workshop are no longer needed, you can easily
         state: absent
 ```
 
-> **_NOTE:_** Since you cannot create resource group in this workshop, this step is included for completeness. **You can skip this step**.
+> **_NOTE:_** This step is included for completeness. **You can skip this step** since you cannot create resource group in this workshop.
 
 ## Create a virtual network(VNet)
 
-A virtual network is a virtual, isolated portion of the Azure public network. Each virtual network is dedicated to your subscription. Create one that uses "10.0.0.0/16" as address prefix.
+A virtual network is a virtual, isolated portion of the Azure public network. Each virtual network is dedicated to your subscription. Create one that uses "172.16.0.0/16" as address prefix.
 
 1. Create a new .yml file.
 2. Use `Hosts: localhost` in the header. Control node is the node Ansible is installed on. The hosts parameter is what the playbook will be executed on. `Hosts: localhost` means the playbook is executed on the localhost only. Your playbook should have this format:
@@ -62,7 +71,23 @@ A virtual network is a virtual, isolated portion of the Azure public network. Ea
 5. Name your task appropriately so that you know precisely which step fails if Ansible runs into an issue.
 6. Run your playbook.
 
-> **_NOTE:_** The `gather_facts` module is automatically called by playbooks to gather useful variables about remote hosts that can be used in playbooks. You may also get warnings like below. This is because you have no inventory.
+#### Cheat Sheet: VNET
+<details>
+<summary>
+Expand to see how you can create a VNet
+</summary>
+
+```yaml
+  - name: Create a virtual network. 
+    azure_rm_virtualnetwork:
+      resource_group: myResource_group
+      name: myVnet
+      address_prefixes: "172.16.0.0/16"
+```
+
+</details>
+
+> **_NOTE:_** The `gather_facts` module is automatically called by playbooks to gather useful variables about remote hosts that can be used in playbooks. You can disable gathering facts by including `gather_facts: no` in the header. You may also get warnings like below. This is because you have no inventory.
 
 ```bash
 pui@Azure:~$ ansible-playbook ./clouddrive/ansible-playbooks/lab1.yml
@@ -85,10 +110,27 @@ localhost                  : ok=2    changed=1    unreachable=0    failed=0    s
 
 ## Create a subnet within the VNet
 
-Subnets enable you to segment the virtual network into one or more sub-networks and allocate a portion of the virtual network's address space to each subnet. Add to existing playbook, subnet "10.0.0.0/24".
+Subnets enable you to segment the virtual network into one or more sub-networks and allocate a portion of the virtual network's address space to each subnet. Add to existing playbook, subnet "172.16.10.0/24".
 
 1. Add as the next task to your existing playbook and use [azure_rm_subnet](https://docs.ansible.com/ansible/latest/modules/azure_rm_subnet_module.html) module to create the subnet.
 2. Run your playbook in Cloud Shell again. Note that since you didn't change anything in previous task and the virtual already exists, all three (three because of the 1st "Gathering Facts" task) are ok, only one changed is made.
+
+#### Cheat Sheet: subnet
+<details>
+<summary>
+Expand to see how you can create a subnet
+</summary>
+
+```yaml
+  - name: Create a subnet within the virtual network
+    azure_rm_subnet:
+        resource_group: myResource_group
+        virtual_network_name: myVnet
+        name: myVnetSubnet
+        address_prefix_cidr:  "172.16.10.0/24"
+```
+
+</details>
 
 ```bash
 PLAY [localhost] ********************************************************************************************************
@@ -103,16 +145,18 @@ TASK [Create a subnet within the virtual network] ******************************
 changed: [localhost]
 
 PLAY RECAP **************************************************************************************************************
-localhost                  : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+localhost                  : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0 
+
 ```
 
 ## How to verify
 
-Congratulations. You have created your first playbook. Go to [Azure portal](https://portal.azure.com) to verify that you have created the resources.
+Congratulations, you have created your first playbook. Go to [Azure portal](https://portal.azure.com) to verify that you have created the resources.
 
-> **_NOTE:_** You can refer to [lab1.yml](lab1.yml) for a complete sample playbook.
+> **CODE**: You can refer to [lab1.yml](lab1.yml) for a complete sample playbook.
 
-## Additional useful resources
+## Further readings
 
-- Use the [Ansible Azure Marketplace](https://aka.ms/ansibleaz) solution template if you want to spin up a control node in Azure. The solution template installs Ansible on a CentOS 7.5 Linux VM with tools configured to work with Azure.
-- Refer to [Ansible module support matrix](https://aka.ms/ansiblesupport) for a complete list of Azure modules.
+- [Azure Ansible Dev Hub](https://docs.microsoft.com/en-us/azure/ansible/) - to learn everything about Ansible + Azure
+    - Use the [Ansible Azure Marketplace](https://aka.ms/ansibleaz) solution template if you want to spin up a control node in Azure. This solution template installs Ansible on a CentOS 7.5 Linux VM with tools configured to work with Azure. You can refer to this [Quickstart](https://docs.microsoft.com/en-us/azure/ansible/ansible-deploy-solution-template).
+    - Refer to [Ansible module support matrix](https://aka.ms/ansiblesupport) for a complete list of Azure modules.

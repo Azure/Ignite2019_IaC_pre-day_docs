@@ -2,7 +2,21 @@ myResource_group: myResource_group
 myVnet: myVnet
 myVnetSubNet: "{{ myVnet }}Subnet"
 myPublicIP: myPublicIP
-myNetworkSecurityGroup: myNetworkSecurityGroup
+myNetworkSecurityGroup: myNSG
 myNIC: myNIC
 myVM: myVM
-mylist: [{ name: 'SSH', priority: '100', port: '22'},{ name: 'HTTP', priority: '200', port: '80'}, { name: '443', priority: '300', port: '443'}]
+NSGlist: 
+  - name: Allow-SSH
+    access: Allow
+    protocol: Tcp
+    direction: Inbound
+    priority: 300
+    port: 22 
+    source_address_prefix: Internet
+  - name: Allow-HTTP
+    access: Allow
+    protocol: Tcp
+    direction: Inbound
+    priority: 100
+    port: 80
+    source_address_prefix: Internet

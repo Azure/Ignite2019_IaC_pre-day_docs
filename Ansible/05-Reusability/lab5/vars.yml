@@ -1,7 +1,5 @@
-myResource_group: myResource_group
+myResource_group: myResource_group_pc10
 myVnet: myVnet
-# myVnetSubNet: myVnet
-# myPublicIP: myPublicIP
-# myNetworkSecurityGroup: myNSG
-# myNIC: myNIC
+keyvault_name: pckeyvault10
+secret_name: myVMSecret
 myVM: myVM

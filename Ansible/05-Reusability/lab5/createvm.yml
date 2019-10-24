@@ -1,12 +1,19 @@
+- name: Get latest version of a secret
+  azure_rm_keyvaultsecret_info:
+    vault_uri: "https://{{ keyvault_name }}.vault.azure.net"
+    name: "{{ secret_name }}"
+  register: output
+
 - name: Create a virtual machines
   azure_rm_virtualmachine:
     resource_group: "{{ myResource_group }}"
     name: "{{ myVM }}"
     admin_username: "testadmin"
-    ssh_password_enabled: false
-    ssh_public_keys:
-      - path: /home/testadmin/.ssh/authorized_keys
-        key_data: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+    admin_password: "{{ output.secret.value }}"
+#    ssh_password_enabled: false
+#    ssh_public_keys:
+#      - path: /home/testadmin/.ssh/authorized_keys
+#        key_data: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
     vm_size: Standard_B1ms
     network_interfaces: "{{ NIC.state.name }}"
     image:
@@ -15,4 +22,4 @@
       sku: 16.04-LTS
       version: latest
     tags: "{{ myTags }}"
-  
+
