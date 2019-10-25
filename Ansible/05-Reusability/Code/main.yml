@@ -1,6 +1,6 @@
 - hosts: localhost
   vars_files: 
-    - ./vars.yml
+    - vars/vars.yml
   roles:
     - ./modules
   gather_facts: no
@@ -28,7 +28,21 @@
       subnetAddPrefix:  "172.16.10.0/24"
       myNetworkSecurityGroup: myNSG
       myNIC: myNIC
-      NSGlist: [{ name: 'Allow-SSH', access: 'Allow', protocol: 'Tcp', direction: 'Inbound', priority: '300', port: '22', source_address_prefix: 'Internet'},{ name: 'Allow-HTTP', access: 'Allow', protocol: 'Tcp', direction: 'Inbound', priority: '100', port: '80', source_address_prefix: 'Internet'}]  
+      NSGlist: 
+        - name: Allow-SSH
+          access: Allow
+          protocol: Tcp
+          direction: Inbound
+          priority: 300
+          port: 22 
+          source_address_prefix: Internet
+        - name: Allow-HTTP
+          access: Allow
+          protocol: Tcp
+          direction: Inbound
+          priority: 100
+          port: 80
+          source_address_prefix: Internet 
     include_tasks: ./confignetwork.yml
 
 #  - name: Show NIC details
@@ -48,7 +62,28 @@
       subnetAddPrefix:  "172.16.20.0/24"
       myNetworkSecurityGroup: myNSG-BE
       myNIC: myNIC-BE
-      NSGlist: [{ name: 'Allow-SSH', access: 'Allow', protocol: 'Tcp', direction: 'Inbound', priority: '200', port: '22', source_address_prefix: 'Internet'},{ name: 'Allow-MySQL-FE', access: 'Allow', protocol: 'Tcp', direction: 'Inbound', priority: '100', port: '3306', source_address_prefix: '172.16.10.0/24'}, { name: 'Deny-internet-all', access: 'Deny', protocol: 'Tcp', direction: 'Outbound', priority: '300', port: '*', source_address_prefix: '*'}]  
+      NSGlist: 
+        - name: Allow-SSH
+          access: Allow
+          protocol: Tcp
+          direction: Inbound
+          priority: 200
+          port: 22 
+          source_address_prefix: Internet
+        - name: Allow-MySQL-FE
+          access: Allow
+          protocol: Tcp
+          direction: Inbound
+          priority: 100
+          port: 3306
+          source_address_prefix: 172.16.10.0/24
+        - name: Deny-internet-all
+          access: Allow
+          protocol: Tcp
+          direction: Outbound
+          priority: 300
+          port: "*"
+          source_address_prefix: "*"
     include_tasks: ./confignetwork.yml
 
 #  - name: Show NIC details

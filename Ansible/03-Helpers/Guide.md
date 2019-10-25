@@ -144,6 +144,4 @@ Expand to see how you use loop to create the NSG rules
     ```
 </details>
 
-> **CODE**: To view all of the completed codes, go to [lab3.yml](lab3.yml).
-
-**<TODO - add excape hatches for Azure modules>**
+> **CODE**: To view all of the completed codes, go to [lab3.yml](code/lab3.yml).

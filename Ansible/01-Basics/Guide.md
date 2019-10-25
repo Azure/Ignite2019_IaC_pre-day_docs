@@ -153,7 +153,7 @@ localhost                  : ok=3    changed=1    unreachable=0    failed=0    s
 
 Congratulations, you have created your first playbook. Go to [Azure portal](https://portal.azure.com) to verify that you have created the resources.
 
-> **CODE**: You can refer to [lab1.yml](lab1.yml) for a complete sample playbook.
+> **CODE**: You can refer to [lab1.yml](Code/lab1.yml) for a complete sample playbook.
 
 ## Further readings
 

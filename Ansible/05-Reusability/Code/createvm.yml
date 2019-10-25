@@ -10,10 +10,6 @@
     name: "{{ myVM }}"
     admin_username: "testadmin"
     admin_password: "{{ output.secret.value }}"
-#    ssh_password_enabled: false
-#    ssh_public_keys:
-#      - path: /home/testadmin/.ssh/authorized_keys
-#        key_data: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
     vm_size: Standard_B1ms
     network_interfaces: "{{ NIC.state.name }}"
     image:

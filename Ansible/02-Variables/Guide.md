@@ -144,13 +144,11 @@ Expand to see how you can create a VM using SSH key to access the host.
         version: latest
 ```
 
-
-
 </details>
 
 You can go to [Azure portal](https://portal.azure.com) to verify that you have created the resources.
 
-> **CODE**: To view all of the completed code for this part of the lab, go [here](lab2.yml).
+> **CODE**: To view all of the completed code for this part of the lab, go [here](code/lab2.yml).
 
 ## Registering variables and working with conditionals
 
@@ -227,6 +225,6 @@ mySubNet: "{{ myVnet }}Subnet"
 > - right clicking vars.yml and select **"Upload to Cloud Shell"**.
 > - in Cloud Shell terminal, move the file to ./clouddrive/ansible-playbooks/ by doing `mv vars.yml ./clouddrive/ansible-playbooks/`
 
-> **CODE**: The [Code](../03-Helpers/Lab3/Code) folder in **Lab #3 - 03-Helpers** contains the sample playbook and vars.yml you can refer to.
+> **CODE**: The [/Code/Code_vars_files](../03-Helpers/Code/Code-vars_files) folder in **Lab #3 - 03-Helpers** contains the sample playbook and vars.yml you can refer to.
 
 - Refer to [Ansible documentation](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html) for more details and ways to use variables.

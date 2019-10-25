@@ -1,5 +1,0 @@
-myResource_group: myResource_group_pc10
-myVnet: myVnet
-keyvault_name: pckeyvault10
-secret_name: myVMSecret
-myVM: myVM

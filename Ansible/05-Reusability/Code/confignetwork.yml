@@ -23,7 +23,7 @@
         protocol: "{{ item.protocol }}"
         destination_port_range: "{{ item.port }}"
         priority: "{{ item.priority }}"
-        direction: " {{ item.direction }}"
+        direction: "{{ item.direction }}"
         source_address_prefix: "{{ item.source_address_prefix }}"
   loop: "{{ NSGlist }}"
   register: NSG

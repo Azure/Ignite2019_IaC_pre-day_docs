@@ -15,85 +15,166 @@ Running playbooks in Cloud Shell presents a couple of limitations:
 - you can only upload file to Cloud Shell one by one
 - after uploading to Cloud Shell, you need to perform an additional step to move files uploaded to the right location.
 
-It can become cumbersome to continue running your playbook in Cloud Shell.
+It can become cumbersome to continue running your playbooks in Cloud Shell.
 
 The VS Code Ansible extension provides better integration experience when you need to work with multiple files so we recommend running Ansible in the remote host via SSH. You can hit `F1` to copy files to remote host.
 
 1. Hit `F1`; type "Ansible: copy folder to Remote Host"
 1. Follow the prompt to provide the source directory
-1. Select "Set up host" if this is the first time. Else select your remote host
-1. Next specify the target folder
+1. Select "Set up host" if this is the first time. Else select your remote host from the list of remote hosts.
+1. Next, specify the target folder
 
 ## Reusing task(s) in your playbook
 
 You can use the [include](https://docs.ansible.com/ansible/latest/modules/include_module.html) and [include_tasks](https://docs.ansible.com/ansible/latest/modules/include_tasks_module.html#include-tasks-module) modules to dynamically include a task or a list of tasks.
 
-Let's modify what you have done so far to create a multi-tier application. 
+Let's modify what you have done so far to create a network of multi-tier applications based on this [Azure CLI sample](https://docs.microsoft.com/en-us/azure/virtual-network/scripts/virtual-network-cli-sample-multi-tier-application).
 
-Based on the Azure CLI sample, let's build a [network of multi-tier applications](https://docs.microsoft.com/en-us/azure/virtual-network/scripts/virtual-network-cli-sample-multi-tier-application). 
+- a virtual network (172.16.0.0/16) with front-end and back-end subnets
+- two virtual machines: web and MySQL; one in each subnet
 
-- a virtual network (172.16.0.0/16) with front-end (172.16.10.0/24) and back-end (176.16.20.0/24) subnets:
-    - Traffic to the front-end subnet is limited to HTTP and SSH
-    - Traffic to the back-end subnet is limited to MySQL, port 3306 and SSH. All outbound traffic from  the back-end subnet should be blocked.
-- two virtual machines, one in each subnet
+![Sample multi-tier applications](../../Terraform/05%20-%20Reusability/Assets/labnet.png "Azure resources to be provisioned.")
 
 What you have done so far:
 - A VNet 172.16.0.0/16
-- A front-end subnet - 172.16.10.0/24 with NSG rules that allow:
-    - SSH traffic from the Internet to the front-end subnetSSH on port 22
-    - HTTP traffic in from the Internet to the front-end subnet on port 80
-- And a VM in the front-end subnet that can act as the front-end web server
+- A front-end subnet - 172.16.10.0/24 with NSG rules that:
+    - allows SSH traffic from the Internet to the front-end subnet on port 22
+    - allows HTTP traffic in from the Internet to the front-end subnet on port 80
+- And a VM in the front-end subnet that acts as the front-end web server
 
 You need to add:
 - A backend subnet 172.16.20/24 with NSG rules that:
   - allows SSH traffic from the Internet to the front-end subnet on port 22
   - allows MySQL traffic from the front-end subnet to the back-end subnet on port 3306
   - blocks all outbound traffic from the back-end subnet to the Internet
-- A VM in the back-end subnet.
-
-![Sample multi-tier applications](../../Terraform/05%20-%20Reusability/Assets/labnet.png "Azure resources to be provisioned.")
+- A VM (MySQL) in the back-end subnet.
 
 Let's start by restructuring your playbook and break the tasks out into a few playbooks.
 
-1. Move all common tasks related to subnet configuration to one YAML file say configurenetwork.yml so that you can use the same list of tasks to provision and configure the subnet, public IP etc. networking related tasks.
+1. Move all common tasks related to network configuration to one YAML file say `configurenetwork.yml` so that you can use the same list of tasks to provision and configure the subnet, public IP etc. networking related tasks.
+
+        ```yml
+        - name: Create a subset within the virtual network
+          azure_rm_subnet:
+            ...
+          register: subnet
+            
+        - name: Create public IP address
+          azure_rm_publicipaddress:
+            ...
+          register: publicIP
+        
+        - name: Create Network Security Group
+          azure_rm_securitygroup:
+            ...
+          loop: "{{ NSGlist }}"
+          register: NSG
+        
+        - name: Create virtual network interface card(NIC) with public IP
+          azure_rm_networkinterface:
+            ...
+          register: NIC
+        ```
+
+      >**Note**: you can register a variable after each task and use "debug" to show the output. By doing so, you can also refer to value in the Azure resource by using e.g., `"{{ NIC.state.name }}"` in subsequent task.
+
+For example:
+
+```yml
+- name: Show NIC details
+  debug:
+    var: NIC
+```
+
+### Cheat Sheet: confignetwork.yml
+
+<details>
+<summary>
+Expand to see confignetwork.yml
+</summary>
 
 ```yml
 - name: Create a subset within the virtual network
   azure_rm_subnet:
-    ...
+    resource_group: "{{ myResource_group }}"
+    virtual_network_name: "{{ myVnet }}"
+    name: "{{ myVnetSubNet }}"
+    address_prefix_cidr:  "{{ subnetAddPrefix }}"
   register: subnet
-    
+
 - name: Create public IP address
   azure_rm_publicipaddress:
-    ...
+    resource_group: "{{ myResource_group }}"
+    allocation_method: Static
+    name: "{{ myPublicIP }}"
   register: publicIP
 
 - name: Create Network Security Group
   azure_rm_securitygroup:
-    ...
+    resource_group: "{{ myResource_group }}"
+    name: "{{ myNetworkSecurityGroup}}"
+    rules:
+      - name: "Allow-{{ item.name }}"
+        access: "{{ item.access }}"
+        protocol: "{{ item.protocol }}"
+        destination_port_range: "{{ item.port }}"
+        priority: "{{ item.priority }}"
+        direction: " {{ item.direction }}"
+        source_address_prefix: "{{ item.source_address_prefix }}"
   loop: "{{ NSGlist }}"
   register: NSG
 
 - name: Create virtual network interface card(NIC) with public IP
   azure_rm_networkinterface:
-    ...
+    resource_group: "{{ myResource_group }}"
+    name: "{{ myNIC }}"
+    virtual_network: "{{ myVnet }}"
+    subnet: "{{ myVnetSubNet }}"
+    ip_configurations:
+      - name: ipconfig
+        public_ip_address_name: "{{ myPublicIP }}"
+    security_group: "{{ myNetworkSecurityGroup }}"
   register: NIC
 ```
 
->**Note**: you can register a variable after each task and use "debug" to show the output. By doing so, you can also refer to value in the Azure resource by using e.g., `"{{ NIC.state.name }}"` in subsequent task.
-
-For example:
-
-```yml
-  - name: Show NIC details
-    debug:
-      var: NIC
-```
+</details>
 
 2. Move the task to create the VM to a file called `createvm.yml`. Let's add an additional configuration (a tag) to each VM.
 
     - For the front-end, add a tag by setting `tags: "Ansible=web"`
     - For the back-end, add a tag by setting `tags: "Ansible=MySQL"`
+
+### Cheat Sheet: createvm.yml
+
+<details>
+<summary>
+Expand to see createvm.yml
+</summary>
+
+```yml
+- name: Get latest version of a secret
+  azure_rm_keyvaultsecret_info:
+    vault_uri: "https://{{ keyvault_name }}.vault.azure.net"
+    name: "{{ secret_name }}"
+  register: output
+
+- name: Create a virtual machines
+  azure_rm_virtualmachine:
+    resource_group: "{{ myResource_group }}"
+    name: "{{ myVM }}"
+    admin_username: "testadmin"
+    admin_password: "{{ output.secret.value }}"
+    vm_size: Standard_B1ms
+    network_interfaces: "{{ NIC.state.name }}"
+    image:
+      offer: UbuntuServer
+      publisher: Canonical
+      sku: 16.04-LTS
+      version: latest
+    tags: "{{ myTags }}"
+```
+
+</details>
 
 3. main.yml will be your main playbook. The structure is similar to this:  
 
@@ -133,7 +214,108 @@ For example:
 
 ```
 
-> **CODE**: To view all of the completed codes, go to [lab5](/lab5).
+### Cheat Sheet: main.yml
+
+<details>
+<summary>
+Expand to see a sample of main.yml
+</summary>
+
+```yml
+- hosts: localhost
+  vars_files: 
+    - ./vars.yml
+  roles:
+    - ./modules
+  gather_facts: no
+    
+  tasks:
+# ----------------------------------------------------------------------------------
+# Start with a resource group so that clean up is easy. This tasks is commented out
+# since you cannot create resource group in this workshop.
+# ----------------------------------------------------------------------------------
+#  - name: Create a resource group
+#    azure_rm_resourcegroup:
+#      name: "{{ myResource_group }}"
+#      location: eastus2
+
+  - name: Create a virtual network. 
+    azure_rm_virtualnetwork:
+      resource_group: "{{ myResource_group }}"
+      name: "{{ myVnet }}"
+      address_prefixes: "172.16.0.0/16"
+
+  - name: Create front-end subnet and NSG rules
+    vars:
+      myVnetSubNet: myVnetSubNet
+      myPublicIP: myPublicIP
+      subnetAddPrefix:  "172.16.10.0/24"
+      myNetworkSecurityGroup: myNSG
+      myNIC: myNIC
+      NSGlist: 
+      - name: Allow-SSH
+        access: Allow
+        protocol: Tcp
+        direction: Inbound
+        priority: 300
+        port: 22 
+        source_address_prefix: Internet
+      - name: Allow-HTTP
+        access: Allow
+        protocol: Tcp
+        direction: Inbound
+        priority: 100
+        port: 80
+        source_address_prefix: Internet 
+    include_tasks: ./confignetwork.yml
+
+  - name: Create a front-end virtual machines
+    vars:
+      myVM: myVM
+      myTags: "Ansible=web"
+    include: ./createvm.yml
+  
+  - name: Create back-end subnet and NSG rules
+    vars:
+      myVnetSubNet: myVnetSubNet-BE
+      myPublicIP: myPublicIP-BE
+      subnetAddPrefix:  "172.16.20.0/24"
+      myNetworkSecurityGroup: myNSG-BE
+      myNIC: myNIC-BE
+      NSGlist: 
+      - name: Allow-SSH
+        access: Allow
+        protocol: Tcp
+        direction: Inbound
+        priority: 200
+        port: 22 
+        source_address_prefix: Internet
+      - name: Allow-MySQL-FE
+        access: Allow
+        protocol: Tcp
+        direction: Inbound
+        priority: 100
+        port: 3306
+        source_address_prefix: 172.16.10.0/24
+      - name: Deny-internet-all
+        access: Allow
+        protocol: Tcp
+        direction: Outbound
+        priority: 300
+        port: "*"
+        source_address_prefix: "*"
+    include_tasks: ./confignetwork.yml
+
+  - name: Create a back-end virtual machines
+    vars:
+      myVM: myVM-BE
+      myTags: "Ansible=MySQL"
+    include: ./createvm.yml
+```
+
+</details>
+
+> **CODE**: To view all of the completed codes, go to [lab5](Code).
 
 ## Dynamic inventory
 
@@ -153,10 +335,11 @@ include_vm_resource_groups:
 keyed_groups:
 - prefix: tag
   key: tags
-
 ```
 
-1. Run the following command to view the populated inventory: 
+> **CODE**: Go [here](Code/myazure_rm.yml) to see the code.
+
+2. Run the following command to view the populated inventory:
 
 ```bash
 ansible-inventory -i myazure_rm.yml --graph
@@ -164,7 +347,8 @@ ansible-inventory -i myazure_rm.yml --graph
 
 You should see something like this:
 
-```
+```output
+
 @all:
   |--@tag_Ansible_SQL:
   |  |--myVM-BE_7ac4
@@ -184,15 +368,13 @@ You can test connection to myVM-BE by doing:
 ansible -u testadmin -i myazure_rm.yml -m ping tag_Ansible_web -k
 ```
 
-
-
 Likewise, for myVM-FE, run:
 
 ```bash
 ansible -u testadmin -i myazure_rm.yml -m ping tag_Ansible_MySQL -k
 ```
 
->**_Note_**: since the VMs are using userid/password for authentication, you need to add `-k` to the command and provide password used to SSH into the VMs.
+>**Note**: since the VMs are using userid/password for authentication, you need to add `-k` to the command and provide password used to SSH into the VMs.
 
 With dynamic inventory, you can run playbook by targeting vm(s) with the specific tag. For instance, if you wish to apply `XXX.yml` to the back-end VM, you can do so by running the command:
 
@@ -211,23 +393,26 @@ To take it one step further, you can create Roles so that you can reuse and furt
 
 Example of project structure:
 
-```yml
-    site.yml
-    webservers.yml
-    fooservers.yml
-    roles/
-       common/
-         tasks/
-         handlers/
-         files/
-         templates/
-         vars/
-         defaults/
-         meta/
-       webservers/
-         tasks/
-         defaults/
-         meta/
+```output
+testrole
+├── defaults
+│   └── main.yml
+├── files
+├── handlers
+│   └── main.yml
+├── meta
+│   └── main.yml
+├── README.md
+├── tasks
+│   └── main.yml
+├── templates
+├── tests
+│   ├── inventory
+│   └── test.yml
+└── vars
+    └── main.yml
+
+8 directories, 8 files
 ```
 
 [Ansible Galaxy or Galaxy](https://docs.ansible.com/ansible/latest/reference_appendices/galaxy.html), is a free site for finding, downloading, and sharing community developed roles. Downloading roles from Galaxy is a great way to jumpstart your automation projects.
@@ -242,8 +427,36 @@ Roles may also include modules and other plugin types. In Lab 4, you saw how we 
 
 For further exploration, the [AKS role](https://galaxy.ansible.com/azure/aks) we shared in Ansible Galaxy is a good example on how you can reuse and share common configurations and tasks to provision AKS cluster in your organization.
 
+To create an AKS with monitoring enabled:
+
+1. Install AKS role by doing in your Ansible host 
+
+    >**Note**: you cannot install roles in CloudShell
+
+    ```output
+    ansible-galaxy install azure.aks
+    ```
+
+2. Run this playbook:
+
+        ```yml
+        - hosts: localhost
+          tasks:
+              - include_role:
+                   name: azure.aks
+                vars:
+                   monitoring: yes
+                   name: akscluster
+                   resource_group: aksroletest
+        ```
+
 ## Further readings
 
+### Roles
 - [Ansible Galaxy](https://galaxy.ansible.com)
 - [Ansible Roles Explained | Cheat Sheet](https://linuxacademy.com/blog/linux-academy/ansible-roles-explained/)
 - [Ansible roles tutorialspoint](https://www.tutorialspoint.com/ansible/ansible_roles.htm)
+
+### Sample playbooks and labs:
+- [Ansible playbooks for Azure](https://github.com/Azure-Samples/ansible-playbooks)
+- [Ansible Deployment Labs for Microsoft Azure](https://github.com/Microsoft/Ansiblelabs)

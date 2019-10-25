@@ -1,0 +1,5 @@
+myResource_group: myResource_group
+myVnet: myVnet
+keyvault_name: mykeyvault
+secret_name: myVMSecret
+myVM: myVM

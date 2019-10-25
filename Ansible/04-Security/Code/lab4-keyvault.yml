@@ -5,7 +5,7 @@
 ---
 - hosts: localhost
   vars:
-    keyvault_name: myKeyVault
+    keyvault_name: mykeyvaul
     secret_name: myVMSecret
   roles:
     - ./modules

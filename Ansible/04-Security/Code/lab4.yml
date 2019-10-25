@@ -7,7 +7,7 @@
     myNetworkSecurityGroup: myNSG
     myNIC: myNIC
     myVM: myVM
-    mylist: 
+    NSGlist: 
       - name: Allow-SSH
         access: Allow
         protocol: Tcp
@@ -67,7 +67,7 @@
           destination_port_range: "{{ item.port }}"
           priority: "{{ item.priority }}"
           source_address_prefix: "{{ item.source_address_prefix }}"
-    loop: "{{ mylist }}"
+    loop: "{{ NSGlist }}"
 
   - name: Create virtual network interface card(NIC)
     azure_rm_networkinterface:
