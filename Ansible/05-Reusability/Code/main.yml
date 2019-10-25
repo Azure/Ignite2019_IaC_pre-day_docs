@@ -23,26 +23,8 @@
 
   - name: Create front-end subnet and NSG rules
     vars:
-      myVnetSubNet: myVnetSubNet
-      myPublicIP: myPublicIP
-      subnetAddPrefix:  "172.16.10.0/24"
-      myNetworkSecurityGroup: myNSG
-      myNIC: myNIC
-      NSGlist: 
-        - name: Allow-SSH
-          access: Allow
-          protocol: Tcp
-          direction: Inbound
-          priority: 300
-          port: 22 
-          source_address_prefix: Internet
-        - name: Allow-HTTP
-          access: Allow
-          protocol: Tcp
-          direction: Inbound
-          priority: 100
-          port: 80
-          source_address_prefix: Internet 
+      subnetAddPrefix:  "{{ FE_subnetAddPrefix }}"
+      NSGlist: "{{ FE_NSGlist }}"
     include_tasks: ./confignetwork.yml
 
 #  - name: Show NIC details
@@ -59,31 +41,10 @@
     vars:
       myVnetSubNet: myVnetSubNet-BE
       myPublicIP: myPublicIP-BE
-      subnetAddPrefix:  "172.16.20.0/24"
+      subnetAddPrefix:  "{{ BE_subnetAddPrefix }}"
       myNetworkSecurityGroup: myNSG-BE
       myNIC: myNIC-BE
-      NSGlist: 
-        - name: Allow-SSH
-          access: Allow
-          protocol: Tcp
-          direction: Inbound
-          priority: 200
-          port: 22 
-          source_address_prefix: Internet
-        - name: Allow-MySQL-FE
-          access: Allow
-          protocol: Tcp
-          direction: Inbound
-          priority: 100
-          port: 3306
-          source_address_prefix: 172.16.10.0/24
-        - name: Deny-internet-all
-          access: Allow
-          protocol: Tcp
-          direction: Outbound
-          priority: 300
-          port: "*"
-          source_address_prefix: "*"
+      NSGlist: "{{ BE_NSGlist }}"
     include_tasks: ./confignetwork.yml
 
 #  - name: Show NIC details

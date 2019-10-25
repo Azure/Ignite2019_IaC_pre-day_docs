@@ -1,5 +1,48 @@
 myResource_group: myResource_group
 myVnet: myVnet
+myVnetSubNet: myVnetSubNet
+FE_subnetAddPrefix:  "172.16.10.0/24"
+FE_NSGlist:
+  - name: Allow-SSH
+    access: Allow
+    protocol: Tcp
+    direction: Inbound
+    priority: 300
+    port: 22 
+    source_address_prefix: Internet
+  - name: Allow-HTTP
+    access: Allow
+    protocol: Tcp
+    direction: Inbound
+    priority: 100
+    port: 80
+    source_address_prefix: Internet 
+BE_subnetAddPrefix:  "172.16.20.0/24"
+BE_NSGlist: 
+  - name: Allow-SSH
+    access: Allow
+    protocol: Tcp
+    direction: Inbound
+    priority: 200
+    port: 22 
+    source_address_prefix: Internet
+  - name: Allow-MySQL-FE
+    access: Allow
+    protocol: Tcp
+    direction: Inbound
+    priority: 100
+    port: 3306
+    source_address_prefix: 172.16.10.0/24
+  - name: Deny-internet-all
+    access: Allow
+    protocol: Tcp
+    direction: Outbound
+    priority: 300
+    port: "*"
+    source_address_prefix: "*"
+myPublicIP: myPublicIP
+myNetworkSecurityGroup: myNSG
+myNIC: myNIC
 keyvault_name: mykeyvault
 secret_name: myVMSecret
 myVM: myVM
