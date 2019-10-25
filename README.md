@@ -3,16 +3,6 @@ Infrastructure as code (IaC) is an important pillar of modern DevOps and is used
 
 Walk throughs for this workshop can be found in the table below. During the workshop, you will pick a track or tool and work through each of the labs for that tool. If you have extra time during the workship or if you would like to come back and walk through the labs with the other tools after the workshop this table will enable you to do that.
 
-## Workshop Labs
-
-| Lab Name      | Ansible       | ARM Template  | Terraform |
-|:------------- |:-------------:|:-------------:|:-------------:|
-| Basics        | [Guide](./Ansible/01-Basics/Guide.md) | [Guide](./ARM%20Template/01%20-%20Basics/Guide.md) | [Guide](./Terraform/01%20-%20Basics/Guide.md) |
-| Variables     | [Guide](./Ansible/02-Variables/Guide.md) | [Guide](./ARM%20Template/02%20-%20Variables/Guide.md) | [Guide](./Terraform/02%20-%20Variables/Guide.md) |
-| Helpers       | [Guide](./Ansible/03-Helpers/Guide.md) | [Guide](./ARM%20Template/03%20-%20Helpers/Guide.md) | [Guide](./Terraform/03%20-%20Helpers/Guide.md) |
-| Security      | [Guide](./Ansible/04-Security/Guide.md) | [Guide](./ARM%20Template/04%20-%20Security/Guide.md) | [Guide](./Terraform/04%20-%20Security/Guide.md) |
-| Reusability   | [Guide](./Ansible/05-Reusability/Guide.md) | [Guide](./ARM%20Template/05%20-%20Reusability/Guide.md) | [Guide](./Terraform/05%20-%20Reusability/Guide.md) |
-
 ## Before you start
 
 Go to [launch URL](https://manage.cloudlabs.ai/#/odl/ac646c05-db3c-4773-a2b6-799f80eac16b), sign up and provide the activation code.
@@ -37,5 +27,14 @@ In the LabVM RDP browser:
 1. Specify the region as the same as your resource group. i.e. **South Central US**
 1. Under `Resource group`, make sure you select `IoC-01-XXXXXX` as the resource group, provide a unique name for each of your storage account and file share. E.g., you can prefix the name with the last 6 digits of your resource group.
 
+## Workshop Labs
+
+| Lab Name      | Ansible       | ARM Template  | Terraform |
+|:------------- |:-------------:|:-------------:|:-------------:|
+| Basics        | [Guide](./Ansible/01-Basics/Guide.md) | [Guide](./ARM%20Template/01%20-%20Basics/Guide.md) | [Guide](./Terraform/01%20-%20Basics/Guide.md) |
+| Variables     | [Guide](./Ansible/02-Variables/Guide.md) | [Guide](./ARM%20Template/02%20-%20Variables/Guide.md) | [Guide](./Terraform/02%20-%20Variables/Guide.md) |
+| Helpers       | [Guide](./Ansible/03-Helpers/Guide.md) | [Guide](./ARM%20Template/03%20-%20Helpers/Guide.md) | [Guide](./Terraform/03%20-%20Helpers/Guide.md) |
+| Security      | [Guide](./Ansible/04-Security/Guide.md) | [Guide](./ARM%20Template/04%20-%20Security/Guide.md) | [Guide](./Terraform/04%20-%20Security/Guide.md) |
+| Reusability   | [Guide](./Ansible/05-Reusability/Guide.md) | [Guide](./ARM%20Template/05%20-%20Reusability/Guide.md) | [Guide](./Terraform/05%20-%20Reusability/Guide.md) |
 
 [Contribution guide](Contrib.md)
