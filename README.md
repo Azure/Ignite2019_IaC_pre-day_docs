@@ -13,4 +13,29 @@ Walk throughs for this workshop can be found in the table below. During the work
 | Security      | [Guide](./Ansible/04-Security/Guide.md) | [Guide](./ARM%20Template/04%20-%20Security/Guide.md) | [Guide](./Terraform/04%20-%20Security/Guide.md) |
 | Reusability   | [Guide](./Ansible/05-Reusability/Guide.md) | [Guide](./ARM%20Template/05%20-%20Reusability/Guide.md) | [Guide](./Terraform/05%20-%20Reusability/Guide.md) |
 
+## Before you start
+
+Go to [launch URL](https://manage.cloudlabs.ai/#/odl/ac646c05-db3c-4773-a2b6-799f80eac16b), sign up and provide the activation code.
+
+After you signed up, click the Launch Lab button which will take you automatically to the LabVM RDP in browser.
+
+### Setting up Cloud Shell in Azure portal
+
+In the LabVM RDP browser:
+
+1. Click the link on the top left to go to **Azure Portal** 
+1. Sign in using the **Azure Credentials** provided in the `Environment Details` tab
+1. Once signed in, go to **Resource Groups** under **Favorites** in the left rail. You should see two resource groups: 
+    - IoC-01-XXXXXX: this resource group contains all the AnsibleVM, LabVMs etc., lab resources. We recommend to put your Cloud Shell storage in this resource group as well.
+    - IoC-02-XXXXXX: use this resource group for all assets created in the labs
+
+1. click >_ in the top bar
+![Launch Cloud Shell](/images/cloudshell.png)
+1. Select `Bash`
+1. Since you have no storage mounted, click `Show advanced settings` to create a storage account in the 1st resource group.
+![Launch Cloud Shell](/images/setup-cloudshell.png)
+1. Specify the region as the same as your resource group. i.e. **South Central US**
+1. Under `Resource group`, make sure you select `IoC-01-XXXXXX` as the resource group, provide a unique name for each of your storage account and file share. E.g., you can prefix the name with the last 6 digits of your resource group.
+
+
 [Contribution guide](Contrib.md)
