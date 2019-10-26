@@ -23,12 +23,12 @@ For this challenge, you will provision an [Azure Kubernetes](https://docs.micros
 ## Web App with CosmoDB backend
 For this challenge, you will provision an [Azure WebApp](https://docs.microsoft.com/en-us/azure/app-service/) and a [Azure Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/introduction) that meets the following requirements.
 
-| Requirement                                                                   | Points |
-|:------------------------------------------------------------------------------|:------:|
-| Cosmos DB using the MongoDb API                                               |   20   |
+| Requirement                                                                                       | Points |
+|:--------------------------------------------------------------------------------------------------|:------:|
+| Cosmos DB using the MongoDb API                                                                   |   20   |
 | Azure Web App (App Service)for NodeJS with System Assigned identity, storage for application logs |   30   |
-| Enable monitoring of app & cosmos with Log Analytics                                |   25   |
-| Connect WebApp and Cosmos DB using VNet                   |   25   |
+| Enable monitoring of app & cosmos with Log Analytics                                              |   25   |
+| Connect WebApp and Cosmos DB using VNet                                                           |   25   |
 
 > **NOTE** All secrets must be securely stored and referenced (i.e. nothing in plain text)
 
@@ -47,10 +47,10 @@ For this challenge, you will provision an create a [VMSS](https://docs.microsoft
 ## Pipeline for IaC
 For this challenge, you will provision an create a pipeline that will build and provision code from the Hands on Labs or a previous challeng. You can use the Azure DevOps environement that has been provisioned as part of this lab environment, GitHub Actions or Jenkins for your pipeline.  The pipelien must meet the following requirements.
 
-| Requirement                                                                   | Points |
-|:------------------------------------------------------------------------------|:------:|
+| Requirement                                                                               | Points |
+|:------------------------------------------------------------------------------------------|:------:|
 | Create Build Step that performs some basic checks of your IaC (linting, plan, etc.)       |   50   |
-| Create a Deploy step that deploys the infrastructure                          |   50   |
+| Create a Deploy step that deploys the infrastructure                                      |   50   |
 
 > **NOTE** All secrets must be securely stored and referenced (i.e. nothing in plain text)
 
