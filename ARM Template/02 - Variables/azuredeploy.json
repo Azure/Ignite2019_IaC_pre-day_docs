@@ -1,0 +1,50 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+  },
+  "variables": {
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2019-06-01",
+      "name": "pre-day-vnet",
+      "location": "eastus2",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.0.0.0/16"
+          ]
+        }
+      },
+      "resources": [
+        {
+          "type": "subnets",
+          "apiVersion": "2019-06-01",
+          "name": "subnet-1",
+          "location": "eastus2",
+          "dependsOn": [
+            "pre-day-vnet"
+          ],
+          "properties": {
+            "addressPrefix": "10.0.0.0/24"
+          }
+        },
+        {
+          "type": "subnets",
+          "apiVersion": "2019-06-01",
+          "name": "subnet-2",
+          "location": "eastus2",
+          "dependsOn": [
+            "pre-day-vnet",
+            "subnet-1"
+          ],
+          "properties": {
+            "addressPrefix": "10.0.1.0/24"
+          }
+        }
+      ]
+    }
+  ]
+}

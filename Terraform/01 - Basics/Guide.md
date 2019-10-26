@@ -5,14 +5,15 @@ In this section you will use Terraform to create the fundamental building block 
 
 Create a folder on the lab virtual machine where you will save your Terraform configuration.
 
-We recommend using VS Code for creating and running (in Azure Cloud Shell) Terraform configurations in this lab so open VS Code and browse to the folder that you created for your configurations.
+We recommend using VS Code for creating Terraform configurations in this lab so open VS Code and browse to the folder that you created for your configurations. 
 
 [Azure Terraform](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azureterraform) and [Terraform](https://marketplace.visualstudio.com/items?itemName=mauve.terraform) extensions are required and already installed in your VS Code environment. The [Install and use the Azure Terraform Visual Studio Code extension](https://docs.microsoft.com/en-us/azure/terraform/terraform-vscode-extension) provides good guidance on what you need to do to get started. 
 
 In short (TL;DR):
-- To run the configuration in Cloud Shell simply ensure your configuration is open in VS Code and a Terraform configuration file is selected; from the menu bar, select View > Command Palette... > Azure Terraform: Init.
+- To run the configuration in Cloud Shell simply ensure your configuration is open in VS Code and a Terraform configuration file is selected; from the menu bar, select View > Command Palette... > Azure Terraform: push.
 - If you have not logged in, the Azure Account extension will prompt you to sign in.
 - Terraform files are copied to the `clouddrive` folder in Cloud Shell upon saving so you don't need to explicitly copy files to Cloud Shell in order to run them there unless otherwise stated in the lab.
+- Terraform execution including init, plan and apply will be run from within cloudshell after pushing the files up.
 
 > **NOTE**: The first time you launch Cloud Shell from a new folder, you will be asked to set up the web application. Select Open to continue
 
@@ -24,7 +25,7 @@ Terraform executable evaluates all files within the directory it's being execute
 ### Indicate that you will use Azure Terraform provider
 Another key Terraform strength is the multitude of providers available for different cloud environments for infrastructure provisioning. Note that does not imply "write infrastructure once, run everywhere," but rather a common syntax used to codify infrastructure, one set per environment.
 
-For our workshop, we will need to specify that we will be using Terraform provider for Azure. First, following Terraform best practices, create a new file that will contain the code indicating the use of Azure provider. Give this new file a name `provider.tf`. Then, using [Terraform Azure provider documentation](https://www.terraform.io/docs/providers/azurerm/index.html), locate the block of HCL code that specifies the use of Azure provider for Terraform, paste it inside provider.tf and save the file.
+For our workshop, we will need to specify that we will be using Terraform provider for Azure. First, following Terraform best practices, create a new file that will contain the code indicating the use of Azure provider. Give this new file a name `provider.tf`. Then, using [Terraform Azure provider documentation](https://www.terraform.io/docs/providers/azurerm/index.html), locate the block of HCL code that specifies the use of Azure provider for Terraform, paste it inside provider.tf and save the file. In this lab, you will need to use at least version 1.35.0 of the provder.
 
 ## Cheat Sheet: provider.tf
 <details>
@@ -41,10 +42,10 @@ provider "azurerm" {
 </details>
 
 ### Create vnet.tf
-Using the tool of your choice (VS Code, Visual Studio, command line, vi), create a new file and call it ```vnet.tf```. You will put all the code related to virtual network in this file.
+Create a new file and called ```vnet.tf```. You will put all the code related to virtual network in this file.
 
 ### Resource Group
-In the lab environment, you have been given access to a pre-created resource group. To ensure that your infrastructure gets provisioned properly, note the name of the resource group you are using. You will specify it in the VNet provisioning section below.
+In the lab environment, you have been given access to a pre-created resource group. To ensure that your infrastructure gets provisioned properly, note the name of the resource group titled "Second Resource Group Name" in your lab environment details. You will specify it in the VNet provisioning section below.
 
 ## VNet concepts
 With preliminaries out of the way, you are ready to provision your virtual network. A quick review of basic VNet concepts below:
