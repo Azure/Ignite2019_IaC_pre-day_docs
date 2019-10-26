@@ -51,7 +51,7 @@
       virtual_network: "{{ myVnet }}"
       subnet: "{{ myVnetSubNet }}"
       ip_configurations:
-        - name: ipconfig1
+        - name: ipconfig
           public_ip_address_name: "{{ myPublicIP }}"
       security_group: "{{ myNetworkSecurityGroup }}"
       
@@ -59,7 +59,7 @@
     azure_rm_virtualmachine:
       resource_group: "{{ myResource_group }}"
       name: "{{ myVM }}"
-      admin_username: "testuser"
+      admin_username: "testadmin"
       admin_password: "Password1234!"
       vm_size: Standard_B1ms
       network_interfaces: "{{ myNIC }}"

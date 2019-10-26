@@ -8,21 +8,14 @@ In this section you will:
 
 ## Before you start
 
-For this lab, you will work with multiple files. 
-
-Running playbooks in Cloud Shell presents a couple of limitations:
-
-- you can only upload file to Cloud Shell one by one
-- after uploading to Cloud Shell, you need to perform an additional step to move files uploaded to the right location.
-
-It can become cumbersome to continue running your playbooks in Cloud Shell.
-
-The VS Code Ansible extension provides better integration experience when you need to work with multiple files so we recommend running Ansible in the remote host via SSH. You can hit `F1` to copy files to remote host.
+As mentioned in previous lab, the VS Code Ansible extension provides better integration experience when you need to work with multiple files so we recommend running Ansible in the remote host via SSH. You can hit `F1` to copy files to remote host.
 
 1. Hit `F1`; type "Ansible: copy folder to Remote Host"
 1. Follow the prompt to provide the source directory
-1. Select "Set up host" if this is the first time. Else select your remote host from the list of remote hosts.
-1. Next, specify the target folder
+1. Select from the list of hosts. (You can refer to instruction in the **Beore you start** section in Lab 4 if you have not set up a remote host yet.)
+1. Next, specify the target folder. You can keep it the same as your local directory
+
+Run your playbook by right clicking your `.yml` file and select **Run playbook remotely via SSH**
 
 ## Reusing task(s) in your playbook
 

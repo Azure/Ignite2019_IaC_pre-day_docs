@@ -7,12 +7,39 @@ In this section you will:
 - Create a secret in an existing Azure Key Vault.
 - Modify your playbook so that you reference the secret in your playbook.
 
+## Before you start
+
+From Lab 4 onwards, you will work with multiple files. 
+
+Running playbooks in Cloud Shell presents a couple of limitations:
+
+- you can only upload file to Cloud Shell one by one
+- after uploading to Cloud Shell, you need to perform an additional step to move files uploaded to the right location.
+
+It can become cumbersome to continue running your playbooks in Cloud Shell.
+
+The VS Code Ansible extension provides better integration experience when you need to work with multiple files so we recommend running Ansible in the remote host via SSH. 
+
+When running your playbook remotely via SSH, you will be prompted if you want to always save your workspace in the remote host. You can also hit `F1` to explicitly copy files to remote host.
+
+1. Hit `F1`
+1. Type/select **Ansible: copy folder to Remote Host**
+1. Follow the prompt to first provide the source directory
+1. If this is the first time:
+    -  set up a new host by selecting **Add new host**. Provide a name. e.g., the Ansible DNS Name in `Environment Details` tab of this workshop
+    - For SSH port, enter 22
+    - Provide **ansible Admin Username** as the SSH username and ansible Admin Password as SSH password 
+1. If you have already set up the remote host, you will find the SSH host in the list for selection.
+1. Next, specify the target folder. You can keep it the same as your local directory.
+
+Run your playbook by right clicking your .yml file and select **Run playbook remotely via SSH**
+
 ## Add a secret to Azure Key Vault
 
-Azure Key Vault is a tool for securely storing and accessing secrets.
+Azure Key Vault is a tool for securely storing and accessing secrets. We have pre-provisioned an Azure Key Vault for you in the second resource group, i.e., `IoC-02-XXXXXX`. The name should be `keyvaultXXXXXX` where `XXXXXX` is the last 6 digits of your second resource group.
 
 1. Use [azure_rm_keyvault](https://docs.ansible.com/ansible/latest/modules/azure_rm_keyvault_module.html) to create an Azure Key Vault. For the purpose of this lab, we have pre-provisioned an Azure Key Vault for each lab participant.
-1. Use [azure_rm_keyvaultsecret](https://docs.ansible.com/ansible/latest/modules/azure_rm_keyvaultsecret_module.html) to add a secret. 
+1. Use [azure_rm_keyvaultsecret](https://docs.ansible.com/ansible/latest/modules/azure_rm_keyvaultsecret_module.html) to add a secret
 
 #### Cheat Sheet: create secret
 <details>

@@ -10,11 +10,11 @@
 # Start with a resource group so that clean up is easy. This tasks is commented out
 # since you cannot create resource group in this workshop.
 # ----------------------------------------------------------------------------------
-  - name: Create a resource group
-    azure_rm_resourcegroup:
-      name: "{{ myResource_group }}"
-      location: eastus2
-
+#  - name: Create a resource group
+#    azure_rm_resourcegroup:
+#      name: "{{ myResource_group }}"
+#      location: eastus2
+#
   - name: Create a virtual network. 
     azure_rm_virtualnetwork:
       resource_group: "{{ myResource_group }}"

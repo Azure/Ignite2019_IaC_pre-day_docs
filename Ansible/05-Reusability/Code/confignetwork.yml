@@ -18,7 +18,7 @@
     resource_group: "{{ myResource_group }}"
     name: "{{ myNetworkSecurityGroup}}"
     rules:
-      - name: "Allow-{{ item.name }}"
+      - name: "{{ item.name }}"
         access: "{{ item.access }}"
         protocol: "{{ item.protocol }}"
         destination_port_range: "{{ item.port }}"
@@ -38,8 +38,4 @@
       - name: ipconfig
         public_ip_address_name: "{{ myPublicIP }}"
     security_group: "{{ myNetworkSecurityGroup }}"
-  register: NIC
-  
-    
-
-  
+  register: NIC  

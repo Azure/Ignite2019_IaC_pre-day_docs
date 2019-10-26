@@ -22,7 +22,7 @@
         priority: 100
         port: 80
         source_address_prefix: Internet 
-    keyvault_name: pckeyvault4
+    keyvault_name: mykeyvault
     secret_name: myVMSecret  
   roles:
     - ./modules
@@ -76,7 +76,7 @@
       virtual_network: "{{ myVnet }}"
       subnet: "{{ myVnetSubNet }}"
       ip_configurations:
-        - name: ipconfig1
+        - name: ipconfig
           public_ip_address_name: "{{ myPublicIP }}"
       security_group: "{{ myNetworkSecurityGroup }}"
 
@@ -90,7 +90,7 @@
     azure_rm_virtualmachine:
       resource_group: "{{ myResource_group }}"
       name: "{{ myVM }}"
-      admin_username: "testuser"
+      admin_username: "testadmin"
       admin_password: " {{ output.secret.value }}"
       vm_size: Standard_B1ms
       network_interfaces: "{{ myNIC }}"

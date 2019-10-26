@@ -18,4 +18,3 @@
       sku: 16.04-LTS
       version: latest
     tags: "{{ myTags }}"
-
