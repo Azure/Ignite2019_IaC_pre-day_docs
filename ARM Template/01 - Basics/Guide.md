@@ -1,2 +1,0 @@
-# Basic Usage and Typical Workflow
-In this section you will be introduced to the basics of using Terraform to provision resources to Azure. You will learn how to author a configuration using HashiCorp Markup Language (HCL). You will then validate that the configuraiton is correct and that it will do what you expect before running the configuration and in turn provisioning Azure resource.
