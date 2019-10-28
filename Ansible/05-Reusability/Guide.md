@@ -332,7 +332,13 @@ keyed_groups:
 
 > **CODE**: Go [here](Code/myazure_rm.yml) to see the code.
 
-2. Run the following command to view the populated inventory:
+2. Hit `F1` to select "Ansible: copy folder to Remote Host" to the ansibleVM.
+
+3. Use **Putty** to SSH into the ansibleVM. Ansible DNS Name, user id and password can be found in the **Environment Details tab**.
+
+3. Change directory to where `myazure_rm.yml` is located. 
+
+4. Run the following command to view the populated inventory:
 
 ```bash
 ansible-inventory -i myazure_rm.yml --graph
@@ -355,6 +361,13 @@ You should see something like this:
 
 ```
 
+For the purpose of this lab, bypass the host key verification error by adding an Ansible configuration file, **.ansible.cfg** in the root of your ansibleVM. Include the following lines in the file.
+
+```bash
+[defaults]
+host_key_checking = False
+```
+
 You can test connection to myVM-BE by doing:
 
 ```bash
@@ -367,7 +380,7 @@ Likewise, for myVM-FE, run:
 ansible -u testadmin -i myazure_rm.yml -m ping tag_Ansible_MySQL -k
 ```
 
->**Note**: since the VMs are using userid/password for authentication, you need to add `-k` to the command and provide password used to SSH into the VMs.
+>**Note**: since the VMs are using userid/password for authentication, you need to add `u` and `-k` to the command to provide user name and password used to SSH into the host VMs.
 
 With dynamic inventory, you can run playbook by targeting vm(s) with the specific tag. For instance, if you wish to apply `XXX.yml` to the back-end VM, you can do so by running the command:
 
