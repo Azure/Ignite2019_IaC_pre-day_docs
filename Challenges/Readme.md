@@ -1,5 +1,6 @@
 # Challenges
-The final hands on part of the the pre-day consists of two challenges where you will pick 2 of the 4 challenges. You have 1 hr for each challenge and will be scored based on the requirements that you are able to implement and provision. You man choose any of the tools or any combination thereof to accomplish your chosen challenge. 
+
+The final hands on part of the the pre-day consists of two challenges where you will pick 2 of the 4 challenges. You have 1 hr for each challenge and will be scored based on the requirements that you are able to implement and provision. You man choose any of the tools or any combination thereof to accomplish your chosen challenge.
 
 As they have been with the labs, our proctors are here to help so feel free to flag one of us down if you get stuck or have questions.
 
@@ -9,7 +10,8 @@ At the end of the day, the person(s) with the most points will be win a fabulous
 > In case of a tie we will raffle amongst the top scorers
 
 ## Securely provision Azure Kuberenets cluster
-For this challenge, you will provision an [Azure Kubernetes](https://docs.microsoft.com/en-us/azure/aks/) (AKS) Cluster that meets the following requirements. 
+
+For this challenge, you will provision an [Azure Kubernetes](https://docs.microsoft.com/en-us/azure/aks/) (AKS) Cluster that meets the following requirements.
 
 | Requirement                                                                   | Points |
 |:------------------------------------------------------------------------------|:------:|
@@ -21,6 +23,7 @@ For this challenge, you will provision an [Azure Kubernetes](https://docs.micros
 > **NOTE** All secrets must be securely stored and referenced (i.e. nothing in plain text)
 
 ## Web App with CosmoDB backend
+
 For this challenge, you will provision an [Azure WebApp](https://docs.microsoft.com/en-us/azure/app-service/) and a [Azure Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/introduction) that meets the following requirements.
 
 | Requirement                                                                                       | Points |
@@ -33,6 +36,7 @@ For this challenge, you will provision an [Azure WebApp](https://docs.microsoft.
 > **NOTE** All secrets must be securely stored and referenced (i.e. nothing in plain text)
 
 ## Provision VMSS with image from Shared Image Gallery
+
 For this challenge, you will provision an create a [VMSS](https://docs.microsoft.com/en-us/azure/virtual-machine-scale-sets/overview) (SIG) from an image that is stored in the [Shared Image Gallery](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/shared-image-galleries) (SIG) that meets the following requirements.
 
 | Requirement                                                                   | Points |
@@ -43,9 +47,9 @@ For this challenge, you will provision an create a [VMSS](https://docs.microsoft
 
 > **NOTE** All secrets must be securely stored and referenced (i.e. nothing in plain text)
 
-
 ## Pipeline for IaC
-For this challenge, you will provision an create a pipeline that will build and provision code from the Hands on Labs or a previous challeng. You can use the Azure DevOps environement that has been provisioned as part of this lab environment, GitHub Actions or Jenkins for your pipeline.  The pipelien must meet the following requirements.
+
+For this challenge, you will provision an create a pipeline that will build and provision code from the Hands on Labs or a previous challeng. You can use the Azure DevOps environement that has been provisioned as part of this lab environment, GitHub Actions or Jenkins for your pipeline.  The pipeline must meet the following requirements.
 
 | Requirement                                                                               | Points |
 |:------------------------------------------------------------------------------------------|:------:|

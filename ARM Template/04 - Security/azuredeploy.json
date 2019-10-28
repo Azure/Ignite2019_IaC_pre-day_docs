@@ -2,6 +2,12 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "nsgRules": {
+      "type": "array",
+      "defaultValue": [
+        22, 80, 443
+      ]
+    },
     "location": {
       "type": "string",
       "defaultValue": "[resourceGroup().location]"
@@ -11,20 +17,14 @@
     },
     "adminPassword": {
       "type": "securestring"
-    },
-    "nsgRules": {
-      "type": "array",
-      "defaultValue": [
-        22, 80, 443
-      ]
     }
   },
   "variables": {
+    "nsgName": "nsg",
     "virtualNetworkName": "virtualNetwork",
     "subnet1Name": "subnet-1",
     "nicName": "networkCard",
-    "subnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnet1Name'))]",
-    "nsgName": "nsg"
+    "subnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnet1Name'))]"
   },
   "resources": [
     {
@@ -44,23 +44,21 @@
           "type": "subnets",
           "apiVersion": "2019-06-01",
           "name": "subnet-1",
-          "location": "[parameters('location')]",
           "dependsOn": [
+            "[variables('nsgName')]",
             "pre-day-vnet"
           ],
           "properties": {
-            "addressPrefix": "10.0.0.0/24",
             "networkSecurityGroup": {
               "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
-            }
-
+            },
+            "addressPrefix": "10.0.0.0/24"
           }
         },
         {
           "type": "subnets",
           "apiVersion": "2019-06-01",
           "name": "subnet-2",
-          "location": "[parameters('location')]",
           "dependsOn": [
             "pre-day-vnet",
             "subnet-1"

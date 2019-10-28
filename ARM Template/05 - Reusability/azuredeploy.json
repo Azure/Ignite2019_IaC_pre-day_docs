@@ -25,6 +25,7 @@
     "nsgName": "nsg",
     "virtualNetworkName": "virtualNetwork",
     "subnet1Name": "subnet-1",
+    "nicName": "networkCard",
     "subnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnet1Name'))]"
   },
   "resources": [
@@ -71,6 +72,28 @@
       ]
     },
     {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2019-06-01",
+      "name": "[variables('nicName')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('subnetId')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
       "type": "Microsoft.Network/networkSecurityGroups",
       "apiVersion": "2019-06-01",
       "name": "[variables('nsgName')]",
@@ -99,38 +122,39 @@
       }
     },
     {
-      "name": "[concat('create-vm', copyIndex())]",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2019-05-01",
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2019-03-01",
+      "name": "linux-vm",
+      "location": "[parameters('location')]",
       "dependsOn": [
-        "[variables('subnetId')]"
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
       ],
-      "copy": {
-        "name": "vmLoop",
-        "count": 3
-      },
       "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "https://raw.githubusercontent.com/.../vm.json",
-          "contentVersion": "1.0.0.0"
+        "hardwareProfile": {
+          "vmSize": "Standard_A1_v2"
         },
-        "parameters": {
-          "vmName": {
-            "value": "[concat('vm-', copyIndex())]"
+        "osProfile": {
+          "computerName": "linux-vm",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "Canonical",
+            "offer": "UbuntuServer",
+            "sku": "18.04-LTS",
+            "version": "latest"
           },
-          "adminUsername": {
-            "value": "[parameters('adminUsername')]"
-          },
-          "adminPassword": {
-            "value": "[parameters('adminPassword')]"
-          },
-          "location": {
-            "value": "[parameters('location')]"
-          },
-          "subnetId": {
-            "value": "[variables('subnetId')]"
+          "osDisk": {
+            "createOption": "FromImage"
           }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
+            }
+          ]
         }
       }
     }
