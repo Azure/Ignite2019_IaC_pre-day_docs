@@ -4,6 +4,8 @@ To begin this lab, start with the template from the previous lab or use the azur
 
 This lab will walk through the creation of a template that can be reused as a single piece of many complex deployments.
 
+> **NOTE:** Open the 05-Reusability folder for this lab
+
 ## Copy the Template
 
 - In VS Code, copy/paste the azuredeploy.json template file.  Rename the new file to "my-vm.json".

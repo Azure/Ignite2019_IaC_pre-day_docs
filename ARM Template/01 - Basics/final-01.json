@@ -9,7 +9,7 @@
     {
       "type": "Microsoft.Network/virtualNetworks",
       "apiVersion": "2019-06-01",
-      "name": "pre-day-vnet",
+      "name": "virtualNetwork",
       "location": "eastus2",
       "properties": {
         "addressSpace": {
@@ -24,7 +24,7 @@
           "apiVersion": "2019-06-01",
           "name": "subnet-1",
           "dependsOn": [
-            "pre-day-vnet"
+            "virtualNetwork"
           ],
           "properties": {
             "addressPrefix": "10.0.0.0/24"
@@ -35,7 +35,7 @@
           "apiVersion": "2019-06-01",
           "name": "subnet-2",
           "dependsOn": [
-            "pre-day-vnet"
+            "virtualNetwork"
           ],
           "properties": {
             "addressPrefix": "10.0.1.0/24"

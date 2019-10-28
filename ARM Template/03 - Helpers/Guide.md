@@ -2,6 +2,8 @@
 
 To begin this lab, start with the template from the previous lab or use the azuredeploy.json file provided in this folder.
 
+> **NOTE:** Open the 03-Helpers folder for this lab
+
 ## Add a Network Security Group to the Template
 
 Next, add a Network Security Group to the template to help secure the resources deployed in the template.  Copy and paste the code below at the top of the resources section of the template.

@@ -2,6 +2,8 @@
 
 To begin this lab, start with the template from the previous lab or use the azuredeploy.json file provided in this folder.
 
+> **NOTE:** Open the 04-Security folder for this lab
+
 ## Add a Parameters File and Parameters
 
 When deploying templates you have the option to use a parameter file to supply parameters to the deployment.  This removes the prompt for these vaules at deployment time.  Open the azuredeploy.parameters.json file and add the following code to the "parameters" object:
