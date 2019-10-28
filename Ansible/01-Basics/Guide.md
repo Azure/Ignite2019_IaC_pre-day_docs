@@ -48,7 +48,7 @@ When all resources created in this workshop are no longer needed, you can easily
         state: absent
 ```
 
-> **_NOTE:_** This step is included for completeness. **You can skip this step** since you cannot create resource group in this workshop.
+> **NOTE:** This step is included for completeness. **You can skip this step** since you cannot create resource group in this workshop. Please use the second empty regroup group IoC-02-XXXXXX for all labs.
 
 ## Create a virtual network(VNet)
 
@@ -87,7 +87,7 @@ Expand to see how you can create a VNet
 
 </details>
 
-> **_NOTE:_** The `gather_facts` module is automatically called by playbooks to gather useful variables about remote hosts that can be used in playbooks. You can disable gathering facts by including `gather_facts: no` in the header. You may also get warnings like below. This is because you have no inventory.
+> **NOTE:** The `gather_facts` module is automatically called by playbooks to gather useful variables about remote hosts that can be used in playbooks. You can disable gathering facts by including `gather_facts: no` in the header. You may also get warnings like below. This is because you have no inventory.
 
 ```bash
 pui@Azure:~$ ansible-playbook ./clouddrive/ansible-playbooks/lab1.yml

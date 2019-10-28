@@ -1,6 +1,6 @@
 - hosts: localhost
   vars:
-    myResource_group: myResource_group_pc1
+    myResource_group: myResource_group
     myVnet: myVnet
     myVnetSubNet: "{{ myVnet }}Subnet"
     myPublicIP: myPublicIP
