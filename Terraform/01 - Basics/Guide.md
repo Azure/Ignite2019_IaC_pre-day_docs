@@ -106,7 +106,7 @@ This command allows you to visualize infrastructure changes about to be deployed
 ## Create your infrastructure via 'terraform apply'
 Terraform ```apply``` command provisions the infrastructure into the cloud. If the output of ```terraform plan``` looks good to you, go ahead and issue the following command:
 
-```terraform plan```
+```terraform apply```
 
 Finally, confirm that you do want the changes deployed by browsing to your resource group from [portal.azure.com](https://portal.azure.com). 
 

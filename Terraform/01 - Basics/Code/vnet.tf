@@ -1,4 +1,4 @@
-# Configure Vnet and Subnet
+# Configure Vnet and Default Subnet
 resource "azurerm_virtual_network" "predayvnet" {
   name                = "tfignitepreday"
   location            = "East US 2"
