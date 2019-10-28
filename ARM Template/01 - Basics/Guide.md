@@ -13,11 +13,11 @@ To start the lab, clone the repo that contains the lab content.
 
 ## Deploy an Empty Template
 
-Before getting started in the lab, deploy the empty template to get familiar with the command line tools available for Azure.  
+Before getting started in the lab, deploy the empty template to get familiar with the command line tools available for Azure.  Open a PowerShell command window to run all of the commands provided for the labs.
 
 ### Login to Azure
 
-For the course of the lab you can use PowerShell, the Azure CLI or a combination of both if you want to become familiar with each.  You will need to login to PowerShell and the CLI using your lab credentials for whichever you use.  If you want to use both tools, run both login commands; if you choose only one tool, you only need to run that login command.  You will be prompted for steps to authenticate after running the command.
+For the course of the lab you can use PowerShell, the Azure CLI or a combination of both if you want to become familiar with each.  You will need to login to PowerShell and the CLI using your lab credentials for whichever you use.  If you want to use both tools, run both login commands; if you choose only one tool, you only need to run that login command.  You will be prompted for steps to authenticate after running the command.  Use the credentials provided for the lab environment.
 
 PowerShell
 
@@ -57,7 +57,7 @@ You will see the status of the deployment in the command window.  Since this tem
 
 Return to VS Code and open the **azuredeploy.json** file in the **01 - Basics** folder. Next, add a virtualNetwork to the template.  When adding resources there are a number of sources of information and samples you can use to start creating templates.
 
-The [Azure QuickStart Repo](https://github.com/Azure/azure-quickstart-templates) has hundreds of samples and a searchable index can be found at [azure.com](https://azure.microsoft.com/en-us/resources/templates).  For this lab we're provide snippets that you can use to construct your template.
+The [Azure QuickStart Repo](https://github.com/Azure/azure-quickstart-templates) has hundreds of samples and a searchable index can be found at [azure.com](https://azure.microsoft.com/en-us/resources/templates).  For this lab we provide snippets that you can use to construct your template.
 
 The first resource to add is a virtual network.  Copy the code below and paste between the square brackets in the resources section of the template.
 
@@ -65,7 +65,7 @@ The first resource to add is a virtual network.  Copy the code below and paste b
 {
       "type": "Microsoft.Network/virtualNetworks",
       "apiVersion": "2019-06-01",
-      "name": "pre-day-vnet",
+      "name": "virtualNetwork",
       "location": "eastus2",
       "properties": {
         "addressSpace": {
@@ -80,7 +80,7 @@ The first resource to add is a virtual network.  Copy the code below and paste b
           "apiVersion": "2019-06-01",
           "name": "subnet-1",
           "dependsOn": [
-            "pre-day-vnet"
+            "virtualNetwork"
           ],
           "properties": {
             "addressPrefix": "10.0.0.0/24"
@@ -129,18 +129,20 @@ Note that there is only one subnet in the virtual network.
 Next, add a second subnet to the virtual network in the template.  Copy the code below and paste it before the first subnet declaration.  Note, that the order of the resources in the template does not matter but you can specify dependencies as needed.  Dependencies will be covered in a later step.
 
 ```json
-    {
-      "type": "subnets",
-      "apiVersion": "2019-06-01",
-      "name": "subnet-2",
-      "dependsOn": [
-        "pre-day-vnet"
-      ],
-      "properties": {
-        "addressPrefix": "10.0.1.0/24"
-      }
-    },
+        {
+         "type": "subnets",
+          "apiVersion": "2019-06-01",
+          "name": "subnet-2",
+          "dependsOn": [
+            "virtualNetwork"
+          ],
+          "properties": {
+            "addressPrefix": "10.0.1.0/24"
+          }
+        },
 ```
+
+Save the changes to the template.
 
 ## Deploy the Template with the New Subnet
 

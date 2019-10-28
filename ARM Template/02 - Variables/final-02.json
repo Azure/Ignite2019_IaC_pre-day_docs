@@ -21,44 +21,6 @@
   },
   "resources": [
     {
-      "type": "Microsoft.Network/virtualNetworks",
-      "apiVersion": "2019-06-01",
-      "name": "pre-day-vnet",
-      "location": "[parameters('location')]",
-      "properties": {
-        "addressSpace": {
-          "addressPrefixes": [
-            "10.0.0.0/16"
-          ]
-        }
-      },
-      "resources": [
-        {
-          "type": "subnets",
-          "apiVersion": "2019-06-01",
-          "name": "subnet-1",
-          "dependsOn": [
-            "pre-day-vnet"
-          ],
-          "properties": {
-            "addressPrefix": "10.0.0.0/24"
-          }
-        },
-        {
-          "type": "subnets",
-          "apiVersion": "2019-06-01",
-          "name": "subnet-2",
-          "dependsOn": [
-            "pre-day-vnet",
-            "subnet-1"
-          ],
-          "properties": {
-            "addressPrefix": "10.0.1.0/24"
-          }
-        }
-      ]
-    },
-    {
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "2019-06-01",
       "name": "[variables('nicName')]",
@@ -116,6 +78,43 @@
           ]
         }
       }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2019-06-01",
+      "name": "virtualNetwork",
+      "location": "[parameters('location')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.0.0.0/16"
+          ]
+        }
+      },
+      "resources": [
+        {
+          "type": "subnets",
+          "apiVersion": "2019-06-01",
+          "name": "subnet-2",
+          "dependsOn": [
+            "virtualNetwork"
+          ],
+          "properties": {
+            "addressPrefix": "10.0.1.0/24"
+          }
+        },
+        {
+          "type": "subnets",
+          "apiVersion": "2019-06-01",
+          "name": "subnet-1",
+          "dependsOn": [
+            "virtualNetwork"
+          ],
+          "properties": {
+            "addressPrefix": "10.0.0.0/24"
+          }
+        }
+      ]
     }
   ]
 }

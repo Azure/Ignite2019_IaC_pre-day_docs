@@ -30,7 +30,7 @@
     {
       "type": "Microsoft.Network/virtualNetworks",
       "apiVersion": "2019-06-01",
-      "name": "pre-day-vnet",
+      "name": "virtualNetwork",
       "location": "[parameters('location')]",
       "properties": {
         "addressSpace": {
@@ -46,7 +46,7 @@
           "name": "subnet-1",
           "dependsOn": [
             "[variables('nsgName')]",
-            "pre-day-vnet"
+            "virtualNetwork"
           ],
           "properties": {
             "networkSecurityGroup": {
@@ -60,7 +60,7 @@
           "apiVersion": "2019-06-01",
           "name": "subnet-2",
           "dependsOn": [
-            "pre-day-vnet",
+            "virtualNetwork",
             "subnet-1"
           ],
           "properties": {
