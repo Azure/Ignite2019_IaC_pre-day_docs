@@ -1,14 +1,16 @@
 # Iterators and Helpers
 In the previous lessons, you have created a Virtual Network, a subnet, and a Virtual Machine within that subnet in Azure. You learned how to parameterize Terraform code to increase code stability and reusability. In this walk-through, you will secure this infrastructure while learning how to use iterators and helper functions in Terraform to help with that task.
 
-By default, all inbound traffic originating from outside of your Virtual Network into your subnet is denied, while your Virtual Machine has outbound Internet access. These default rules might be acceptable if you had just one subnet, but that is not a real-world scenario. One of the common scenarios in cloud infrastructure is to have infrastructure tiers, such as database tier, backend tier, and a web tier, all with their own set of security policies. Let's update our infrastructure with a new subnet representing the web tier and then we will secure it.
+By default, all inbound traffic originating from outside of your Virtual Network into your subnet is denied, while your Virtual Machine has outbound Internet access. These default rules might be acceptable if you had just one subnet in your entire cloud infrastructure, but that is certainly not a real-world scenario. One of the common scenarios in cloud infrastructure is to have infrastructure tiers, such as database tier, backend tier, and a web tier, all with their own set of security policies. Let's update our infrastructure with a new subnet representing the web tier (we'll just focus on that in this lesson and leave other possible scenarios for now) and then we will secure it.
 
 ## Update vnet.tf
 Using the same process as in Lesson 2, go ahead and add another subnet to the Virtual Network you created with the following properties:
 
-1. Set internal identifier as "predaywebsubnet"
-1. Set the resource group and the virtual network name to be the same as the other subnet
-1. Set address prefix as "10.0.2.0/24"
+```
+Set internal identifier as "predaywebsubnet"
+Set the resource group and the virtual network name to be the same as the other subnet
+Set address prefix as "10.0.2.0/24"
+```
 
 Save your changes before moving onto the next part - securing your subnet.
 
@@ -34,7 +36,7 @@ Iterators help us create many copies of the same resource with a single line of 
 
 ```terraform
 resource "azurerm_managed_disk" "mydatadisks" {
-  count                = "3"
+  count                = 3
   name                 = "disk1" + count.index
   location             = var.rg
   resource_group_name  = var.location
@@ -49,12 +51,19 @@ Note the use of the count property to specify the number of data disks we need, 
 The simple example above works for the infrastructure that is not parameterized the way you learned in Lesson 2; it would be preferred if we isolated as many  parameters as possible for easier maintenance, and then iterated over those parameters. Let's do this with the security rules we want to introduce for the "web" subnet we created in this lesson.
 
 ## Define security rules
-The rules for the "web" subnet are pretty straightforward: deny all inbound Internet traffic except for http and https. Since the rules will be evaluated based on the priority value, we want to make sure that Allow rules for http and https get higher priority than the Deny rule. Let's go ahead and paste the security rules variable into our variables.tf code:
+Network security rules in Azure allow you to define which traffic can pass to and from your cloud infrastructure. The network security rules for the "web" subnet are pretty straightforward: we want to deny all inbound Internet traffic except for http and https protocols. Since the rules are evaluated based on the priority value, we want to make sure that Allow rules for http and https get higher priority than the Deny rule. Let's go ahead and paste the security rules variable into our variables.tf code (note that this variable is of type list):
 
 ```terraform
 variable "custom_rules" {
   description = "Security rules for the network security group"
-  type        = "list"
+  type        = list(object({
+    name                  = string
+    priority              = number
+    direction             = string
+    access                = string
+    protocol              = string
+    destination_port_range= string
+  }))
   default     = []
 }
 ```
@@ -96,9 +105,9 @@ custom_rules               = [
 Note the use of "[]" to define the variable as type list - a list of security rules.
 
 ## Create networksecurity.tf
-With rules defined in our variable, it is time to use iterators and helper functions to define the Azure resources based on those variables. First, we'll use the helper *length* function - this function returns the number of elements in the list, which is the number of rules we have created. We will also use the *lookup* helper function to retrieve value from the list. 
+With rules defined in our variable, it is time to use iterators and helper functions to define the Azure resources based on those variables. First, we'll use the helper *length* function - this function returns the number of elements in the list, which is the number of rules we have created. We will also use the *lookup* helper function to retrieve value from the list.
 
-But first we need to create a network security group to associate the rules with. Go ahead and create it via the following code:
+Since network security rules in Azure must be associated with the network security group, we must first create a network security group. Go ahead and create it via the following code:
 
 ```terraform
 resource "azurerm_network_security_group" "nsgsecureweb" {
@@ -108,7 +117,7 @@ resource "azurerm_network_security_group" "nsgsecureweb" {
 }
 ```
 
-Next, go ahead and create a new file called networksecurity.tf and paste the following code in there:
+Next, go ahead and create a new file called networksecurity.tf and paste the following code in there. While the code might look intimidating at first, keep in mind that what we're doing with that code is looking up certain values from the list of values we created earlier in the ```custom_rules``` variable.
 
 ```terraform
 resource "azurerm_network_security_rule" "custom_rules" {
@@ -137,7 +146,7 @@ Update the web subnet definition to use the "nsgsecureweb" security group we cre
     network_security_group_id = azurerm_network_security_group.nsgsecureweb.id
 ```
 
-and then also create a new resource finalizing the association (this is a forward-looking feature for the next generation of Terraform provider for Azure)
+and then also create a new resource finalizing the association (this is a forward-looking feature for the next generation of Terraform provider for Azure, we are creating it to future-proof our code):
 
 ```terraform
 resource "azurerm_subnet_network_security_group_association" "test" {
@@ -156,9 +165,11 @@ You will deploy your security group and rules in the next step.
 ## Create your infrastructure via 'terraform apply'
 If the output of ```terraform plan``` looks good to you, go ahead and issue the following command:
 
-```terraform plan```
+```terraform apply```
 
 Finally, confirm that you do want the changes deployed.
+
+You can also review the complete code we have created for this section in the [Code folder](https://github.com/Azure/Ignite2019_IaC_pre-day_docs/tree/master/Terraform/03%20-%20Helpers/code).
 
 Congratulations, you have just secured your infrastructure and learnt to use iterators and helpers to to it for maintainability and scalability in the future! In the next section, you will learn how to further secure your infrastructure using Azure Key Vault.
 
