@@ -1,9 +1,9 @@
 # Variables
-In this section you will build upon the infrastructure (VNet + subnet) you created earlier by creating a virtual machine and adding a network interface to it to allow that virtual machine to communicate with the outside world. After creating this additional infrastructure, you will learn how to define and use variables inside your Terraform code to parameterize resources. You will also learn how Terraform refers to resources internally and is able to construct a dependency graph (Directed Acyclic Graph, or a DAG for the comp sci majors) without explicitly specifying it.
+In this section you will build upon the infrastructure (VNet + subnet) you created earlier by creating a virtual machine and adding a network interface to it to allow that virtual machine to communicate with the outside world. After creating this additional infrastructure, you will learn how to define and use variables inside your Terraform code to parameterize resources. You will also learn how Terraform refers to resources internally and how it is able to construct a dependency graph (Directed Acyclic Graph, or a DAG for the comp sci majors) without explicitly defining it.
 
 ## Update vnet.tf
 
-In this lab you will be creating relationships between Terraform resources. The first of which will occur in the next part of this lab where you will "link" the nic to the subnet that has already been created in the virtual network from the previous lab. To do this you will define an [expression](https://www.terraform.io/docs/configuration/expressions.html) that references data, specifically the subnet id, exported by the subnet resource. In order to make this easier you will pull the subnet out of the virtual network resource and define it in its own Terraform resource using the [`azurerm_subnet`](https://www.terraform.io/docs/providers/azurerm/r/subnet.html) resource.
+In this lab you will be creating relationships between Terraform resources. The first of which will occur in the next part of this lab where you will "link" the Network Interface resource (or NIC) to the subnet that has already been created in the virtual network from the previous lab. To do this you will define an [expression](https://www.terraform.io/docs/configuration/expressions.html) that references data, specifically the subnet id, exported by the subnet resource. In order to make this easier you will pull the subnet out of the virtual network resource and define it in its own Terraform resource using the [```azurerm_subnet```](https://www.terraform.io/docs/providers/azurerm/r/subnet.html) resource.
 
 Update your vnet.tf file as follows:
 1. Create a new `azurerm_subnet` resource named "*predaysubnet*" using the same properties that you have in the `subnet` block from the `azurerm_virtual_network` resource.
@@ -45,7 +45,7 @@ Since your network interface will need to be associated to a VNet, you will need
 
 ```resource "azurerm_virtual_network" "predayvnet" {```
 
-On this line, the first word (resource) is a standard word indicating new resource creation. The second word ("azurerm_virtual_network) is the type of resource we were defining - VNet in that case. The third word (predayvnet) is the internal identifier for the VNet. We will use this identifier inside Terraform scripts to refer to that VNet.
+On this line, the first word (resource) is a reserved word indicating new resource creation. The second word ("azurerm_virtual_network) is the type of resource we were defining - VNet in that case. The third word (predayvnet) is the internal identifier for the VNet. We will use this identifier inside Terraform scripts to refer to that VNet.
 
 Now, using [Terraform Azure provider documentation for network interface](https://www.terraform.io/docs/providers/azurerm/r/network_interface.html), locate the block of code that creates a network interface with the following parameters:
 
@@ -181,7 +181,7 @@ Go ahead and put the variable definition from above into your variables.tf file.
 
 ### Create terraform.tfvars
 
-A good practice to follow for entering variable values, that are not secrets,is to put them into a separate file called (by convention, not a requirement) terraform.tfvars. If you name the file something other than this, you will need to pass it into the commandline parameter `var-file`. The contents of this file is simply a set of keys (matching the variable names) with values as follows:
+A good practice to follow for entering variable values that are not secrets, is to put them into a separate file called ```terraform.tfvars```. If you name the file something other than this, you will need to pass it into the commandline parameter `var-file`. The contents of this file is simply a set of keys (matching the variable names) with values as follows:
 
 ```terraform
 location = "East US 2"
@@ -235,8 +235,10 @@ You will deploy your VM in the next step.
 ## Create your infrastructure via 'terraform apply'
 If the output of ```terraform plan``` looks good to you, go ahead and issue the following command:
 
-```terraform plan```
+```terraform apply```
 
 Finally, confirm that you do want the changes deployed.
+
+You can also review the complete code we have created for this section in the [Code folder](https://github.com/Azure/Ignite2019_IaC_pre-day_docs/tree/master/Terraform/02%20-%20Variables/Code).
 
 Congratulations, you have just created the virtual machine with a network interface in Azure and associated it to the existing VM! In the next section, you will learn how to secure your infrastructure using Terraform while also learning about iterators in helper functions in HCL.
