@@ -108,6 +108,8 @@ Terraform ```apply``` command provisions the infrastructure into the cloud. If t
 
 ```terraform plan```
 
-Finally, confirm that you do want the changes deployed by browsing to your resource group from [portal.azure.com](https://portal.azure.com).
+Finally, confirm that you do want the changes deployed by browsing to your resource group from [portal.azure.com](https://portal.azure.com). 
+
+You can also review the complete code we have created for this section in the [Code folder](https://github.com/Azure/Ignite2019_IaC_pre-day_docs/tree/master/Terraform/01%20-%20Basics/Code).
 
 Congratulations, you have just created the first fundamental building block of your infrastructure!
