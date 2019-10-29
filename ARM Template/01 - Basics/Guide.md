@@ -42,13 +42,13 @@ To deploy the template run the following command:
 PowerShell
 
 ```PowerShell
-New-AzResourceGroupDeployment -ResourceGroupName IoC-03-000000 -TemplateFile azuredeploy.json -Verbose
+New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile azuredeploy.json -Verbose
 ```
 
 Azure CLI
 
 ```bash
-az group deployment create --resource-group IoC-03-000000 --template-file azuredeploy.json --verbose
+az group deployment create --resource-group IoC-02-000000 --template-file azuredeploy.json --verbose
 ```
 
 You will see the status of the deployment in the command window.  Since this template is empty, no resources are created and the deployment will finish quickly.
@@ -99,13 +99,13 @@ To deploy the template run the following command:
 PowerShell
 
 ```PowerShell
-New-AzResourceGroupDeployment -ResourceGroupName IoC-03-000000 -TemplateFile azuredeploy.json -Verbose
+New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile azuredeploy.json -Verbose
 ```
 
 Azure CLI
 
 ```bash
-az group deployment create --resource-group IoC-03-000000 --template-file azuredeploy.json --verbose
+az group deployment create --resource-group IoC-02-000000 --template-file azuredeploy.json --verbose
 ```
 
 After the deployment go to the Azure Portal to see the virtual network created in the resource group.  Find the virtual network and view the subnet created. You can also use the following commands:
@@ -113,13 +113,13 @@ After the deployment go to the Azure Portal to see the virtual network created i
 PowerShell
 
 ```PowerShell
-Get-AzVirtualNetwork -ResourceGroupName IoC-03-000000
+Get-AzVirtualNetwork -ResourceGroupName IoC-02-000000
 ```
 
 Azure CLI
 
 ```bash
-az network vnet list -g IoC-03-000000 -o table
+az network vnet list -g IoC-02-000000 -o table
 ```
 
 Note that there is only one subnet in the virtual network.

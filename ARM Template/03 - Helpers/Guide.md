@@ -9,29 +9,29 @@ To begin this lab, start with the template from the previous lab or use the azur
 Next, add a Network Security Group to the template to help secure the resources deployed in the template.  Copy and paste the code below at the top of the resources section of the template.
 
 ```json
-  {
-    "type": "Microsoft.Network/networkSecurityGroups",
-    "apiVersion": "2019-06-01",
-    "name": "nsg",
-    "location": "[parameters('location')]",
-    "properties": {
-      "securityRules": [
-        {
-          "name": "default-allow-22",
-          "properties": {
-            "priority": 1000,
-            "sourceAddressPrefix": "*",
-            "protocol": "Tcp",
-            "destinationPortRange": "22",
-            "access": "Allow",
-            "direction": "Inbound",
-            "sourcePortRange": "*",
-            "destinationAddressPrefix": "*"
+    {
+     "type": "Microsoft.Network/networkSecurityGroups",
+     "apiVersion": "2019-06-01",
+     "name": "nsg",
+     "location": "[parameters('location')]",
+     "properties": {
+        "securityRules": [
+          {
+            "name": "default-allow-22",
+            "properties": {
+              "priority": 1000,
+              "sourceAddressPrefix": "*",
+              "protocol": "Tcp",
+              "destinationPortRange": "22",
+              "access": "Allow",
+              "direction": "Inbound",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "*"
+           }
           }
-        }
-      ]
-    }
-  },
+        ]
+      }
+    },
 ```
 
 ## Create Variables
@@ -50,12 +50,12 @@ Update the name property of the network security group to use the defined variab
 
 ## Assign the Network Security Group to a Subnet
 
-Next the security group must be assigned to the network or network card.  Placing the security group on a subnet will secure all resources in that subnet. Find the first subnet defined in the template, the subnet will be named "subnet-1".  Copy and paste the following code at the top of the properties object of the subnet resource defintion:
+The security group must be assigned to the network or network card.  Placing the security group on a subnet will secure all resources in that subnet. Find the subnet named "subnet-1" in the template.  Copy and paste the following code inside, and at the top of, the properties object of the subnet resource defintion above the addressPrefix:
 
 ```json
             "networkSecurityGroup": {
               "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
-            }
+            },
 ```
 
 ### DependsOn
@@ -68,18 +68,20 @@ Since the subnet requires the network security group, add a dependency between t
 
 ## Deploy the Template
 
-Before deploying the template, use VS Code to inspect your template for errors.  Then in your command window, verify that your current directory is set to the directory used for this lab before running the following commands.
+Before deploying the template, format the code (SHIFT+ALT+F) and VS Code to inspect your template for errors.  Then in your command window, verify that your current directory is set to the directory used for this lab before running the following commands.
+
+> **NOTE:** Set the current directory to the 03-Helpers folder for this lab
 
 PowerShell
 
 ```PowerShell
-New-AzResourceGroupDeployment -ResourceGroupName IoC-03-000000 -TemplateFile azuredeploy.json -Verbose
+New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile azuredeploy.json -Verbose
 ```
 
 Azure CLI
 
 ```bash
-az group deployment create --resource-group IoC-03-000000 --template-file azuredeploy.json --verbose
+az group deployment create --resource-group IoC-02-000000 --template-file azuredeploy.json --verbose
 ```
 
 After the deployment completes, or while the deployment is in process, you can open the Azure Portal and see the resources deployed into your resource group.
@@ -133,7 +135,7 @@ Network Security Groups can contain multiple rules.  The rules can be defined in
 
 ```
 
-You can see that this approach is verbose because some of the code is simply duplicated.  Copy loops can be used in a number of ways in a template to reduce the duplication.  Next, modify the template to create a copy loop for the security rules.
+You can see that this approach is verbose because some of the code is duplicated which makes it harder to maintain.  Copy loops can be used a number of ways in a template to reduce the duplication.  Next, we'll modify the template to create a copy loop for the security rules.
 
 ### Modify the Network Security Group Definition
 
@@ -155,7 +157,7 @@ Next add the following code to the top of the properties object on the network s
           "name": "securityRules",
           "count": "[length(parameters('nsgRules'))]",
           "input": { }
-        }
+        },
 ```
 
 This will create a copy loop for the property indicated by the name property of the copy loop - in this case the security rules property.  The number of rules is determine by the count property, which in this case is determined by the size or length of the array parameter for the rules.
@@ -239,13 +241,13 @@ Before deploying the template, use VS Code to inspect your template for errors. 
 PowerShell
 
 ```PowerShell
-New-AzResourceGroupDeployment -ResourceGroupName IoC-03-000000 -TemplateFile azuredeploy.json -Verbose
+New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile azuredeploy.json -Verbose
 ```
 
 Azure CLI
 
 ```bash
-az group deployment create --resource-group IoC-03-000000 --template-file azuredeploy.json --verbose
+az group deployment create --resource-group IoC-02-000000 --template-file azuredeploy.json --verbose
 ```
 
 After the deployment completes, or while the deployment is in process, you can open the Azure Portal and see the resources deployed into your resource group.
