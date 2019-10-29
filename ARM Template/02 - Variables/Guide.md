@@ -14,9 +14,7 @@ Add a Virtual Machine resource to the template by adding the code below.  Copy a
       "apiVersion": "2019-06-01",
       "name": "[variables('nicName')]",
       "location": "[parameters('location')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]"
-      ],
+      "dependsOn": [ ],
       "properties": {
         "ipConfigurations": [
           {
@@ -101,11 +99,15 @@ A virtual machine is accessible through a virtual network.  The virtual machine'
       }
 ```
 
-## View Dependencies
+## View and Set Dependencies
 
 In the first lab we mentioned dependencies to ensure resources are deployed in the correct order.  Note that our template has dependencies to ensure the virtual network is deployed before the virtual machine, since the virtual machine needs to be placed into the virtual network.  Open the search box (CTRL+F) and search for "dependsOn" to see how this is represented in the template.
 
-Note that the subnets have a dependency on the virtualNetwork to which they belong.  Also, the networkInterface card that attaches the virtualMachine to the subnet, will have a dependency on the subnet.
+Next we need to add a dependency to the network card on the subnet.  Since the VM will be placed in a subnet, a dependency is needed to ensure the subnet is deployed before the network card.  Find the dependsOn property for the networkInterfaceCard and add the following code:
+
+```json
+        "[variables('subnetId')]"
+```
 
 ## Create Parameters
 
@@ -164,4 +166,20 @@ After the deployment completes, or while the deployment is in process, you can o
 
 This is the end of this section of the lab.  To see a finished solution, see the final.json file in this folder.
 
-TODO: delete the resources/vm
+### Clean Up
+
+To clean up the resource group for the next section, run the following command:
+
+PowerShell
+
+```PowerShell
+New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile blank.json -Mode Complete -Verbose
+```
+
+Azure CLI
+
+```bash
+az group deployment create --resource-group IoC-02-000000 --template-file blank.json -mode complete --verbose
+```
+
+You can start the next section while this deployment is still running.

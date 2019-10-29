@@ -24,7 +24,8 @@
           "apiVersion": "2019-06-01",
           "name": "subnet-2",
           "dependsOn": [
-            "virtualNetwork"
+            "virtualNetwork",
+            "subnet-1"
           ],
           "properties": {
             "addressPrefix": "10.0.1.0/24"
