@@ -17,7 +17,7 @@ When deploying templates you have the option to use a parameter file to supply p
     }
 ```
 
-TODO: Update user name and password above to match what you have used before
+Format the code using SHIFT+ALT+F if needed.
 
 ## Deploy with a Parameter File
 
@@ -32,14 +32,30 @@ New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile azu
 Azure CLI
 
 ```bash
-az group deployment create --resource-group IoC-02-000000 --template-file azuredeploy.json --parameters @azuredeploy.parameters.json --verbose
+az group deployment create --resource-group IoC-02-000000 --template-file azuredeploy.json --parameters '@azuredeploy.parameters.json' --verbose
 ```
+
+***Note that in this deployment there was no prompt for the adminUserName and adminPassword as those parameter values were provided by the parameters file.***
 
 After the deployment completes, or while the deployment is in process, you can open the Azure Portal and see the resources deployed into your resource group.
 
-## Delete the Resource Group
+### Clean Up
 
-TODO: don't have perms for this
+To clean up the resource group for the next section, run the following command:
+
+PowerShell
+
+```PowerShell
+New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile blank.json -Mode Complete -Verbose
+```
+
+Azure CLI
+
+```bash
+az group deployment create --resource-group IoC-02-000000 --template-file blank.json -mode complete --verbose
+```
+
+You can start the next section while this deployment is still running.
 
 ## Use KeyVault to store the Admin Password
 
@@ -49,10 +65,11 @@ Saving a password or other secret in a parameter file makes it easy to test a te
 
 Use the steps below to add a secret to the KeyVault available for the lab:
 
-- Open the KeyVault created for the lab in the Azure Portal
+- Open the Azure Portal and go to the IoC-01-000000 resource group created for your account (note that the suffix 000000 will be different for each user)
+- Open the KeyVault created for the lab
 - Select the Secrets tab and click Generate/Import to add a secret
 - Specify a name for the secret for example: "adminPassword"
-- Add the value for the secret, for this lab, use the same password value you have used in previous deployments
+- Add the value for the secret
 - Click "Create" to save the secret in KeyVault
 
 ### Upate Parameter File to Use KeyVault
@@ -70,11 +87,12 @@ Next, update the parameter file to reference the newly created secret.  Copy the
    }
 ```
 
-Next, follow the steps below to update the resourceId to identify the KeyVault for your lab:
+Next, follow the steps below to update the resourceId to identify the KeyVault for your account:
 
 - In the Azure Portal select the Properties tab for the Azure KeyVault
-- Find the resourceId in the properties window, and click the copy icon
+- Find the resourceId in the Properties window, and click the copy icon
 - Paste the resourceId from the clipboard to replace the placeholder id in azuredeploy.paramaters.json
+- Save the changes to the parameters file
 
 ## Deploy the Template
 
@@ -94,6 +112,24 @@ az group deployment create --resource-group IoC-02-000000 --template-file azured
 
 After the deployment completes, or while the deployment is in process, you can open the Azure Portal and see the resources deployed into your resource group.
 
-## Finish
+## Congratulations
 
 This is the end of this section of the lab.  To see a finished solution, see the final.json file in this folder.
+
+### Final Clean Up
+
+To clean up the resource group for the next section, run the following command:
+
+PowerShell
+
+```PowerShell
+New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile blank.json -Mode Complete -Verbose
+```
+
+Azure CLI
+
+```bash
+az group deployment create --resource-group IoC-02-000000 --template-file blank.json -mode complete --verbose
+```
+
+You can start the next section while this deployment is still running.

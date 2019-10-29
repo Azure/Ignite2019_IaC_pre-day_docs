@@ -13,7 +13,7 @@ This lab will walk through the creation of a template that can be reused as a si
 
 ## Modify the my-vm.json Template
 
-Next, modify the my-vm.json template tp contain only the resources needed to deploy a virtual machine.  This template can then be used in any number of deployments or applications without the need to duplicate the code or concept each time it is used.
+Next, modify the my-vm.json template to contain only the resources needed to deploy a virtual machine.  This template can then be used in any number of deployments or applications without the need to duplicate the code or concept each time it is used.
 
 ### Remove Networking from vm.json
 
@@ -24,7 +24,7 @@ To update the template to contain only the VM resources, complete the following 
 - Next, highlight the collapsed {} and delete them
 - Remove the Network Security Group resource
 - Remove the variables for the Virtual Network and Network Security Group - the variable for the nicName should be the only remaining variable
-- Remove unused parameter for the NSG - notice that VS Code will underline this parameter to indicate it is no longer used
+- Remove unused parameter for the nsgRules - notice that VS Code will underline this parameter to indicate it is no longer used
 - Remove dependsOn property from the networkInterface card since the subnet is no longer defined in this template
 
 ### Add Parameters
@@ -39,13 +39,13 @@ Next, add some parameters to the my-vm.json template to make it more flexible fo
     },
 ```
 
-- On the subnet reference for the networkInterface card, VS Code will show an error for the subnet variable that was deleted - change "variable" to "parameter"
+- On the subnet reference for the networkInterface card, VS Code will show an error for the subnet variable that was deleted - change "variables" to "parameters"
 - Add a parameter for the virtual machine name, since we re-use this template and do not want all VMs to have the same name
 
 ```json
     "vmName": {
       "type": "string"
-    }
+    },
 ```
 
 - Update the name property on the VM resource to use this new parameter
@@ -55,6 +55,15 @@ Next, add some parameters to the my-vm.json template to make it more flexible fo
 ```
 
 - Save your changes to the my-vm.json file
+
+### Verify the Changes
+
+If you want to see how your changes compare to this section in the lab, you can use VS Code to do the comparison.
+
+- Right-click on the my-vm.json file and choose "Select for Compare"
+- Right-click on the vm.json file and choose "Compare with Selected"
+
+Any differences between the files will be highlighted but can be ignored for this section of the lab.
 
 ## Remove the VM Resource from azuredeploy.json
 
@@ -78,7 +87,7 @@ Next, add a deployment resource to the template.  This resource will be used to 
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "https://raw.githubusercontent.com/.../vm.json", //TODO
+          "uri": "https://raw.githubusercontent.com/Azure/Ignite2019_IaC_pre-day_docs/master/ARM%20Template/05%20-%20Reusability/vm.json",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -99,12 +108,32 @@ Next, add a deployment resource to the template.  This resource will be used to 
           }
         }
       }
-    }
+    },
 ```
+
+Save the azuredeploy.json file.
 
 ## Deploy the Template
 
 > **NOTE:** Since you are not able to check code into the github repo used for this lab, the deployment resource will reference the vm.json file already provided instead of the my-vm.json file you created.  You can compare the 2 files to see how you did.
+
+Before deploying the template, use VS Code to inspect your template for errors.  Format the code if necessary using SHIFT+ALT+F in VS Code.  Then in your command window, verify that your current directory is set to the directory used for this lab before running the following commands.  You should see no prompts for parameter values since all values should be in the parameters file.
+
+PowerShell
+
+```PowerShell
+New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile azuredeploy.json -Verbose
+```
+
+Azure CLI
+
+```bash
+az group deployment create --resource-group IoC-02-000000 --template-file azuredeploy.json --verbose
+```
+
+After the deployment completes, or while the deployment is in process, you can open the Azure Portal and see the resources deployed into your resource group.
+
+
 
 
 

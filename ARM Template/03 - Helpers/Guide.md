@@ -10,11 +10,11 @@ Next, add a Network Security Group to the template to help secure the resources 
 
 ```json
     {
-     "type": "Microsoft.Network/networkSecurityGroups",
-     "apiVersion": "2019-06-01",
-     "name": "nsg",
-     "location": "[parameters('location')]",
-     "properties": {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "apiVersion": "2019-06-01",
+      "name": "nsg",
+      "location": "[parameters('location')]",
+      "properties": {
         "securityRules": [
           {
             "name": "default-allow-22",
@@ -39,7 +39,7 @@ Next, add a Network Security Group to the template to help secure the resources 
 Add the following variable for the variable for the name of the network security group to the top of the variables section of the template.
 
 ```json
-  "nsgName": "nsg",
+    "nsgName": "nsg",
 ```
 
 Update the name property of the network security group to use the defined variable.
@@ -50,7 +50,7 @@ Update the name property of the network security group to use the defined variab
 
 ## Assign the Network Security Group to a Subnet
 
-The security group must be assigned to the network or network card.  Placing the security group on a subnet will secure all resources in that subnet. Find the subnet named "subnet-1" in the template.  Copy and paste the following code inside, and at the top of, the properties object of the subnet resource defintion above the addressPrefix:
+The security group must be assigned to a sbunet or network card.  Placing the security group on a subnet will secure all resources in that subnet. Find the subnet named "subnet-1" in the template.  Copy and paste the following code inside, and at the top of, the properties object of the subnet resource defintion - above the addressPrefix:
 
 ```json
             "networkSecurityGroup": {
@@ -137,7 +137,7 @@ Network Security Groups can contain multiple rules.  The rules can be defined in
 
 You can see that this approach is verbose because some of the code is duplicated which makes it harder to maintain.  Copy loops can be used a number of ways in a template to reduce the duplication.  Next, we'll modify the template to create a copy loop for the security rules.
 
-### Modify the Network Security Group Definition
+### Add Parameter for the Rules
 
 To make the template more flexible, define a parameter to determine which ports will be available through the security group.  The parameter will contain an array of ports. Add the following code to the top of the parameters section of the template.
 
@@ -150,38 +150,44 @@ To make the template more flexible, define a parameter to determine which ports 
     },
 ```
 
-Next add the following code to the top of the properties object on the network security group resource definition.
+### Modify the Network Security Group Definition
+
+Next add the following code to the top of the properties object on the network security group resource definition, just above the securityRules.
 
 ```json
-        "copy": {
-          "name": "securityRules",
-          "count": "[length(parameters('nsgRules'))]",
-          "input": { }
-        },
+        "copy": [
+          {
+            "name": "securityRules",
+            "count": "[length(parameters('nsgRules'))]",
+            "input": { }
+          }
+        ]
 ```
 
-This will create a copy loop for the property indicated by the name property of the copy loop - in this case the security rules property.  The number of rules is determine by the count property, which in this case is determined by the size or length of the array parameter for the rules.
+This will create a copy loop for the property indicated by the name property of the copy loop - in this case the securityRules property.  The number of rules is determine by the count property, which in this case is determined by the size or length of the array parameter for the nsgRules.
 
-Next, cut the content of the existing securityRules property and paste it inside the "input" property in the copy loop.  Start at the "name" property and include everything up to the "destinationAddressPrefix" property. We are simply moving the defintion from outside of the copy loop to inside the input property of the copy loop.  After that, simply remove the empty "securityRules" property. The code should now look like the following:
+Next, cut the content of the existing securityRules property and paste it inside the "input" property in the copy loop.  Start at the "name" property and include everything up to and including the "destinationAddressPrefix" property - also include the closing }.  Here, we are simply moving the defintion from outside of the copy loop to inside the input property of the copy loop.  After that, remove the empty "securityRules" property. The code should now look like the following (format the code if needed):
 
 ```json
-        "copy": {
-          "name": "securityRules",
-          "count": "[length(parameters('nsgRules'))]",
-          "input": {
-            "name": "default-allow-22",
-            "properties": {
-             "priority": 1000,
-              "sourceAddressPrefix": "*",
-              "protocol": "Tcp",
-              "destinationPortRange": "22",
-              "access": "Allow",
-              "direction": "Inbound",
-              "sourcePortRange": "*",
-              "destinationAddressPrefix": "*"
+        "copy": [
+          {
+            "name": "securityRules",
+            "count": "[length(parameters('nsgRules'))]",
+            "input": {
+              "name": "default-allow-22",
+              "properties": {
+                "priority": 1000,
+                "sourceAddressPrefix": "*",
+                "protocol": "Tcp",
+                "destinationPortRange": "22",
+                "access": "Allow",
+                "direction": "Inbound",
+                "sourcePortRange": "*",
+                "destinationAddressPrefix": "*"
+              }
             }
           }
-        }
+        ]
 ```
 
 As written, our code would now create 3 identical copies of a securityRule.  We need to change the property values to create the rules according to the parameter values passed in to the template.
@@ -197,7 +203,7 @@ This will create a name that starts with the text "allow-" and is appended with 
 Next, give the rule a unique priority based on the order of the ports in the array.  Change the "priority" property value to increment the priority of each successive rule:
 
 ```json
-              "priority": "[add(1000, copyIndex('securityRules'))]",
+               "priority": "[add(1000, copyIndex('securityRules'))]",
 ```
 
 The copyIndex function returns a integer for the index of the loop so the expression will evaluate to 1000, 1001, 1002, etc.
@@ -215,23 +221,25 @@ This simply references the array value using the copyIndex() function.
 After editing the template you should have the folloing copy loop in the properties object and nothing else.
 
 ```json
-        "copy": {
-          "name": "securityRules",
-          "count": "[length(parameters('nsgRules'))]",
-          "input": {
-            "name": "[concat('allow-', parameters('nsgRules')[copyIndex('securityRules')])]",
-            "properties": {
-              "priority": "[add(1000, copyIndex('securityRules'))]",
-              "sourceAddressPrefix": "*",
-              "protocol": "Tcp",
-              "destinationPortRange": "[parameters('nsgRules')[copyIndex('securityRules')]]",
-              "access": "Allow",
-              "direction": "Inbound",
-              "sourcePortRange": "*",
-              "destinationAddressPrefix": "*"
+        "copy": [
+          {
+            "name": "securityRules",
+            "count": "[length(parameters('nsgRules'))]",
+            "input": {
+              "name": "[concat('allow-', parameters('nsgRules')[copyIndex ('securityRules')])]",
+              "properties": {
+                "priority": "[add(1000, copyIndex('securityRules'))]",
+                "sourceAddressPrefix": "*",
+                "protocol": "Tcp",
+                "destinationPortRange": "[parameters('nsgRules')[copyIndex('securityRules')]]",
+                "access": "Allow",
+                "direction": "Inbound",
+                "sourcePortRange": "*",
+                "destinationAddressPrefix": "*"
+              }
             }
           }
-        }
+        ]
 ```
 
 ## Deploy the Template with the Copy Loop
@@ -255,3 +263,21 @@ After the deployment completes, or while the deployment is in process, you can o
 ## Congratulations
 
 This is the end of this section of the lab.  To see a finished solution, see the final.json file in this folder.
+
+### Clean Up
+
+To clean up the resource group for the next section, run the following command:
+
+PowerShell
+
+```PowerShell
+New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile blank.json -Mode Complete -Verbose
+```
+
+Azure CLI
+
+```bash
+az group deployment create --resource-group IoC-02-000000 --template-file blank.json -mode complete --verbose
+```
+
+You can start the next section while this deployment is still running.

@@ -134,7 +134,8 @@ Next, add a second subnet to the virtual network in the template.  Copy the code
           "apiVersion": "2019-06-01",
           "name": "subnet-2",
           "dependsOn": [
-            "virtualNetwork"
+            "virtualNetwork",
+            "subnet-1"
           ],
           "properties": {
             "addressPrefix": "10.0.1.0/24"
@@ -158,5 +159,20 @@ After deployment is finished, view the virtual network as in the previous step a
 
 This is the end of this section of the lab.  To see a finished solution, see the final.json file in this folder.
 
-TODO: need a way to clean up after each step or we'll likely run into location problems (or we always use resourceGroup().location
-)
+### Clean Up
+
+To clean up the resource group for the next section, run the following command:
+
+PowerShell
+
+```PowerShell
+New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile blank.json -Mode Complete -Verbose
+```
+
+Azure CLI
+
+```bash
+az group deployment create --resource-group IoC-02-000000 --template-file blank.json -mode complete --verbose
+```
+
+You can start the next section while this deployment is still running.
