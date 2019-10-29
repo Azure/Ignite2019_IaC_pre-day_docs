@@ -22,23 +22,23 @@
         {
           "type": "subnets",
           "apiVersion": "2019-06-01",
-          "name": "subnet-1",
-          "dependsOn": [
-            "virtualNetwork"
-          ],
-          "properties": {
-            "addressPrefix": "10.0.0.0/24"
-          }
-        },
-        {
-          "type": "subnets",
-          "apiVersion": "2019-06-01",
           "name": "subnet-2",
           "dependsOn": [
             "virtualNetwork"
           ],
           "properties": {
             "addressPrefix": "10.0.1.0/24"
+          }
+        },
+        {
+          "type": "subnets",
+          "apiVersion": "2019-06-01",
+          "name": "subnet-1",
+          "dependsOn": [
+            "virtualNetwork"
+          ],
+          "properties": {
+            "addressPrefix": "10.0.0.0/24"
           }
         }
       ]

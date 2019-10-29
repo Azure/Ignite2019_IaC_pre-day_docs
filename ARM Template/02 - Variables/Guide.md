@@ -140,20 +140,22 @@ A parameter for the location of resources was also defined.  The virtual machine
 
 ## Deploy the Template
 
-Before deploying the template, use VS Code to inspect your template for errors.  Format the code if necessary using SHIFT+ALT+F in VS Code.  Then in your command window, verify that your current directory is set to the directory used for this lab before running the following commands.
+Before deploying the template, use VS Code to inspect your template for errors.  Format the code if necessary using SHIFT+ALT+F in VS Code.  
+
+- In the PowerShell command window, verify that your current directory is set to the directory used for this lab before running the following commands.
 
 > **NOTE:**  When deploying the template, you will see a prompt for any parameter vaules that are not provided, for this lab, provide the same values each time you deploy.
 
 PowerShell
 
 ```PowerShell
-New-AzResourceGroupDeployment -ResourceGroupName IoC-03-000000 -TemplateFile azuredeploy.json -Verbose
+New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile azuredeploy.json -Verbose
 ```
 
 Azure CLI
 
 ```bash
-az group deployment create --resource-group IoC-03-000000 --template-file azuredeploy.json --verbose
+az group deployment create --resource-group IoC-02-000000 --template-file azuredeploy.json --verbose
 ```
 
 After the deployment completes, or while the deployment is in process, you can open the Azure Portal and see the resources deployed into your resource group.
@@ -161,3 +163,5 @@ After the deployment completes, or while the deployment is in process, you can o
 ## Congratulations
 
 This is the end of this section of the lab.  To see a finished solution, see the final.json file in this folder.
+
+TODO: delete the resources/vm
