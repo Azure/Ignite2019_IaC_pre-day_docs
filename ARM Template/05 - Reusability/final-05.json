@@ -29,9 +29,9 @@
   },
   "resources": [
     {
-      "name": "[concat('create-vm', copyIndex())]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-05-01",
+      "name": "[concat('create-vm', copyIndex())]",
       "dependsOn": [
         "[variables('virtualNetworkName')]"
       ],
