@@ -56,18 +56,10 @@ Next, add some parameters to the my-vm.json template to make it more flexible fo
 
 - Update the computerName property in the osProfile object to use the vmName parameter as well
 
-- Update the name property on the networkInterce resource so that each VM will have a networkInterface with the same naming pattern as the VM itself
+- Update the nicName variable so that each VM will have a networkInterface with the same naming pattern as the VM itself
 
 ```json
-      "name": "[concat(parameters('vmName'), '-nic')]",
-```
-
-- Update the dependsOn property of the virtualMachine to use the new naming pattern used on the networkInterface resource
-
-```json
-      "dependsOn": [
-        "[concat(parameters('vmName'), '-nic')]"
-      ],
+      "nicName": "[concat(parameters('vmName'), '-nic')]",
 ```
 
 - Save your changes to the my-vm.json file

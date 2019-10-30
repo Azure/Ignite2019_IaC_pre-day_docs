@@ -20,13 +20,13 @@
     }
   },
   "variables": {
-    "nicName": "networkCard"
+    "nicName": "[concat(parameters('vmName'), '-nic')]"
   },
   "resources": [
     {
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "2019-06-01",
-      "name": "[concat(parameters('vmName'), '-nic')]",
+      "name": "[variables('nicName')]",
       "location": "[parameters('location')]",
       "properties": {
         "ipConfigurations": [
