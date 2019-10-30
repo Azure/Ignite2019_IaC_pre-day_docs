@@ -53,6 +53,7 @@
       ip_configurations:
         - name: ipconfig
           public_ip_address_name: "{{ myPublicIP }}"
+          primary: yes
       security_group: "{{ myNetworkSecurityGroup }}"
       
   - name: Create a virtual machines

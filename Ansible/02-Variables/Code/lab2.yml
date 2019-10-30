@@ -44,6 +44,7 @@
       ip_configurations:
         - name: ipconfig
           public_ip_address_name: "{{ myPublicIP }}"
+          primary: yes
 
   - name: Create a virtual machine
     azure_rm_virtualmachine:

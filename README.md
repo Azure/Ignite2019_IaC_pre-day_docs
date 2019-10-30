@@ -16,7 +16,7 @@ In the LabVM RDP browser:
 1. Click the link on the top left to go to **Azure Portal** 
 1. Sign in using the **Azure Credentials** provided in the `Environment Details` tab
 1. Once signed in, go to **Resource Groups** under **Favorites** in the left rail. You should see two resource groups: 
-    - IoC-01-XXXXXX: this resource group contains all the AnsibleVM, LabVMs etc., lab resources. We recommend to put your Cloud Shell storage in this resource group as well.
+    - IoC-01-XXXXXX: this resource group contains all the AnsibleVM, LabVMs, Key Vault etc., lab resources. We recommend to put your Cloud Shell storage in this resource group as well.
     - IoC-02-XXXXXX: use this resource group for all assets created in the labs
 
 1. click >_ in the top bar
@@ -24,8 +24,8 @@ In the LabVM RDP browser:
 1. Select `Bash`
 1. Since you have no storage mounted, click `Show advanced settings` to create a storage account in the 1st resource group.
 ![Launch Cloud Shell](/images/setup-cloudshell.png)
-1. Specify the region as the same as your resource group. i.e. **South Central US**
-1. Under `Resource group`, make sure you select `IoC-01-XXXXXX` as the resource group, provide a unique name for each of your storage account and file share. E.g., you can prefix the name with the last 6 digits of your resource group.
+1. Specify the region as the same as your resource group. e.g., **South Central US**. The **Create storage** button is grey out until you provide **unique** names for your storage account and file share.
+1. Under `Resource group`, make sure you select `IoC-01-XXXXXX`; provide an **unique** name for each of your storage account and file share. E.g., you can prefix the name with the last 6 digits of your resource group. 
 
 ## Workshop Labs
 

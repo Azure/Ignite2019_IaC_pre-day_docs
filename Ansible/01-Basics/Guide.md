@@ -69,7 +69,9 @@ A virtual network is a virtual, isolated portion of the Azure public network. Ea
 3. Use spaces. **Not** tab.
 4. Use the [azure_rm_virtualnetwork](https://docs.ansible.com/ansible/latest/modules/azure_rm_virtualnetwork_module.html) to complete this step.
 5. Name your task appropriately so that you know precisely which step fails if Ansible runs into an issue.
-6. Run your playbook.
+6. Run your playbook by right clicking your .yml file and select **Run Ansible Playbook in Cloud Shell**
+
+    ![Run in Cloud Shell](../../images/vs-run-in-cloudshell.png "Run in Cloud Shell")
 
 #### Cheat Sheet: VNET
 <details>

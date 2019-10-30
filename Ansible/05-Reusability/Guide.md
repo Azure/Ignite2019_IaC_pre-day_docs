@@ -94,7 +94,7 @@ Expand to see confignetwork.yml
     name: "{{ myVnetSubNet }}"
     address_prefix_cidr:  "{{ subnetAddPrefix }}"
   register: subnet
-
+    
 - name: Create public IP address
   azure_rm_publicipaddress:
     resource_group: "{{ myResource_group }}"
@@ -107,12 +107,12 @@ Expand to see confignetwork.yml
     resource_group: "{{ myResource_group }}"
     name: "{{ myNetworkSecurityGroup}}"
     rules:
-      - name: "Allow-{{ item.name }}"
+      - name: "{{ item.name }}"
         access: "{{ item.access }}"
         protocol: "{{ item.protocol }}"
         destination_port_range: "{{ item.port }}"
         priority: "{{ item.priority }}"
-        direction: " {{ item.direction }}"
+        direction: "{{ item.direction }}"
         source_address_prefix: "{{ item.source_address_prefix }}"
   loop: "{{ NSGlist }}"
   register: NSG
@@ -126,6 +126,7 @@ Expand to see confignetwork.yml
     ip_configurations:
       - name: ipconfig
         public_ip_address_name: "{{ myPublicIP }}"
+        primary: yes
     security_group: "{{ myNetworkSecurityGroup }}"
   register: NIC
 ```
@@ -217,21 +218,12 @@ Expand to see a sample of main.yml
 ```yml
 - hosts: localhost
   vars_files: 
-    - ./vars.yml
+    - vars/vars.yml
   roles:
     - ./modules
   gather_facts: no
     
   tasks:
-# ----------------------------------------------------------------------------------
-# Start with a resource group so that clean up is easy. This tasks is commented out
-# since you cannot create resource group in this workshop.
-# ----------------------------------------------------------------------------------
-#  - name: Create a resource group
-#    azure_rm_resourcegroup:
-#      name: "{{ myResource_group }}"
-#      location: eastus2
-
   - name: Create a virtual network. 
     azure_rm_virtualnetwork:
       resource_group: "{{ myResource_group }}"
@@ -240,27 +232,13 @@ Expand to see a sample of main.yml
 
   - name: Create front-end subnet and NSG rules
     vars:
-      myVnetSubNet: myVnetSubNet
-      myPublicIP: myPublicIP
-      subnetAddPrefix:  "172.16.10.0/24"
-      myNetworkSecurityGroup: myNSG
-      myNIC: myNIC
-      NSGlist: 
-      - name: Allow-SSH
-        access: Allow
-        protocol: Tcp
-        direction: Inbound
-        priority: 300
-        port: 22 
-        source_address_prefix: Internet
-      - name: Allow-HTTP
-        access: Allow
-        protocol: Tcp
-        direction: Inbound
-        priority: 100
-        port: 80
-        source_address_prefix: Internet 
+      subnetAddPrefix:  "{{ FE_subnetAddPrefix }}"
+      NSGlist: "{{ FE_NSGlist }}"
     include_tasks: ./confignetwork.yml
+
+#  - name: Show NIC details
+#    debug: 
+#      var: NIC
 
   - name: Create a front-end virtual machines
     vars:
@@ -272,32 +250,15 @@ Expand to see a sample of main.yml
     vars:
       myVnetSubNet: myVnetSubNet-BE
       myPublicIP: myPublicIP-BE
-      subnetAddPrefix:  "172.16.20.0/24"
+      subnetAddPrefix:  "{{ BE_subnetAddPrefix }}"
       myNetworkSecurityGroup: myNSG-BE
       myNIC: myNIC-BE
-      NSGlist: 
-      - name: Allow-SSH
-        access: Allow
-        protocol: Tcp
-        direction: Inbound
-        priority: 200
-        port: 22 
-        source_address_prefix: Internet
-      - name: Allow-MySQL-FE
-        access: Allow
-        protocol: Tcp
-        direction: Inbound
-        priority: 100
-        port: 3306
-        source_address_prefix: 172.16.10.0/24
-      - name: Deny-internet-all
-        access: Allow
-        protocol: Tcp
-        direction: Outbound
-        priority: 300
-        port: "*"
-        source_address_prefix: "*"
+      NSGlist: "{{ BE_NSGlist }}"
     include_tasks: ./confignetwork.yml
+
+#  - name: Show NIC details
+#    debug: 
+#      var: NIC
 
   - name: Create a back-end virtual machines
     vars:
@@ -361,7 +322,7 @@ You should see something like this:
 
 ```
 
-For the purpose of this lab, bypass the host key verification error by adding an Ansible configuration file, **.ansible.cfg** in the root of your ansibleVM. Include the following lines in the file.
+Since we use SSH password instead of key for this workshop, you need to bypass the host key verification error. One way to do that is by adding an Ansible configuration file, **.ansible.cfg** in the root of your ansibleVM. Include the following lines in the file.
 
 ```bash
 [defaults]

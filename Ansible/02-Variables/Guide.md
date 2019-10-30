@@ -2,7 +2,7 @@
 
 In this section you will:
 
-- Create a network security group
+- Create a public IP address
 - Create a Network Interface Card (NIC)
 - Create a Virtual Machine
 
@@ -73,7 +73,7 @@ You can now see `myNIC` in your resource group.
 #### Cheat Sheet: NIC
 <details>
 <summary>
-Expand to see how you can create a subnet
+Expand to see how you can create a NIC
 </summary>
 
 ```yaml
@@ -85,6 +85,7 @@ Expand to see how you can create a subnet
       ip_configurations:
         - name: ipconfig
           public_ip_address_name: "{{ myPublicIP }}"
+          primary: yes
 ```
 
 </details>

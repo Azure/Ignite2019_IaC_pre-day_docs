@@ -24,15 +24,19 @@ When running your playbook remotely via SSH, you will be prompted if you want to
 
 1. Hit `F1`
 1. Type/select **Ansible: copy folder to Remote Host**
+    ![Copy folder to remote host](../../images/vs-copy-remote.png "Copy folder to remote host")
 1. Follow the prompt to first provide the source directory
 1. If this is the first time:
     -  set up a new host by selecting **Add new host**. Provide a name. e.g., the Ansible DNS Name in `Environment Details` tab of this workshop
+    ![Set up new host](../../images/vs-host.png "Set up new remote SSH host")
     - For SSH port, enter 22
     - Provide **ansible Admin Username** as the SSH username and ansible Admin Password as SSH password 
 1. If you have already set up the remote host, you will find the SSH host in the list for selection.
 1. Next, specify the target folder. You can keep it the same as your local directory.
 
 Run your playbook by right clicking your .yml file and select **Run playbook remotely via SSH**
+
+![Run in remote host](../../images/vs-host.png "Run in remote SSH host")
 
 ## Add a secret to Azure Key Vault
 

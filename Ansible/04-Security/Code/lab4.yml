@@ -78,6 +78,7 @@
       ip_configurations:
         - name: ipconfig
           public_ip_address_name: "{{ myPublicIP }}"
+          primary: yes
       security_group: "{{ myNetworkSecurityGroup }}"
 
   - name: Get latest version of a secret
