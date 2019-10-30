@@ -16,33 +16,22 @@
           "addressPrefixes": [
             "10.0.0.0/16"
           ]
-        }
-      },
-      "resources": [
-        {
-          "type": "subnets",
-          "apiVersion": "2019-06-01",
-          "name": "subnet-2",
-          "dependsOn": [
-            "virtualNetwork",
-            "subnet-1"
-          ],
-          "properties": {
-            "addressPrefix": "10.0.1.0/24"
-          }
         },
-        {
-          "type": "subnets",
-          "apiVersion": "2019-06-01",
-          "name": "subnet-1",
-          "dependsOn": [
-            "virtualNetwork"
-          ],
-          "properties": {
-            "addressPrefix": "10.0.0.0/24"
+        "subnets": [
+          {
+            "name": "subnet-1",
+            "properties": {
+              "addressPrefix": "10.0.0.0/24"
+            }
+          },
+          {
+            "name": "subnet-2",
+            "properties": {
+              "addressPrefix": "10.0.1.0/24"
+            }
           }
-        }
-      ]
+        ]
+      }
     }
   ]
 }
