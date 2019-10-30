@@ -18,6 +18,7 @@
     "subnet1Name": "subnet-1",
     "nicName": "networkCard",
     "subnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnet1Name'))]"
+
   },
   "resources": [
     {
@@ -92,15 +93,15 @@
         },
         "subnets": [
           {
-            "name": "subnet-1",
-            "properties": {
-              "addressPrefix": "10.0.0.0/24"
-            }
-          },
-          {
             "name": "subnet-2",
             "properties": {
               "addressPrefix": "10.0.1.0/24"
+            }
+          },
+          {
+            "name": "subnet-1",
+            "properties": {
+              "addressPrefix": "10.0.0.0/24"
             }
           }
         ]

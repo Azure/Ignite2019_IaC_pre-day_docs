@@ -6,7 +6,7 @@ To begin this lab, start with the template from the previous lab or use the azur
 
 ## Add a Parameters File and Parameters
 
-When deploying templates you have the option to use a parameter file to supply parameters to the deployment.  This removes the prompt for these vaules at deployment time.  Open the azuredeploy.parameters.json file and add the following code to the "parameters" object:
+When deploying templates you have the option to use a parameter file to supply parameters to the deployment.  This removes the prompt for these vaules at deployment time.  Open the **azuredeploy.parameters.json** file and add the following code to the "parameters" object:
 
 ```json
     "adminUsername": {
@@ -17,11 +17,13 @@ When deploying templates you have the option to use a parameter file to supply p
     }
 ```
 
-Format the code using SHIFT+ALT+F if needed.
+> **NOTE:**  Change the values above to match the username and password you have been using for previous deployments.
+
+Format the code using SHIFT+ALT+F if needed and save the file.
 
 ## Deploy with a Parameter File
 
-Next, save the parameters file deploy the template using the file created.  Before deploying the template, use VS Code to inspect your template for errors.  Format the code if necessary using SHIFT+ALT+F in VS Code.  Then in your command window, verify that your current directory is set to the directory used for this lab before running the following commands.
+Verify that your current directory is set to the directory used for this lab before running the following commands.
 
 PowerShell
 
@@ -36,26 +38,6 @@ az group deployment create --resource-group IoC-02-000000 --template-file azured
 ```
 
 ***Note that in this deployment there was no prompt for the adminUserName and adminPassword as those parameter values were provided by the parameters file.***
-
-After the deployment completes, or while the deployment is in process, you can open the Azure Portal and see the resources deployed into your resource group.
-
-### Clean Up
-
-To clean up the resource group for the next section, run the following command:
-
-PowerShell
-
-```PowerShell
-New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile blank.json -Mode Complete -Verbose
-```
-
-Azure CLI
-
-```bash
-az group deployment create --resource-group IoC-02-000000 --template-file blank.json -mode complete --verbose
-```
-
-You can start the next section while this deployment is still running.
 
 ## Use KeyVault to store the Admin Password
 
@@ -115,21 +97,3 @@ After the deployment completes, or while the deployment is in process, you can o
 ## Congratulations
 
 This is the end of this section of the lab.  To see a finished solution, see the final.json file in this folder.
-
-### Final Clean Up
-
-To clean up the resource group for the next section, run the following command:
-
-PowerShell
-
-```PowerShell
-New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile blank.json -Mode Complete -Verbose
-```
-
-Azure CLI
-
-```bash
-az group deployment create --resource-group IoC-02-000000 --template-file blank.json -mode complete --verbose
-```
-
-You can start the next section while this deployment is still running.

@@ -2,7 +2,7 @@
 
 To begin this lab, start with the template from the previous lab or use the azuredeploy.json file provided in this folder.
 
-This lab will walk through the creation of a template that can be reused as a single piece of many complex deployments.
+This lab will walk through the creation of a template that can be reused as a single piece of many complex deployments.  We will separate the networking and virtual machine resources so they can be deployed independently.  A common scenario is that a virutal network will be a shared resource that is deployed infrequently - while virtual machines can be deployed, deleted and redeployed frequently.
 
 > **NOTE:** Open the 05-Reusability folder for this lab
 
@@ -19,7 +19,7 @@ Next, modify the my-vm.json template to contain only the resources needed to dep
 
 To update the template to contain only the VM resources, complete the following steps:
 
-- Remove the Virtual Network resource along with the subnet resources - a simple way to do this is to collapse the JSON needed for the resource and delete the {} that remain
+- Remove the Virtual Network resource - a simple way to do this is to collapse the JSON needed for the resource and delete the {} that remain
 - In VS Code, move the mouse next to the line number of the starting { for the virtual network and click the down array that appears
 - Next, highlight the collapsed {} and delete them
 - Remove the Network Security Group resource
@@ -54,6 +54,7 @@ Next, add some parameters to the my-vm.json template to make it more flexible fo
       "name": "[parameters('vmName')]",
 ```
 
+- Update the computerName property in the osProfile object to use the vmName parameter as well
 - Save your changes to the my-vm.json file
 
 ### Verify the Changes

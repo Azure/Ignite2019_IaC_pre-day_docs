@@ -106,7 +106,7 @@ In the first lab we mentioned dependencies to ensure resources are deployed in t
 Next we need to add a dependency to the network card on the subnet.  Since the VM will be placed in a subnet, a dependency is needed to ensure the subnet is deployed before the network card.  Find the dependsOn property for the networkInterfaceCard and add the following code:
 
 ```json
-        "[variables('subnetId')]"
+        "[variables('virtualNetworkName')]"
 ```
 
 ## Create Parameters
@@ -165,21 +165,3 @@ After the deployment completes, or while the deployment is in process, you can o
 ## Congratulations
 
 This is the end of this section of the lab.  To see a finished solution, see the final.json file in this folder.
-
-### Clean Up
-
-To clean up the resource group for the next section, run the following command:
-
-PowerShell
-
-```PowerShell
-New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile blank.json -Mode Complete -Verbose
-```
-
-Azure CLI
-
-```bash
-az group deployment create --resource-group IoC-02-000000 --template-file blank.json -mode complete --verbose
-```
-
-You can start the next section while this deployment is still running.

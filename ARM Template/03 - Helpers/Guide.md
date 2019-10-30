@@ -60,11 +60,16 @@ The security group must be assigned to a sbunet or network card.  Placing the se
 
 ### DependsOn
 
-Since the subnet requires the network security group, add a dependency between the two resources to ensure the security group is deployed first.  Add the following code to the top of the dependsOn property for the subnet that the security group is assigned to.
+Since the subnet requires the network security group, add a dependency between the two resources to ensure the security group is deployed first.  Add the following code to the top of the dependsOn property for the virtualNetwork.  Copy the following code and paste below the location property for the virtualNetwork resource.
 
 ```json
-            "[variables('nsgName')]",
+      "dependsOn": [
+        "[variables('nsgName')]"
+      ],
+
 ```
+
+Note that the dependsOn property requires a resourceId of a resource defined in the template.  If the resource name is unique, you can simply use the resource name instead of the full resourceId.
 
 ## Deploy the Template
 
@@ -85,24 +90,6 @@ az group deployment create --resource-group IoC-02-000000 --template-file azured
 ```
 
 After the deployment completes, or while the deployment is in process, you can open the Azure Portal and see the resources deployed into your resource group.
-
-### Clean Up
-
-To clean up the resource group for the next section, run the following command:
-
-PowerShell
-
-```PowerShell
-New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile blank.json -Mode Complete -Verbose
-```
-
-Azure CLI
-
-```bash
-az group deployment create --resource-group IoC-02-000000 --template-file blank.json -mode complete --verbose
-```
-
-You can start the next section while this deployment is still running.
 
 ## Create a Copy Loop for Multiple Security Rules
 
@@ -212,6 +199,8 @@ As written, our code would now create 3 identical copies of a securityRule.  We 
 
 First we need to change the name of the securityRule which is determined by the name property in the input section of the copy loop. We will dynamically create the name based on the values in the array.  Change the name property to use the following value:
 
+> **NOTE:** Be sure to change the name property inside the input object of the copy loop, not the name of the copy loop itself.
+
 ```json
             "name": "[concat('allow-', parameters('nsgRules')[copyIndex('securityRules')])]",
 ```
@@ -221,7 +210,7 @@ This will create a name that starts with the text "allow-" and is appended with 
 Next, give the rule a unique priority based on the order of the ports in the array.  Change the "priority" property value to increment the priority of each successive rule:
 
 ```json
-               "priority": "[add(1000, copyIndex('securityRules'))]",
+                "priority": "[add(1000, copyIndex('securityRules'))]",
 ```
 
 The copyIndex function returns a integer for the index of the loop so the expression will evaluate to 1000, 1001, 1002, etc.
@@ -229,7 +218,7 @@ The copyIndex function returns a integer for the index of the loop so the expres
 Finally, set the "destinationPortRange" to the value of each paramter value.
 
 ```json
-              "destinationPortRange": "[parameters('nsgRules')[copyIndex('securityRules')]]",
+                "destinationPortRange": "[parameters('nsgRules')[copyIndex('securityRules')]]",
 ```
 
 This simply references the array value using the copyIndex() function.
@@ -281,21 +270,3 @@ After the deployment completes, or while the deployment is in process, you can o
 ## Congratulations
 
 This is the end of this section of the lab.  To see a finished solution, see the final.json file in this folder.
-
-### Clean Up
-
-To clean up the resource group for the next section, run the following command:
-
-PowerShell
-
-```PowerShell
-New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile blank.json -Mode Complete -Verbose
-```
-
-Azure CLI
-
-```bash
-az group deployment create --resource-group IoC-02-000000 --template-file blank.json -mode complete --verbose
-```
-
-You can start the next section while this deployment is still running.

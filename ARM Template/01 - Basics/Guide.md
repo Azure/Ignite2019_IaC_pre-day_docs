@@ -66,7 +66,7 @@ The first resource to add is a virtual network.  Copy the code below and paste b
       "type": "Microsoft.Network/virtualNetworks",
       "apiVersion": "2019-06-01",
       "name": "virtualNetwork",
-      "location": "eastus2",
+      "location": "[resourceGroup().location]",
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
@@ -147,21 +147,3 @@ After deployment is finished, view the virtual network as in the previous step a
 ## Congratulations
 
 This is the end of this section of the lab.  To see a finished solution, see the final.json file in this folder.
-
-### Clean Up
-
-To clean up the resource group for the next section, run the following command:
-
-PowerShell
-
-```PowerShell
-New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile blank.json -Mode Complete -Verbose
-```
-
-Azure CLI
-
-```bash
-az group deployment create --resource-group IoC-02-000000 --template-file blank.json -mode complete --verbose
-```
-
-You can start the next section while this deployment is still running.
