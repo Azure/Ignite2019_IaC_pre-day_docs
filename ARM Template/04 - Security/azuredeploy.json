@@ -120,6 +120,9 @@
       "apiVersion": "2019-06-01",
       "name": "virtualNetwork",
       "location": "[parameters('location')]",
+      "dependsOn": [
+        "[variables('nsgName')]"
+      ],
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
@@ -128,18 +131,18 @@
         },
         "subnets": [
           {
+            "name": "subnet-2",
+            "properties": {
+              "addressPrefix": "10.0.1.0/24"
+            }
+          },
+          {
             "name": "subnet-1",
             "properties": {
               "networkSecurityGroup": {
                 "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
               },
               "addressPrefix": "10.0.0.0/24"
-            }
-          },
-          {
-            "name": "subnet-2",
-            "properties": {
-              "addressPrefix": "10.0.1.0/24"
             }
           }
         ]
