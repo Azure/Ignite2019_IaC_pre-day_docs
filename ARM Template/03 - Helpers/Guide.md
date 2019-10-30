@@ -86,6 +86,24 @@ az group deployment create --resource-group IoC-02-000000 --template-file azured
 
 After the deployment completes, or while the deployment is in process, you can open the Azure Portal and see the resources deployed into your resource group.
 
+### Clean Up
+
+To clean up the resource group for the next section, run the following command:
+
+PowerShell
+
+```PowerShell
+New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile blank.json -Mode Complete -Verbose
+```
+
+Azure CLI
+
+```bash
+az group deployment create --resource-group IoC-02-000000 --template-file blank.json -mode complete --verbose
+```
+
+You can start the next section while this deployment is still running.
+
 ## Create a Copy Loop for Multiple Security Rules
 
 Network Security Groups can contain multiple rules.  The rules can be defined individually by repeating the definition for a rule.  The code may look like the following.
@@ -161,7 +179,7 @@ Next add the following code to the top of the properties object on the network s
             "count": "[length(parameters('nsgRules'))]",
             "input": { }
           }
-        ]
+        ],
 ```
 
 This will create a copy loop for the property indicated by the name property of the copy loop - in this case the securityRules property.  The number of rules is determine by the count property, which in this case is determined by the size or length of the array parameter for the nsgRules.

@@ -75,9 +75,6 @@
       "apiVersion": "2019-06-01",
       "name": "[variables('nsgName')]",
       "location": "[parameters('location')]",
-      "dependsOn": [
-        "[variables('subnetId')]"
-      ],
       "properties": {
         "copy": {
           "name": "securityRules",

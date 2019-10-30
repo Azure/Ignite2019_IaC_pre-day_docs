@@ -62,7 +62,7 @@ The [Azure QuickStart Repo](https://github.com/Azure/azure-quickstart-templates)
 The first resource to add is a virtual network.  Copy the code below and paste between the square brackets in the resources section of the template.
 
 ```json
-{
+    {
       "type": "Microsoft.Network/virtualNetworks",
       "apiVersion": "2019-06-01",
       "name": "virtualNetwork",
@@ -72,21 +72,16 @@ The first resource to add is a virtual network.  Copy the code below and paste b
           "addressPrefixes": [
             "10.0.0.0/16"
           ]
-        }
-      },
-      "resources": [
-        {
-          "type": "subnets",
-          "apiVersion": "2019-06-01",
-          "name": "subnet-1",
-          "dependsOn": [
-            "virtualNetwork"
-          ],
-          "properties": {
-            "addressPrefix": "10.0.0.0/24"
+        },
+        "subnets": [
+          {
+            "name": "subnet-1",
+            "properties": {
+              "addressPrefix": "10.0.0.0/24"
+            }
           }
-        }
-      ]
+        ]
+      }
     }
 ```
 
@@ -129,18 +124,12 @@ Note that there is only one subnet in the virtual network.
 Next, add a second subnet to the virtual network in the template.  Copy the code below and paste it before the first subnet declaration.  Note, that the order of the resources in the template does not matter but you can specify dependencies as needed.  Dependencies will be covered in a later step.
 
 ```json
-        {
-         "type": "subnets",
-          "apiVersion": "2019-06-01",
-          "name": "subnet-2",
-          "dependsOn": [
-            "virtualNetwork",
-            "subnet-1"
-          ],
-          "properties": {
-            "addressPrefix": "10.0.1.0/24"
-          }
-        },
+          {
+            "name": "subnet-2",
+            "properties": {
+              "addressPrefix": "10.0.1.0/24"
+            }
+          },
 ```
 
 Save the changes to the template.
