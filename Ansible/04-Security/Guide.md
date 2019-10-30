@@ -20,7 +20,11 @@ It can become cumbersome to continue running your playbooks in Cloud Shell.
 
 The VS Code Ansible extension provides better integration experience when you need to work with multiple files so we recommend running Ansible in the remote host via SSH. 
 
-When running your playbook remotely via SSH, you will be prompted if you want to always save your workspace in the remote host. You can also hit `F1` to explicitly copy files to remote host.
+When running your playbook remotely via SSH, you will be prompted if you want to always save your workspace in the remote host. 
+
+![Save workspace](../../images/vs-save-wspace.png "Copy worspace to remote host")
+
+You can also hit `F1` to explicitly copy files to remote host:
 
 1. Hit `F1`
 1. Type/select **Ansible: copy folder to Remote Host**
