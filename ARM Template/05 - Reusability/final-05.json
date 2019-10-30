@@ -29,91 +29,25 @@
   },
   "resources": [
     {
-      "type": "Microsoft.Network/virtualNetworks",
-      "apiVersion": "2019-06-01",
-      "name": "virtualNetwork",
-      "location": "[parameters('location')]",
-      "properties": {
-        "addressSpace": {
-          "addressPrefixes": [
-            "10.0.0.0/16"
-          ]
-        }
-      },
-      "resources": [
-        {
-          "type": "subnets",
-          "apiVersion": "2019-06-01",
-          "name": "subnet-1",
-          "dependsOn": [
-            "[variables('nsgName')]",
-            "virtualNetwork"
-          ],
-          "properties": {
-            "networkSecurityGroup": {
-              "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
-            },
-            "addressPrefix": "10.0.0.0/24"
-          }
-        },
-        {
-          "type": "subnets",
-          "apiVersion": "2019-06-01",
-          "name": "subnet-2",
-          "dependsOn": [
-            "virtualNetwork",
-            "subnet-1"
-          ],
-          "properties": {
-            "addressPrefix": "10.0.1.0/24"
-          }
-        }
-      ]
-    },
-    {
-      "type": "Microsoft.Network/networkSecurityGroups",
-      "apiVersion": "2019-06-01",
-      "name": "[variables('nsgName')]",
-      "location": "[parameters('location')]",
-      "dependsOn": [
-        "[variables('subnetId')]"
-      ],
-      "properties": {
-        "copy": {
-          "name": "securityRules",
-          "count": "[length(parameters('nsgRules'))]",
-          "input": {
-            "name": "[concat('allow-', parameters('nsgRules')[copyIndex('securityRules')])]",
-            "properties": {
-              "priority": "[add(1000, copyIndex('securityRules'))]",
-              "sourceAddressPrefix": "*",
-              "protocol": "Tcp",
-              "destinationPortRange": "[parameters('nsgRules')[copyIndex('securityRules')]]",
-              "access": "Allow",
-              "direction": "Inbound",
-              "sourcePortRange": "*",
-              "destinationAddressPrefix": "*"
-            }
-          }
-        }
-      }
-    },
-    {
-      "name": "create-vm",
+      "name": "[concat('create-vm', copyIndex())]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-05-01",
       "dependsOn": [
-        "[variables('subnetId')]"
+        "[variables('virtualNetworkName')]"
       ],
+      "copy": {
+        "name": "vmLoop",
+        "count": 3
+      },
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "https://raw.githubusercontent.com/.../vm.json",
+          "uri": "https://raw.githubusercontent.com/Azure/Ignite2019_IaC_pre-day_docs/master/ARM%20Template/05%20-%20Reusability/vm.json",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
           "vmName": {
-            "value": "linux-vm"
+            "value": "[concat('vm-', copyIndex())]"
           },
           "adminUsername": {
             "value": "[parameters('adminUsername')]"
@@ -128,6 +62,66 @@
             "value": "[variables('subnetId')]"
           }
         }
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "apiVersion": "2019-06-01",
+      "name": "[variables('nsgName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "copy": [
+          {
+            "name": "securityRules",
+            "count": "[length(parameters('nsgRules'))]",
+            "input": {
+              "name": "[concat('allow-', parameters('nsgRules')[copyIndex('securityRules')])]",
+              "properties": {
+                "priority": "[add(1000, copyIndex('securityRules'))]",
+                "sourceAddressPrefix": "*",
+                "protocol": "Tcp",
+                "destinationPortRange": "[parameters('nsgRules')[copyIndex('securityRules')]]",
+                "access": "Allow",
+                "direction": "Inbound",
+                "sourcePortRange": "*",
+                "destinationAddressPrefix": "*"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2019-06-01",
+      "name": "virtualNetwork",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[variables('nsgName')]"
+      ],
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.0.0.0/16"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "subnet-2",
+            "properties": {
+              "addressPrefix": "10.0.1.0/24"
+            }
+          },
+          {
+            "name": "subnet-1",
+            "properties": {
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
+              },
+              "addressPrefix": "10.0.0.0/24"
+            }
+          }
+        ]
       }
     }
   ]

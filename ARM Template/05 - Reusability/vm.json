@@ -26,7 +26,7 @@
     {
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "2019-06-01",
-      "name": "[variables('nicName')]",
+      "name": "[concat(parameters('vmName'), '-nic')]",
       "location": "[parameters('location')]",
       "properties": {
         "ipConfigurations": [
