@@ -55,6 +55,13 @@ Next, add some parameters to the my-vm.json template to make it more flexible fo
 ```
 
 - Update the computerName property in the osProfile object to use the vmName parameter as well
+
+- Update the name property on the networkInterce resource so that each VM will have a networkInterface with the same naming pattern as the VM itself
+
+```json
+      "name": "[concat(parameters('vmName'), '-nic')]",
+```
+
 - Save your changes to the my-vm.json file
 
 ### Verify the Changes
@@ -83,7 +90,7 @@ Next, add a deployment resource to the template.  This resource will be used to 
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-05-01",
       "dependsOn": [
-        "[variables('subnetId')]"
+        "[variables('virtualNetworkName')]"
       ],
       "properties": {
         "mode": "Incremental",
@@ -134,17 +141,7 @@ az group deployment create --resource-group IoC-02-000000 --template-file azured
 
 After the deployment completes, or while the deployment is in process, you can open the Azure Portal and see the resources deployed into your resource group.
 
-
-
-
-
-## Finish
-
-This is the end of this section of the lab.  To see a finished solution, see the final.json file in this folder.
-
-But wait there's more!  If you really want to see the power of what you created, continue on to the bonus section of this lab...
-
-## Bonus - Add Copy Loop To Deploy Multiple VMs
+## Add Copy Loop To Deploy Multiple VMs
 
 Next, add a copy loop on the deployment resource that deploys the VM.  This will allow the template to create multiple VMs in a single deployment without duplicating the code.
 
@@ -169,8 +166,8 @@ Next, add a copy loop on the deployment resource that deploys the VM.  This will
             "value": "[concat('vm-', copyIndex())]"
 ```
 
-This loop will create 3 VMs with the names vm-0, vm-1 and vm-2 in the resourceGroup.
+This loop will create 3 VMs with the names vm-0, vm-1 and vm-2 in the resourceGroup.  Deploy the template to see the results.
 
-## Finish - Bonus
+## Finish
 
 This is the end of the bonus section of the lab.  To see a finished solution, see the final.json file in this folder.
