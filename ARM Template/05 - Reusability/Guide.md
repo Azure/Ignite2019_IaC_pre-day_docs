@@ -62,6 +62,14 @@ Next, add some parameters to the my-vm.json template to make it more flexible fo
       "name": "[concat(parameters('vmName'), '-nic')]",
 ```
 
+- Update the dependsOn property of the virtualMachine to use the new naming pattern used on the networkInterface resource
+
+```json
+      "dependsOn": [
+        "[concat(parameters('vmName'), '-nic')]"
+      ],
+```
+
 - Save your changes to the my-vm.json file
 
 ### Verify the Changes
@@ -86,9 +94,9 @@ Next, add a deployment resource to the template.  This resource will be used to 
 
 ```json
     {
-      "name": "create-vm",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-05-01",
+      "name": "create-vm",
       "dependsOn": [
         "[variables('virtualNetworkName')]"
       ],

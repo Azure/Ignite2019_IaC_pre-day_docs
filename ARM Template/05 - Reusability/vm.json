@@ -48,7 +48,7 @@
       "name": "[parameters('vmName')]",
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
+        "[concat(parameters('vmName'), '-nic')]"
       ],
       "properties": {
         "hardwareProfile": {
