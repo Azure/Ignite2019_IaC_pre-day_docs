@@ -326,7 +326,7 @@ Since we use SSH password instead of key for this workshop, you need to add the 
 
 1. Go to Azure portal, copy the public IP address of your front-end VM 
 
-![Get Public IP](../../images/fe-publicip.png "Copy VM public IP")
+![Get Public IP](../../images/fe-publicIP.png "Copy VM public IP")
 
 2. run the following command in your ansibleVM.
 
