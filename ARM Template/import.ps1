@@ -108,4 +108,4 @@ foreach ($kv in $functions.GetEnumerator()) {
 } 
 
 
-Import-Module "$myModuleRoot\$moduleName.psd1"
+Import-Module "$myModuleRoot\$moduleName"
