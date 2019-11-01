@@ -85,7 +85,7 @@ Make sure to save vnet.tf before the following step.
 ```
 resource "azurerm_virtual_network" "predayvnet" {
   name                = "tfignitepreday"
-  location            = "East US 2"
+  location            = "<<<REGION OF YOUR ASSIGNED RESOURCE GROUP>>>"
   resource_group_name = "<<<NAME OF YOUR ASSIGNED RESOURCE GROUP>>>"
   address_space       = ["10.0.0.0/16"]
 
