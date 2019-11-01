@@ -13,7 +13,7 @@ In short (TL;DR):
 - To run the configuration in Cloud Shell simply ensure your configuration is open in VS Code and a Terraform configuration file is selected; from the menu bar, select View > Command Palette... > Azure Terraform: push.
 - If you have not logged in, the Azure Account extension will prompt you to sign in.
 - Terraform files are copied to the `clouddrive` folder in Cloud Shell upon saving so you don't need to explicitly copy files to Cloud Shell in order to run them there unless otherwise stated in the lab.
-- Terraform execution including init, plan and apply will be run from within cloudshell after pushing the files up.
+- ALL Terraform execution including init, plan and apply will be **run from within Azyre Cloud Shell** after pushing the files up.
 
 > **NOTE**: The first time you launch Cloud Shell from a new folder, you will be asked to set up the web application. Select Open to continue
 
@@ -96,19 +96,56 @@ resource "azurerm_virtual_network" "predayvnet" {
 ```
 </details>
 
+>**NOTE** Prior to running any Terraform commands in Azure Cloud Shell, make sure that you select View > Command Palette... > Azure Terraform: push in order to push your latest changes up to your cloud shell environment. 
+
+## Initialize your Terraform environment
+Before provisioning your environement, you need to ensure that Terraform is initialized using the [init command](https://www.terraform.io/docs/commands/init.html). This process will initialize a working directory containing Terraform configuration files.
+
+```terraform init```
+
 ## Plan your infrastructure via 'terraform plan'
 Now you are ready to plan and deploy the VNet and the associated subnet into Azure. From the console window within the folder where vnet.tf and provider.tf reside, go ahead and execute the following command:
 
-```terraform plan```
+```terraform plan -out tfplan```
 
 This command allows you to visualize infrastructure changes about to be deployed into Azure. This command does not perform any actual infrastructure deployment. You will deploy your VNet in the next step.
+
+Review the plan in Cloud Shell to ensure that exactly 1 resource will be added and the properties are what you expect. You should see output similar to the following:
+
+```terraform
+Terraform will perform the following actions:
+
+  # azurerm_virtual_network.predayvnet will be created
+  + resource "azurerm_virtual_network" "predayvnet" {
+      + address_space       = [
+          + "10.0.0.0/16",
+        ]
+      + id                  = (known after apply)
+      + location            = "eastus2"
+      + name                = "tfignitepreday"
+      + resource_group_name = "IoC-02-109672"
+      + tags                = (known after apply)
+
+      + subnet {
+          + address_prefix = "10.0.1.0/24"
+          + id             = (known after apply)
+          + name           = "subnet1"
+        }
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+------------------------------------------------------------------------
+```
 
 ## Create your infrastructure via 'terraform apply'
 Terraform ```apply``` command provisions the infrastructure into the cloud. If the output of ```terraform plan``` looks good to you, go ahead and issue the following command:
 
-```terraform apply```
+```terraform apply tfplan```
 
 Finally, confirm that you do want the changes deployed by browsing to your resource group from [portal.azure.com](https://portal.azure.com). 
+
+>**NOTE** Since Terraform is idempotent, if you run Terraform plan again after successsfully applying the configuration, you will notice that it will state that no changes are required and that your infrastructure is up to date.
 
 You can also review the complete code we have created for this section in the [Code folder](https://github.com/Azure/Ignite2019_IaC_pre-day_docs/tree/master/Terraform/01%20-%20Basics/Code).
 
