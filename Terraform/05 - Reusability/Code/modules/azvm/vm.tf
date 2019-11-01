@@ -1,12 +1,12 @@
 # Data source reference to key vault instance
 data "azurerm_key_vault" "tf_pre-day" {
-  name                = var.keyVault
+  name                = var.key_vault
   resource_group_name = var.rg
 }
 
 # Data source reference to the secret
 data "azurerm_key_vault_secret" "tf_pre-day" {
-  name         = var.secretId
+  name         = var.secret_id
   key_vault_id = data.azurerm_key_vault.tf_pre-day.id
 }
 

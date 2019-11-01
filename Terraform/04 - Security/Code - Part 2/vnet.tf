@@ -22,14 +22,14 @@ resource "azurerm_network_security_group" "predaysg" {
   resource_group_name = var.rg
 
   dynamic "security_rule" {
-    for_each = var.securityGroupRules
+    for_each = var.security_group_rules
 
     content {
       name                       = lower(security_rule.value.name)
       description                = "Allow inbound traffic for ${security_rule.value.protocol}"
       priority                   = security_rule.value.priority
-      direction                  = "Inbound"
-      access                     = "Allow"
+      direction                  = security_rule.value.direction
+      access                     = security_rule.value.access
       protocol                   = title(security_rule.value.protocol)
       source_port_range          = "*"
       destination_port_range     = security_rule.value.destinationPortRange

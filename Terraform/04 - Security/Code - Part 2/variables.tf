@@ -13,22 +13,24 @@ variable "location" {
   description = "Azure region to put resources in"
 }
 
-variable "securityGroupRules" {
+variable "security_group_rules" {
   type        = list(object({
     name                  = string
     priority              = number
     protocol              = string
     destinationPortRange  = string
+    direction             = string
+    access                = string
   }))
   description = "List of security group rules"
 }
 
-variable "secretId" {
+variable "secret_id" {
   type        = "string"
   description = "name of secret containing admin password for vms"
 }
 
-variable "keyVault" {
+variable "key_vault" {
   type        = "string"
   description = "Name of the pre-existing key vault instance"
 }

@@ -170,7 +170,7 @@ resource "azurerm_network_security_group" "predaysg" {
   resource_group_name = var.rg
 
   dynamic "security_rule" {
-    for_each = var.securityGroupRules
+    for_each = var.security_group_rules
 
     content {
       name                       = lower(security_rule.value.name)
@@ -210,7 +210,7 @@ variable "location" {
   description = "Azure region to put resources in"
 }
 
-variable "securityGroupRules" {
+variable "security_group_rules" {
   type        = list(object({
     name                  = string
     priority              = number
@@ -220,12 +220,12 @@ variable "securityGroupRules" {
   description = "List of security group rules"
 }
 
-variable "secretId" {
+variable "secret_id" {
   type        = "string"
   description = "name of secret containing admin password for vms"
 }
 
-variable "keyVault" {
+variable "key_vault" {
   type        = "string"
   description = "Name of the pre-existing key vault instance"
 }
@@ -260,13 +260,13 @@ Expand for full vm.tf code
 ```terraform
 # Data source reference to key vault instance
 data "azurerm_key_vault" "tf_pre-day" {
-  name                = var.keyVault
+  name                = var.key_vault
   resource_group_name = var.rg
 }
 
 # Data source reference to the secret
 data "azurerm_key_vault_secret" "tf_pre-day" {
-  name         = var.secretId
+  name         = var.secret_id
   key_vault_id = data.azurerm_key_vault.tf_pre-day.id
 }
 
@@ -318,7 +318,7 @@ In the main.tf file you will you will be defining all of the values that are req
 
 - location
 - rg
-- keyVault
+- key_vault
 - tags
 
 To reference these values in the configuration replace the **var.** that was used to reference the variables with **local.**. Update the references in the `azurerm_virtual_network` resource for location, tags and rg to use the locals instead of variables.
@@ -338,11 +338,11 @@ The properties that you will use in the module are the variables that you define
 - host_name
 - rg
 - location
-- secretId
-- keyVault
+- secret_id
+- key_vault
 - vnet_name
 - subnet_cidr
-- securityGroupRules
+- security_group_rules
 - tags
 
 Use the figure above and the local variables to set the appropriate values for each module.
@@ -365,7 +365,7 @@ Expand for full main.tf code
 locals {
   location          = "East US 2"
   rg                = "" ## Enter the resource group pre-created in your lab
-  keyVault          = "" ## Enter the name of the pre-created key vault instance
+  key_vault          = "" ## Enter the name of the pre-created key vault instance
   tags = {
     event           = "Ignite"
     year            = "2019"
@@ -390,11 +390,11 @@ module "frontend" {
   host_name           = "web001"
   rg                  = local.rg
   location            = local.location
-  secretId            = "lab04admin"
-  keyVault            = local.keyVault
+  secret_id            = "lab04admin"
+  key_vault            = local.key_vault
   vnet_name           = azurerm_virtual_network.predayvnet.name
   subnet_cidr         = "172.16.10.0/24"
-  securityGroupRules  = [
+  security_group_rules  = [
       {
           name                  = "HTTP"
           priority              = 100
@@ -418,11 +418,11 @@ module "mysql_db" {
   host_name           = "mysql001"
   rg                  = local.rg
   location            = local.location
-  secretId            = "lab04admin"
-  keyVault            = local.keyVault
+  secret_id            = "lab04admin"
+  key_vault            = local.key_vault
   vnet_name           = azurerm_virtual_network.predayvnet.name
   subnet_cidr         = "172.16.20.0/24"
-  securityGroupRules  = [
+  security_group_rules  = [
       {
           name                  = "SQL"
           priority              = 100

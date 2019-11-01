@@ -3,7 +3,7 @@ variable "rg" {
   description = "Name of Lab resource group to provision resources to."
 }
 
-variable "secretId" {
+variable "secret_id" {
   type        = "string"
   description = "name of secret containing admin password for vms"
 }
@@ -18,7 +18,7 @@ variable "tenantId" {
   description = "Id for tenant"
 }
 
-variable "keyVault" {
+variable "key_vault" {
   type        = "string"
   description = "Name of the pre-existing key vault instance"
 }

@@ -7,7 +7,7 @@ data "azuread_user" "lab04-user" {
 }
 
 data "azurerm_key_vault" "lab04" {
-  name                = var.keyVault
+  name                = var.key_vault
   resource_group_name = data.azurerm_resource_group.lab04.name
 }
 
@@ -28,7 +28,7 @@ resource "azurerm_key_vault_access_policy" "lab04" {
 }
 
 resource "azurerm_key_vault_secret" "lab04" {
-  name         = var.secretId
+  name         = var.secret_id
   value        = random_password.admin_pwd.result
   key_vault_id = data.azurerm_key_vault.lab04.id
 }

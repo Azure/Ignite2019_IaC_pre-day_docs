@@ -1,27 +1,33 @@
-rg = "" ## Enter the resource group pre-created in your lab
-location = "" ## Enter the azure region for your resources
-securityGroupRules = [
+rg = "<<<NAME OF YOUR ASSIGNED RESOURCE GROUP>>>" ## Enter the resource group pre-created in your lab
+location = "<<<REGION OF YOUR ASSIGNED RESOURCE GROUP>>>" ## Enter the azure region for your resources
+security_group_rules = [
       {
-          name                  = "DNS"
+          name                  = "http"
           priority              = 100
-          protocol              = "*"
-          destinationPortRange  = "53"
+          protocol              = "tcp"
+          destinationPortRange  = "80"
+          direction             = "Inbound"
+          access                = "Allow"
       },
       {
-          name = "HTTPS"
+          name                  = "https"
           priority              = 150
           protocol              = "tcp"
           destinationPortRange  = "443"
+          direction             = "Inbound"
+          access                = "Allow"
       },
       {
-          name = "WHOIS"
+          name                  = "deny-the-rest"
           priority              = 200
-          protocol              = "tcp"
-          destinationPortRange  = "43"
+          protocol              = "*"
+          destinationPortRange  = "0-65535"
+          direction             = "Inbound"
+          access                = "Deny"
       },
   ]
-secretId = "lab04admin"
-keyVault = "" ## Enter the name of the pre-created key vault instance
+secret_id = "lab04admin"
+key_vault = "" ## Enter the name of the pre-created key vault instance
 rg2 = "" ## Enter the name of the resource group where key vault exists
 tags = {
     event           = "Ignite"

@@ -2,7 +2,7 @@
 locals {
   location          = "East US 2"
   rg                = "" ## Enter the resource group pre-created in your lab
-  keyVault          = "" ## Enter the name of the pre-created key vault instance
+  key_vault          = "" ## Enter the name of the pre-created key vault instance
   tags = {
     event           = "Ignite"
     year            = "2019"
@@ -27,11 +27,11 @@ module "frontend" {
   host_name           = "web001"
   rg                  = local.rg
   location            = local.location
-  secretId            = "lab04admin"
-  keyVault            = local.keyVault
+  secret_id            = "lab04admin"
+  key_vault            = local.key_vault
   vnet_name           = azurerm_virtual_network.predayvnet.name
   subnet_cidr         = "172.16.10.0/24"
-  securityGroupRules  = [
+  security_group_rules  = [
       {
           name                  = "HTTP"
           priority              = 100
@@ -55,11 +55,11 @@ module "mysql_db" {
   host_name           = "mysql001"
   rg                  = local.rg
   location            = local.location
-  secretId            = "lab04admin"
-  keyVault            = local.keyVault
+  secret_id            = "lab04admin"
+  key_vault            = local.key_vault
   vnet_name           = azurerm_virtual_network.predayvnet.name
   subnet_cidr         = "172.16.20.0/24"
-  securityGroupRules  = [
+  security_group_rules  = [
       {
           name                  = "SQL"
           priority              = 100
