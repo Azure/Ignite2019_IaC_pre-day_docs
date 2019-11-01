@@ -30,7 +30,7 @@ resource "azurerm_network_security_group" "predaysg" {
   resource_group_name = var.rg
 
   dynamic "security_rule" {
-    for_each = var.securityGroupRules
+    for_each = var.security_group_rules
 
     content {
       name                       = lower(security_rule.value.name)

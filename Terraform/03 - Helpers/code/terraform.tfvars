@@ -1,7 +1,7 @@
 rg = "<<<NAME OF YOUR ASSIGNED RESOURCE GROUP>>>" ## Enter the resource group pre-created in your lab
 location = "<<<REGION OF YOUR ASSIGNED RESOURCE GROUP>>>" ## Enter the azure region for your resources if different from East US 2
 
-securityGroupRules = [
+security_group_rules = [
       {
           name                  = "http"
           priority              = 100

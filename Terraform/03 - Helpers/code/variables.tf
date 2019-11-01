@@ -8,7 +8,7 @@ variable "location" {
   description = "Azure region to put resources in"
 }
 
-variable "securityGroupRules" {
+variable "security_group_rules" {
   type        = list(object({
     name                  = string
     priority              = number
