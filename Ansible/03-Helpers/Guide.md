@@ -1,8 +1,8 @@
-# Iterators and Helpers
+# Ansible Lab 3 - Iterators and Helpers
 
 In this lab you will:
 
-- Create a network security group(NSG) and add rules to the NSG
+- Create a network security group (NSG) and add rules to the NSG
 
 ## Overview
 
@@ -12,7 +12,7 @@ Apart from creating the new Azure resource, you will modify the playbook you cre
 
 Network security groups filter network traffic between Azure resources in a virtual network.
 
-1. Add to your existing playbook a new variable called `myNetworkSecurityGroup`
+1. Add to your existing playbook a new variable called `myNetworkSecurityGroup`.
 1. Use the [azure_rm_securitygroup](https://docs.ansible.com/ansible/latest/modules/azure_rm_securitygroup_module.html) to create a network security group that allows SSH traffic on TCP port 22.
 1. Add the NSG to the NIC you created in previous lab.
 1. Run your playbook.
@@ -60,7 +60,7 @@ You may want to block some ports as well so, perhaps you will add another rule l
           source_address_prefix: *
 ```
 
-The number of lines of codes can become really long and hard to manage.
+As you create more NSG rules, your playbook can become lengthy and unmanageable.
 
 The good news is, you can make use of `loops` to reduce the lines of codes and improve readability. After all, Ansible is simple and the playbooks are human-readable.
 
@@ -83,7 +83,9 @@ For example:
      - testuser2
 ```
 
-You can have a list of hashes.
+You can have a list of hash. Each item in the list is a list of key/value pairs, commonly called a “hash” or a “dictionary”.
+
+In the example below, the user task is run once for each key/value pair in the list. 
 
 ```yml
 - name: add several users

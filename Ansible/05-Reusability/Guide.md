@@ -1,4 +1,4 @@
-# Reusability
+# Ansible Lab 5 - Reusability
 
 In this section you will:
 
@@ -322,14 +322,21 @@ You should see something like this:
 
 ```
 
-Since we use SSH password instead of key for this workshop, you need to bypass the host key verification error. One way to do that is by adding an Ansible configuration file, **.ansible.cfg** in the root of your ansibleVM. Include the following lines in the file.
+Since we use SSH password instead of key for this workshop, you need to add the host's fingerprint to your known_hosts file. 
+
+1. Go to Azure portal, copy the public IP address of your front-end VM 
+
+![Get Public IP](../../images/fe-publicip.png "Copy VM public IP")
+
+2. run the following command in your ansibleVM.
 
 ```bash
-[defaults]
-host_key_checking = False
+ ssh-keyscan -H 104.215.77.154 >> ~/.ssh/known_hosts
 ```
 
-You can test connection to myVM-BE by doing:
+3. Repeat step 1 and 2 for your back-end VM.
+
+You can now test connection to myVM-BE by doing:
 
 ```bash
 ansible -u testadmin -i myazure_rm.yml -m ping tag_Ansible_web -k

@@ -1,4 +1,4 @@
-# Variables
+# Ansible Lab 2 - Variables
 
 In this section you will:
 
@@ -170,7 +170,9 @@ For example:
        when: foo_result.rc == 5
 ```
 
-You can register a variable for the output of a task. Use `set_facts` to assign the value of another variable based on a specific value in the output and use it for subsequent task(s.) 
+In the example above, something will happen when foo_result’s return code is 5.
+
+You can register a variable for the output of a task. Use `set_facts` to assign the value of another variable based on a specific value in the output and use it for subsequent task(s.)
 
 ```yml
   tasks:
@@ -201,7 +203,7 @@ This [playbook sample](https://github.com/Azure-Samples/ansible-playbooks/blob/m
 ansible-playbook xxx.yml -e "myResource_group=XXXXXX myVM=XXXXXX"
 ```
 
-- you can also define variables in a included files. Use the `vars_files` keyword and modify your playbook by like so:
+- you can also define variables in an included file. Use the `vars_files` keyword and modify your playbook by like so:
 
 ```yaml
 - hosts: localhost

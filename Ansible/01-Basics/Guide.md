@@ -1,4 +1,4 @@
-# Basic Usage and Typical Workflow
+# Ansible Lab 1 - Basic Usage and Typical Workflow
 
 In this section you will:
 
