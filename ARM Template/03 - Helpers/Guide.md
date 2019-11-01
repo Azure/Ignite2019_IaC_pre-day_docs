@@ -77,6 +77,8 @@ Note that the dependsOn property requires a resourceId of a resource defined in 
 
 Before deploying the template, run the following command to preview the changes that will be applied when the template is deployed. Note, this command is currently only available in PowerShell.  If you have not use PowerShell for the earlier sections of the lab, you will need to log in first.
 
+Format the code (SHIFT+ALT+F), inspect your template for errors and save the file.  Then in your command window, verify that your current directory is set to the directory used for this lab before running the following commands.
+
 ```PowerShell
 Connect-AzAccount
 ```
