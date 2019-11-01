@@ -14,6 +14,8 @@ variable "security_group_rules" {
     priority              = number
     protocol              = string
     destinationPortRange  = string
+    direction             = string
+    access                = string
   }))
   description = "List of security group rules"
 }
