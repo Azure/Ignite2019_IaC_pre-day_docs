@@ -148,6 +148,8 @@ Update the web subnet definition to use the "nsgsecureweb" security group we cre
 
 and then also create a new resource finalizing the association (this is a forward-looking feature for the next generation of Terraform provider for Azure, we are creating it to future-proof our code):
 
+> **NOTE** this forward-looking feature will result in a warning when you run plan and apply
+
 ```terraform
 resource "azurerm_subnet_network_security_group_association" "preday" {
   subnet_id                 = azurerm_subnet.predaywebsubnet.id
