@@ -262,7 +262,7 @@ Connect-AzAccount
 After login, run the following command:
 
 ```PowerShell
-New-AzResourceGroupDeploymentWhatif -ResourceGroupName IoC-02-000000 -TemplateFile azuredeploy.json
+New-AzResourceGroupDeploymentWhatif -ResourceGroupName IoC-02-000000 -TemplateUri azuredeploy.json
 ```
 
 When the command finishes you will see the output of the command showing that a Network Security Group will be added as a result of this deployment.
