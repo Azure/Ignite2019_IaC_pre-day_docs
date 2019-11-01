@@ -5,7 +5,7 @@ Walk throughs for this workshop can be found in the table below. During the work
 
 ## Before you start
 
-Go to [launch URL](https://manage.cloudlabs.ai/#/odl/ac646c05-db3c-4773-a2b6-799f80eac16b), sign up and provide the activation code.
+Go to the launch URL provided, sign up and enter the activation code.
 
 After you signed up, click the Launch Lab button which will take you automatically to the LabVM RDP in browser.
 
