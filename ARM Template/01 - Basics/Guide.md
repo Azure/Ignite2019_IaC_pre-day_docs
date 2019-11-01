@@ -43,7 +43,7 @@ az login
 
 ### Deploy the Template
 
-A template will typically deploy a set of resources to a resource group.  An empty resource group is available for this lab, the name of the resource group will use part of your userId so you will need to update the commands below to use the correct name for your user instead of "000000".
+A template will typically deploy a set of resources to a resource group.  An empty resource group is available for this lab, the name of the resource group will use part of your userId so you will need to update the commands below to use the correct resource group name for your user instead of "IoC-02-000000".
 
 > **NOTE:** For each step of the lab run the commands from the directory that contains the lab files, for example **C:\Users\demouser\Ignite2019_IaC_pre-day_docs\ARM Template\01 - Basics**
 
