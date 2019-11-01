@@ -32,7 +32,7 @@ resource "azurerm_subnet" "predaywebsubnet" {
 </details>
 
 ## Intro to iterators in Terraform
-Iterators help us create many copies of the same resource with a single line of code. In the simplest example, let's say your virtual machine needs to have 3 identical data disks, equivalent in size and type, and different in name. One way to accomplish this would be to copy and paste code blocks creating those disks; a much easier way, however, would be to use the "count" keyword inside the infrastructure configuration, like this
+Iterators help us create many copies of the same resource with a single line of code. In the simplest example, let's say your virtual machine needs to have 3 identical data disks, equivalent in size and type, and different in name. One way to accomplish this would be to copy and paste code blocks creating those disks; a much easier way, however, would be to use the `count` keyword inside the infrastructure configuration, like this
 
 ```terraform
 resource "azurerm_managed_disk" "mydatadisks" {
@@ -107,7 +107,7 @@ Note the use of "[]" to define the variable as type list - a list of security ru
 ## Create networksecurity.tf
 With rules defined in our variable, it is time to use iterators and helper functions to define the Azure resources based on those variables. First, we'll use the helper *length* function - this function returns the number of elements in the list, which is the number of rules we have created. We will also use the *lookup* helper function to retrieve value from the list.
 
-Since network security rules in Azure must be associated with the network security group, we must first create a network security group. Go ahead and create it via the following code:
+Next, go ahead and create a new file called networksecurity.tf and paste the following code in there. Since network security rules in Azure must be associated with the network security group, we must first create a network security group. Go ahead and create it via the following code:
 
 ```terraform
 resource "azurerm_network_security_group" "nsgsecureweb" {
@@ -117,7 +117,7 @@ resource "azurerm_network_security_group" "nsgsecureweb" {
 }
 ```
 
-Next, go ahead and create a new file called networksecurity.tf and paste the following code in there. While the code might look intimidating at first, keep in mind that what we're doing with that code is looking up certain values from the list of values we created earlier in the ```custom_rules``` variable.
+While the code might look intimidating at first, keep in mind that what we're doing with that code is looking up certain values from the list of values we created earlier in the ```custom_rules``` variable.
 
 ```terraform
 resource "azurerm_network_security_rule" "custom_rules" {
@@ -127,12 +127,12 @@ resource "azurerm_network_security_rule" "custom_rules" {
   direction                   = lookup(var.custom_rules[count.index], "direction", "Any")
   access                      = lookup(var.custom_rules[count.index], "access", "Allow")
   protocol                    = lookup(var.custom_rules[count.index], "protocol", "*")
-  source_port_ranges          = lookup(var.custom_rules[count.index], "source_port_range", "0-65535" )
-  destination_port_ranges     = lookup(var.custom_rules[count.index], "destination_port_range", "0-65535")
+  source_port_range           = lookup(var.custom_rules[count.index], "source_port_range", "0-65535" )
+  destination_port_range      = lookup(var.custom_rules[count.index], "destination_port_range", "0-65535")
   source_address_prefix       = lookup(var.custom_rules[count.index], "source_address_prefix", "*")
   destination_address_prefix  = lookup(var.custom_rules[count.index], "destination_address_prefix", "*")
   description                 = lookup(var.custom_rules[count.index], "description", "Security rule")
-  resource_group_name         = azurerm_resource_group.nsg.name
+  resource_group_name         = var.rg
   network_security_group_name = azurerm_network_security_group.nsgsecureweb.name
 }
 ```
@@ -148,8 +148,10 @@ Update the web subnet definition to use the "nsgsecureweb" security group we cre
 
 and then also create a new resource finalizing the association (this is a forward-looking feature for the next generation of Terraform provider for Azure, we are creating it to future-proof our code):
 
+> **NOTE** this forward-looking feature will result in a warning when you run plan and apply
+
 ```terraform
-resource "azurerm_subnet_network_security_group_association" "test" {
+resource "azurerm_subnet_network_security_group_association" "preday" {
   subnet_id                 = azurerm_subnet.predaywebsubnet.id
   network_security_group_id = azurerm_network_security_group.nsgsecureweb.id
 }
@@ -158,14 +160,101 @@ resource "azurerm_subnet_network_security_group_association" "test" {
 ## Plan your infrastructure via 'terraform plan'
 Now you are ready once again to plan and deploy the infrastructure into Azure. From the console window within the folder with all the .tf files, go ahead and execute the following command:
 
-```terraform plan```
+```terraform plan -out tfplan```
+
+You should have 6 new resources to add:
+
+```terraform
+Terraform will perform the following actions:
+
+  # azurerm_network_security_group.nsgsecureweb will be created
+  + resource "azurerm_network_security_group" "nsgsecureweb" {
+      + id                  = (known after apply)
+      + location            = "eastus2"
+      + name                = "secureweb"
+      + resource_group_name = "IoC-02-109672"
+      + security_rule       = (known after apply)
+      + tags                = (known after apply)
+    }
+
+  # azurerm_network_security_rule.custom_rules[0] will be created
+  + resource "azurerm_network_security_rule" "custom_rules" {
+      + access                      = "Allow"
+      + description                 = "Security rule"
+      + destination_address_prefix  = "*"
+      + destination_port_range      = "80"
+      + direction                   = "Inbound"
+      + id                          = (known after apply)
+      + name                        = "http"
+      + network_security_group_name = "secureweb"
+      + priority                    = 100
+      + protocol                    = "tcp"
+      + resource_group_name         = "IoC-02-109672"
+      + source_address_prefix       = "*"
+      + source_port_range           = "0-65535"
+    }
+
+  # azurerm_network_security_rule.custom_rules[1] will be created
+  + resource "azurerm_network_security_rule" "custom_rules" {
+      + access                      = "Allow"
+      + description                 = "Security rule"
+      + destination_address_prefix  = "*"
+      + destination_port_range      = "443"
+      + direction                   = "Inbound"
+      + id                          = (known after apply)
+      + name                        = "https"
+      + network_security_group_name = "secureweb"
+      + priority                    = 101
+      + protocol                    = "tcp"
+      + resource_group_name         = "IoC-02-109672"
+      + source_address_prefix       = "*"
+      + source_port_range           = "0-65535"
+    }
+
+  # azurerm_network_security_rule.custom_rules[2] will be created
+  + resource "azurerm_network_security_rule" "custom_rules" {
+      + access                      = "Deny"
+      + description                 = "Security rule"
+      + destination_address_prefix  = "*"
+      + destination_port_range      = "0-65535"
+      + direction                   = "Inbound"
+      + id                          = (known after apply)
+      + name                        = "deny-the-rest"
+      + network_security_group_name = "secureweb"
+      + priority                    = 300
+      + protocol                    = "tcp"
+      + resource_group_name         = "IoC-02-109672"
+      + source_address_prefix       = "*"
+      + source_port_range           = "0-65535"
+    }
+
+  # azurerm_subnet.predaywebsubnet will be created
+  + resource "azurerm_subnet" "predaywebsubnet" {
+      + address_prefix            = "10.0.2.0/24"
+      + id                        = (known after apply)
+      + ip_configurations         = (known after apply)
+      + name                      = "web"
+      + network_security_group_id = (known after apply)
+      + resource_group_name       = "IoC-02-109672"
+      + virtual_network_name      = "tfignitepreday"
+    }
+
+  # azurerm_subnet_network_security_group_association.preday will be created
+  + resource "azurerm_subnet_network_security_group_association" "preday" {
+      + id                        = (known after apply)
+      + network_security_group_id = (known after apply)
+      + subnet_id                 = (known after apply)
+    }
+
+Plan: 6 to add, 0 to change, 0 to destroy.
+```
 
 You will deploy your security group and rules in the next step.
 
 ## Create your infrastructure via 'terraform apply'
 If the output of ```terraform plan``` looks good to you, go ahead and issue the following command:
 
-```terraform apply```
+```terraform apply tfplan```
 
 Finally, confirm that you do want the changes deployed.
 

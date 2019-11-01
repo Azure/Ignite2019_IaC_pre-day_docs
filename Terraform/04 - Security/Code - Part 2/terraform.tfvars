@@ -22,6 +22,7 @@ securityGroupRules = [
   ]
 secretId = "lab04admin"
 keyVault = "" ## Enter the name of the pre-created key vault instance
+rg2 = "" ## Enter the name of the resource group where key vault exists
 tags = {
     event           = "Ignite"
     year            = "2019"

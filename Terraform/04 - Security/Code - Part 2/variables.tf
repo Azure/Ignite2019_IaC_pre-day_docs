@@ -3,6 +3,11 @@ variable "rg" {
   description = "Name of Lab resource group to provision resources to."
 }
 
+variable "rg2" {
+  type        = "string"
+  description = "Name of Lab resource group where key vault exists."
+}
+
 variable "location" {
   type        = "string"
   description = "Azure region to put resources in"
