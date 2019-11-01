@@ -13,7 +13,7 @@ In short (TL;DR):
 - To run the configuration in Cloud Shell simply ensure your configuration is open in VS Code and a Terraform configuration file is selected; from the menu bar, select View > Command Palette... > Azure Terraform: push.
 - If you have not logged in, the Azure Account extension will prompt you to sign in.
 - Terraform files are copied to the `clouddrive` folder in Cloud Shell upon saving so you don't need to explicitly copy files to Cloud Shell in order to run them there unless otherwise stated in the lab.
-- ALL Terraform execution including init, plan and apply will be **run from within Azyre Cloud Shell** after pushing the files up.
+- ALL Terraform execution including init, plan and apply will be **run from within Azure Cloud Shell** after pushing the files up.
 
 > **NOTE**: The first time you launch Cloud Shell from a new folder, you will be asked to set up the web application. Select Open to continue
 
@@ -63,8 +63,8 @@ Using [Terraform Azure provider documentation for virtual network](https://www.t
 
 ```
 name should be "tfignitepreday"
-location should be "East US 2"
 resource_group_name should be set to the name of the resource group created specifically for you in the demo environment (noted previously)
+location should be set to the region where your resouce group resides
 address_space should be set to "10.0.0.0/16"
 ```
 

@@ -1,4 +1,4 @@
-# LAB 3 - Azure Resource Manager Templates
+# ARM Templates - LAB 3
 
 To begin this lab, start with the template from the previous lab or use the azuredeploy.json file provided in this folder.
 
