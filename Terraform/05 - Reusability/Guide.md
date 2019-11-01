@@ -368,7 +368,7 @@ Remove the terraform.tfvars file.
 > - nic.tf
 
 Finally, as you have done in previous sections and labs:
-- Povision the new infrasctructure using Terraform plan and apply
+- Povision the new infrasctructure using Terraform init, plan and apply
 - Validate that everything was provisioned as expected.
 
 Congratulations, you have created a module and used it to provision new infrastructure!
