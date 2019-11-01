@@ -162,6 +162,93 @@ Now you are ready once again to plan and deploy the infrastructure into Azure. F
 
 ```terraform plan -out tfplan```
 
+You should have 6 new resources to add:
+
+```terraform
+Terraform will perform the following actions:
+
+  # azurerm_network_security_group.nsgsecureweb will be created
+  + resource "azurerm_network_security_group" "nsgsecureweb" {
+      + id                  = (known after apply)
+      + location            = "eastus2"
+      + name                = "secureweb"
+      + resource_group_name = "IoC-02-109672"
+      + security_rule       = (known after apply)
+      + tags                = (known after apply)
+    }
+
+  # azurerm_network_security_rule.custom_rules[0] will be created
+  + resource "azurerm_network_security_rule" "custom_rules" {
+      + access                      = "Allow"
+      + description                 = "Security rule"
+      + destination_address_prefix  = "*"
+      + destination_port_range      = "80"
+      + direction                   = "Inbound"
+      + id                          = (known after apply)
+      + name                        = "http"
+      + network_security_group_name = "secureweb"
+      + priority                    = 100
+      + protocol                    = "tcp"
+      + resource_group_name         = "IoC-02-109672"
+      + source_address_prefix       = "*"
+      + source_port_range           = "0-65535"
+    }
+
+  # azurerm_network_security_rule.custom_rules[1] will be created
+  + resource "azurerm_network_security_rule" "custom_rules" {
+      + access                      = "Allow"
+      + description                 = "Security rule"
+      + destination_address_prefix  = "*"
+      + destination_port_range      = "443"
+      + direction                   = "Inbound"
+      + id                          = (known after apply)
+      + name                        = "https"
+      + network_security_group_name = "secureweb"
+      + priority                    = 101
+      + protocol                    = "tcp"
+      + resource_group_name         = "IoC-02-109672"
+      + source_address_prefix       = "*"
+      + source_port_range           = "0-65535"
+    }
+
+  # azurerm_network_security_rule.custom_rules[2] will be created
+  + resource "azurerm_network_security_rule" "custom_rules" {
+      + access                      = "Deny"
+      + description                 = "Security rule"
+      + destination_address_prefix  = "*"
+      + destination_port_range      = "0-65535"
+      + direction                   = "Inbound"
+      + id                          = (known after apply)
+      + name                        = "deny-the-rest"
+      + network_security_group_name = "secureweb"
+      + priority                    = 300
+      + protocol                    = "tcp"
+      + resource_group_name         = "IoC-02-109672"
+      + source_address_prefix       = "*"
+      + source_port_range           = "0-65535"
+    }
+
+  # azurerm_subnet.predaywebsubnet will be created
+  + resource "azurerm_subnet" "predaywebsubnet" {
+      + address_prefix            = "10.0.2.0/24"
+      + id                        = (known after apply)
+      + ip_configurations         = (known after apply)
+      + name                      = "web"
+      + network_security_group_id = (known after apply)
+      + resource_group_name       = "IoC-02-109672"
+      + virtual_network_name      = "tfignitepreday"
+    }
+
+  # azurerm_subnet_network_security_group_association.preday will be created
+  + resource "azurerm_subnet_network_security_group_association" "preday" {
+      + id                        = (known after apply)
+      + network_security_group_id = (known after apply)
+      + subnet_id                 = (known after apply)
+    }
+
+Plan: 6 to add, 0 to change, 0 to destroy.
+```
+
 You will deploy your security group and rules in the next step.
 
 ## Create your infrastructure via 'terraform apply'
