@@ -331,7 +331,7 @@ Since we use SSH password instead of key for this workshop, you need to add the 
 2. run the following command in your ansibleVM.
 
 ```bash
- ssh-keyscan -H 104.215.77.154 >> ~/.ssh/known_hosts
+ ssh-keyscan -H 13.65.39.111 >> ~/.ssh/known_hosts
 ```
 
 3. Repeat step 1 and 2 for your back-end VM.
