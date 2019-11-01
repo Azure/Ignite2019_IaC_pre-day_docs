@@ -19,7 +19,7 @@ resource "random_password" "admin_pwd" {
 resource "azurerm_key_vault_access_policy" "lab04" {
   key_vault_id = data.azurerm_key_vault.lab04.id
 
-  tenant_id = var.tenantId
+  tenant_id = var.tenant_id
   object_id = data.azuread_user.lab04-user.id
 
   secret_permissions = [

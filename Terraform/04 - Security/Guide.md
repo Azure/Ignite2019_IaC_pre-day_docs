@@ -48,7 +48,7 @@ Now lets dig into the configuration (main.tf).
     resource "azurerm_key_vault_access_policy" "lab04" {
         key_vault_id = azurerm_key_vault.lab04.id
 
-        tenant_id = var.tenantId
+        tenant_id = var.tenant_id
         object_id = data.azuread_user.lab04-user.id
 
         secret_permissions = [
@@ -93,7 +93,7 @@ resource "random_password" "admin_pwd" {
 resource "azurerm_key_vault_access_policy" "lab04" {
   key_vault_id = data.azurerm_key_vault.lab04.id
 
-  tenant_id = var.tenantId
+  tenant_id = var.tenant_id
   object_id = data.azuread_user.lab04-user.id
 
   secret_permissions = [
@@ -120,16 +120,16 @@ Add the following Terraform variables to the file:
 - rg
 - secret_id
 - labUser
-- tenantId
+- tenant_id
 - key_vault
 
 Ensure that you define a type and description for each variable. Although these are not required, it is another best practice that will make using your Terraform coniguration easer for you and your teammates.
 
 Now that the variables are defined, you need to give them values. As you have learned in previousl labs for values that are not secrets, add the values to your terraform.tfvars file so that they will be discovered and used when Terraform is run. 
 
-Add the appropriate string values for your lab environment for all of the variables that were just defined in your variables.tf file. For secret_id use the string "`lab04admin`". For tenantId run the following command in the Azure Cloud Shell:
+Add the appropriate string values for your lab environment for all of the variables that were just defined in your variables.tf file. For secret_id use the string "`lab04admin`". For tenant_id run the following command in the Azure Cloud Shell:
 ```bash
-az account show --query "tenantId"
+az account show --query "tenant_id"
 ```
 
 > **NOTE**: You should get the exact resource group name, lab user name and key vault name to use for your variable values from the *Environment Details* tab in your lab.
@@ -156,7 +156,7 @@ variable "labUser" {
   description = "Username for lab account"
 }
 
-variable "tenantId" {
+variable "tenant_id" {
   type        = "string"
   description = "Id for tenant"
 }
@@ -179,7 +179,7 @@ rg = "" ## Enter the resource group pre-created in your lab
 secret_id = "lab04admin"
 labUser = "" ## Enter the lab user name as shown in the Environment Details tab
 key_vault = "" ## Enter the name of the pre-created key vault instance
-tenantId = "" ## Enter the tenant ID for your lab user
+tenant_id = "" ## Enter the tenant ID for your lab user
 ```
 
 </details>
@@ -249,9 +249,10 @@ Assuming that the configuration completed successfully, you can validate that ev
 
 In this part of the lab you will use the secret that you just created to replace the password for your virtual machine. To do this we will be editing three of the files from the previous lab: variables.tf, terrafrom.tfvars, vm.tf.
 
-Lets start by adding the variable that you will need to reference the secret from your virtual machine resource. Add two new variables with the following names and values:
+Lets start by adding the variable that you will need to reference the secret from your virtual machine resource. Add three new variables with the following names and values:
 - `secret_id`= "lab04admin"
 - `key_vault` = "{{ The name of your Key Vault instance }}"
+- `rg2` = "{{resource group where key vault is provisioned}}"
 
 
 Now with the required variables defined, you will update the vm.tf configuration file to accomplish the following tasks:
@@ -281,7 +282,7 @@ The admin password is not a tracked property in the azurerm_virtual_machine reso
 In Cloud Shell run the following command:
 
 ```terraform
-terraform taint azurerm_virtual_machine.tf_pre-day
+terraform taint azurerm_virtual_machine.predayvm
 ```
 
 Finally, as you have done in previous sections and labs:

@@ -13,7 +13,7 @@ variable "labUser" {
   description = "Username for lab account"
 }
 
-variable "tenantId" {
+variable "tenant_id" {
   type        = "string"
   description = "Id for tenant"
 }
