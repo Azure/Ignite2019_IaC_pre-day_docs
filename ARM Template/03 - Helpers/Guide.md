@@ -71,6 +71,24 @@ Since the subnet requires the network security group, add a dependency between t
 
 Note that the dependsOn property requires a resourceId of a resource defined in the template.  If the resource name is unique, you can simply use the resource name instead of the full resourceId.
 
+## Examine Changes Before Deployment
+
+> *At this conference ARM will introduce the private preview of a new feature for ARM Templates currently named "WhatIf".  This feature will show the changes that will be applied when a template is deployed so you can examine those changes before deployment begins.  This section of the lab will give you a preview of the feature. If you are interested in participating in the preview you can sign up at https://aka.ms/whatifpreview*
+
+Before deploying the template, run the following command to preview the changes that will be applied when the template is deployed. Note, this command is currently only available in PowerShell.  If you have not use PowerShell for the earlier sections of the lab, you will need to log in first.
+
+```PowerShell
+Connect-AzAccount
+```
+
+After login, run the following command:
+
+```PowerShell
+New-AzResourceGroupDeploymentWhatif -ResourceGroupName IoC-02-000000 -TemplateUri azuredeploy.json
+```
+
+When the command finishes you will see the output of the command showing that a Network Security Group will be added as a result of this deployment.
+
 ## Deploy the Template
 
 Before deploying the template, format the code (SHIFT+ALT+F) and VS Code to inspect your template for errors.  Then in your command window, verify that your current directory is set to the directory used for this lab before running the following commands.
