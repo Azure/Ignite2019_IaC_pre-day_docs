@@ -37,16 +37,16 @@ Now that you have the location for the module move the following files form the 
 - variables.tf
 - vm.tf
 
-Remove the terraform.tfvars file. 
-
 Next create the following new files:
 
 In the module folder
+
 - subnet.tf: You will move the subnet related code here from the vnet.tf file.
 - outputs.tf: This file will be use to define the values that we want to return from the module. Like values returned form resources, these values can be used as input, etc. in your configuration.
 - readme.md: This file is used to describe the module. It is not required by is a best practices so that consumers of the module can understand how to use the module.
 
 In the root folder
+
 - main.tf: Raname the vnet.tf file main.tf. This will be the file that is used to reference your module. 
 
 Now you should have a folder structure that resembles the following:
@@ -66,6 +66,8 @@ Now you should have a folder structure that resembles the following:
       -- vm.tf
   -- providers.tf
   -- main.tf
+  -- terraform.tfvars
+  -- vnet.tf
 ```
 
 With the folder structure in tact, we will now make some changes to the existing files and add the appropriate code to the new files. Start by moving the `azurerm_subnet`, `azurerm_network_security_group` and `azurerm_subnet_network_security_group_association` resources from the vnet.tf to the subnet.tf file.
@@ -89,10 +91,15 @@ In order to make the code that you wrote previously reusable, you need to ensure
 
 *subnet.tf*
 
+1. This module will be used to creat any number of subnets with associated security groups and rules so delete the second subnet named **predaywebsubnet**.
 1. Since the subnet may contain a number of VMs for a given role, you are going to get a little fancy and use another function to generalize the subnet name. You will use the [regex](https://www.terraform.io/docs/configuration/functions/regex.html) function to take the prefix of the hostname. Replace the value of the name property of the `azurerm_subnet` resource with `regex("^[[:alpha:]]+", var.host_name)`.
-1. As you will see in the next section, you will be defining the virtual network outside of the module and passing the name in as a variable to the module so replace the virtual_network_name property value with the variable "**var.vnet_name**".
-1. Since each of the subnets will be part of the same virtual network, you need to ensure that the subnet ip ranges do not overlab so change the *address_prefix* property to "**var.subnet_cidr**" in order to accept a unique value.
-1. Ensure that the name of your security group is unique by appending the host name to it. The name properyt for the `azurerm_network_security_group` should now be something like "**default-rules-${var.host_name}**".
+1. As you will see in the next section, you will be defining the virtual network outside of the module and passing the name in as a variable to the module so replace the virtual_network_name property value with the variable **var.vnet_name**.
+1. Since each of the subnets will be part of the same virtual network, you need to ensure that the subnet ip ranges do not overlab so change the *address_prefix* property to **var.subnet_cidr** in order to accept a unique value.
+1. Make sure that the subnet will be associated with the security group by adding the `network_secuirty_group_id` if it does not already exist. The value should be the same as it was in the previous lab **azurerm_network_security_group.predaysg.id**
+1. Ensure that the name of your security group is unique by appending the host name to it. The name properyt for the `azurerm_network_security_group` should now be something like "**rules-${var.host_name}**".
+1. Make sure that the values in the `azurerm_subnet_network_security_group_association` resource have the correct resource names:
+    - azurerm_subnet.predaysubnet.id
+    - azurerm_network_security_group.predaysg.id
 
 Finally, you may need to use values from some of the resources created in this module as input to other resources or modules. To expose these, you add them as output values. By convention, this is typically done in an outputs.tf file like the one that you created earlier so lets update that file to make the virtual machine id, mac address and private ip address availble. Create output variables for **vm_id**, **mac_address**, **private_ip** in the following format in your output.tf file:
 
@@ -103,7 +110,7 @@ output "<<<Name of value to output>>>" {
 }
 
 ```
-Congratulations on creating yoru first Terraform module! The module is ready to be used by your higher level configuration.
+Congratulations on creating your first Terraform module! The module is ready to be used by your higher level configuration.
 
 #### CHEAT SHEETS
 
@@ -307,6 +314,7 @@ resource "azurerm_virtual_machine" "predayvm" {
 ```
 </details>
 
+
 ## Use the Module
 
 In this section you will be work in the main.tf file. You use the module that you created in the previous section to provision a virtual network with two subnets containing a single virtual machine each. 
@@ -314,11 +322,14 @@ In this section you will be work in the main.tf file. You use the module that yo
 
 For more information about module syntax in your configurations refer to [Terraform modules in configurations](https://www.terraform.io/docs/configuration/modules.html)
 
-In the main.tf file you will you will be defining all of the values that are required by the module and the resources, hence no need for the *terraform.tfvars* file that you deleted in the last section. That said, to reduce the number of times that you will need to type values, you will make use of a Terraform concept that has not been introduced yet: [Local Variables](https://www.terraform.io/docs/configuration/locals.html). At the top of your main.tf file create a locals block and add the following variables using the same values that were used in the previous labs:
+In the main.tf file you will you will be defining all of the values that are required by the module and the resources, hence no need for the *terraform.tfvars* file. You will deleted this file after completing the main.tf file. 
+
+To reduce the number of times that you will need to type values, you will make use of a Terraform concept that has not been introduced yet: [Local Variables](https://www.terraform.io/docs/configuration/locals.html). At the top of your main.tf file create a locals block and move the following variables and associated values from the `terraform.tfvars` file:
 
 - location
 - rg
 - key_vault
+- rg2
 - tags
 
 To reference these values in the configuration replace the **var.** that was used to reference the variables with **local.**. Update the references in the `azurerm_virtual_network` resource for location, tags and rg to use the locals instead of variables.
@@ -339,6 +350,7 @@ The properties that you will use in the module are the variables that you define
 - rg
 - location
 - secret_id
+- rg2
 - key_vault
 - vnet_name
 - subnet_cidr
@@ -346,6 +358,14 @@ The properties that you will use in the module are the variables that you define
 - tags
 
 Use the figure above and the local variables to set the appropriate values for each module.
+
+Remove the terraform.tfvars file.
+
+> **NOTE** Using VS code to push your files to cloud shell will update existing files and add new files but will not delete existing files that are no longer used so you will need to clean up the following files from cloud shell before running terraform plan or apply:
+> - nic.tf
+> - terraform.tfvars
+> - variables.tf
+> - nic.tf
 
 Finally, as you have done in previous sections and labs:
 - Povision the new infrasctructure using Terraform plan and apply

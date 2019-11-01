@@ -14,6 +14,8 @@ variable "security_group_rules" {
     priority              = number
     protocol              = string
     destinationPortRange  = string
+    direction             = string
+    access                = string
   }))
   description = "List of security group rules"
 }
@@ -26,6 +28,11 @@ variable "secret_id" {
 variable "key_vault" {
   type        = "string"
   description = "Name of the pre-existing key vault instance"
+}
+
+variable "rg2" {
+  type        = "string"
+  description = "Name of Lab resource group where key vault exists."
 }
 
 variable "tags" {
