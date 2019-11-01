@@ -33,7 +33,7 @@ By this point, these files should look familiar.
 
 Now lets dig into the configuration (main.tf). 
 1. Start by reference existing Azure resources using [Terraform data sources](https://www.terraform.io/docs/configuration/data-sources.html) that are required by other resources that you will be using in your configuration as follows:
-    - [Azure resource group](https://www.terraform.io/docs/providers/azurerm/d/resource_group.html): This is the same resource group, "second resource group" from Environment Details tab in the lab, where you will be provisioning the resources. Instead of adding the string name in here use a variable named `rg`. 
+    - [Azure resource group](https://www.terraform.io/docs/providers/azurerm/d/resource_group.html): This is the Key Vault resource group, "first resource group" from Environment Details tab in the lab, It is NOT the same resource group where you will be provisioning the resources. Instead of adding the string name in here use a variable named `rg`. 
         > **NOTE**: We will define the value of this and other variables later in this lab.  
     - [Active Directory user](https://www.terraform.io/docs/providers/azuread/d/users.html): This data source will be used to get the Active Directory id for your lab user in order to assign the appropriate Azure Key Vault permissions. Use a variable named `labUser` for the `user_principle_name`.
     - [Azure Key Vault instance](https://www.terraform.io/docs/providers/azurerm/d/key_vault.html): As I am sure you have already noticed, your lab environment has a pre-provisioned Key Vault instance. This data source will be used to reference the Key Vault instance in the `azurerm_key_vault_secret` and `azurerm_key_vault_access_policy` resources discussed later. Use a variable named `keyVault` for the Key Vault name.
@@ -292,6 +292,7 @@ rg = "" ## Enter the resource group pre-created in your lab
 location = "" ## Enter the azure region for your resources
 secretId = "lab04admin"
 keyVault = "" ## Enter the name of the pre-created key vault instance
+rg2 = "" ## Enter the name of the resource group where key vault exists
 tags = {
     event           = "Ignite"
     year            = "2019"
@@ -311,6 +312,11 @@ Expand for full variables.tf code
 variable "rg" {
   type        = "string"
   description = "Name of Lab resource group to provision resources to."
+}
+
+variable "rg2" {
+  type        = "string"
+  description = "Name of Lab resource group where key vault exists."
 }
 
 variable "location" {
@@ -344,7 +350,7 @@ Expand for full vm.tf code
 # Data source reference to key vault instance
 data "azurerm_key_vault" "tf_pre-day" {
   name                = var.keyVault
-  resource_group_name = var.rg
+  resource_group_name = var.rg2
 }
 
 # Data source reference to the secret
@@ -358,7 +364,7 @@ resource "azurerm_virtual_machine" "tf_pre-day" {
   name                  = "tfignitepredayvm"
   location              = var.location
   resource_group_name   = var.rg
-  vm_size               = "Standard_DS1_v2"
+  vm_size               = "Standard_B1s"
   network_interface_ids = [azurerm_network_interface.tf_pre-day.id]
 
   storage_image_reference {
