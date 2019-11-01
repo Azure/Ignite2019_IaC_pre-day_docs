@@ -249,6 +249,24 @@ After editing the template you should have the folloing copy loop in the propert
         ]
 ```
 
+## Examine Changes Before Deployment
+
+> *At this conference ARM will introduce the private preview of a new feature for ARM Templates currently named "WhatIf".  This feature will show the changes that will be applied when a template is deployed so you can examine those changes before deployment begins.  This section of the lab will give you a preview of the feature.*
+
+Before deploying the template, run the following command to preview the changes that will be applied when the template is deployed. Note, this command is currently only available in PowerShell.  If you have not use PowerShell for the earlier sections of the lab, you will need to log in first.
+
+```PowerShell
+Connect-AzAccount
+```
+
+After login, run the following command:
+
+```PowerShell
+New-AzResourceGroupDeploymentWhatif -ResourceGroupName IoC-02-000000 -TemplateFile azuredeploy.json
+```
+
+When the command finishes you will see the output of the command showing that a Network Security Group will be added as a result of this deployment.
+
 ## Deploy the Template with the Copy Loop
 
 Before deploying the template, use VS Code to inspect your template for errors.  Format the code if necessary using SHIFT+ALT+F in VS Code.  Then in your command window, verify that your current directory is set to the directory used for this lab before running the following commands.

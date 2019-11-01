@@ -11,6 +11,16 @@ To start the lab, clone the repo that contains the lab content.
 - For the repository URL enter: https://github.com/Azure/Ignite2019_IaC_pre-day_docs and press **Enter**
 - Select a location for the repo, and open the folder when prompted by VS Code
 
+## Import WhatIf Module
+
+For this lab there will be a ***preview*** of the "WhatIf" feature for ARM Templates.  Before running any commands import the preview modules for PowerShell.
+
+- Open a PowerShell command window
+- Change the current directory to the directory used for cloning the lab repo, if you used the default this will be C:\Users\demouser\Ignite2019_IaC_pre-day_docs\ARM Template>
+- Run the script to import the preview modules: import.ps1
+
+> **NOTE:** If you close the PowerShell window you will need to re-run these commands before using the WhatIf feature.
+
 ## Deploy an Empty Template
 
 Before getting started in the lab, deploy the empty template to get familiar with the command line tools available for Azure.  Open a PowerShell command window to run all of the commands provided for the labs.
@@ -33,7 +43,7 @@ az login
 
 ### Deploy the Template
 
-A template will typically deploy a set of resources to a resource group.  An empty resource group is available for this lab, the name of the resource group will use part of your userId so you will need to update the commands below to use the correct name for your user.
+A template will typically deploy a set of resources to a resource group.  An empty resource group is available for this lab, the name of the resource group will use part of your userId so you will need to update the commands below to use the correct name for your user instead of "000000".
 
 > **NOTE:** For each step of the lab run the commands from the directory that contains the lab files, for example **C:\Users\demouser\Ignite2019_IaC_pre-day_docs\ARM Template\01 - Basics**
 
