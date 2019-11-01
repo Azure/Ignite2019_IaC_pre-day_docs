@@ -1,4 +1,4 @@
-# Security
+# Terraform Lab 4 - Security
 
 In this section you will:
 
@@ -274,7 +274,7 @@ os_profile {
 ...
 ```
 
-The admin password is not a tracked property in the azurerm_virtual_machine resource so the changes that you have made will result in a plan that requires no changes, additions or deletions. To force the change, we will [taint](https://www.terraform.io/docs/commands/taint.html) the state for the VM resource. This will force Terraform destroy and recreate the resource. 
+The admin password is not a tracked property in the azurerm_virtual_machine resource so the changes that you have made will result in a plan that requires no changes, additions or deletions. To force the change, we will [taint](https://www.terraform.io/docs/commands/taint.html) the state for the VM resource. This will force Terraform to destroy and recreate the resource. 
 
 >**NOTE** The above behavior is a result of older functionality of the underlying APIs and is something that will change in the next major release of azurerm provider [version 2.0](https://www.terraform.io/docs/providers/azurerm/guides/2.0-upgrade-guide.html).
 

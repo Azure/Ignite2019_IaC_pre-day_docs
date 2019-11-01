@@ -1,4 +1,4 @@
-# Iterators and Helpers
+# Terraform Lab 3 - Iterators and Helpers
 In the previous lessons, you have created a Virtual Network, a subnet, and a Virtual Machine within that subnet in Azure. You learned how to parameterize Terraform code to increase code stability and reusability. In this walk-through, you will secure this infrastructure while learning how to use iterators and helper functions in Terraform to help with that task.
 
 By default, all inbound traffic originating from outside of your Virtual Network into your subnet is denied, while your Virtual Machine has outbound Internet access. These default rules might be acceptable if you had just one subnet in your entire cloud infrastructure, but that is certainly not a real-world scenario. One of the common scenarios in cloud infrastructure is to have infrastructure tiers, such as database tier, backend tier, and a web tier, all with their own set of security policies. Let's update our infrastructure with a new subnet representing the web tier (we'll just focus on that in this lesson and leave other possible scenarios for now) and then we will secure it.

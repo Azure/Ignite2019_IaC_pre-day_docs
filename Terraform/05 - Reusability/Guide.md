@@ -1,4 +1,4 @@
-# Reusability
+# Terraform Lab 5 - Reusability
 
 In this section you will:
 

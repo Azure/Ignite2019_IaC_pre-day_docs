@@ -1,4 +1,4 @@
-# Variables
+# Terraform Lab 2 - Variables
 In this section you will build upon the infrastructure (VNet + subnet) you created earlier by creating a virtual machine and adding a network interface to it to allow that virtual machine to communicate with the outside world. After creating this additional infrastructure, you will learn how to define and use variables inside your Terraform code to parameterize resources. You will also learn how Terraform refers to resources internally and how it is able to construct a dependency graph (Directed Acyclic Graph, or a DAG for the comp sci majors) without explicitly defining it.
 
 ## Update vnet.tf

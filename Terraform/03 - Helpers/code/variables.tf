@@ -8,20 +8,6 @@ variable "location" {
   description = "Azure region to put resources in"
 }
 
-variable "custom_rules" {
-  description = "Security rules for the network security group"
-  type         = list(object({
-    name                  = string
-    priority              = number
-    direction             = string
-    access                = string
-    protocol              = string
-    source_port_range     = string
-    destination_port_range= string
-  }))
-  default     = []
-}
-
 variable "securityGroupRules" {
   type        = list(object({
     name                  = string

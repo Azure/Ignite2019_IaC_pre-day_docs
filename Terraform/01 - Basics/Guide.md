@@ -1,4 +1,4 @@
-# Terraform Basics
+# Terraform Lab 1 - Basics
 In this section you will use Terraform to create the fundamental building block of Azure infrastructure - a virtual network. Virtual network (or VNet for short) enables many types of Azure resources, such as virtual machines, to communicate securely with each other, the internet and on-premises network.
 
 ## Before diving into Terraform let's get things set up

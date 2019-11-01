@@ -9,27 +9,23 @@ resource "azurerm_virtual_network" "predayvnet" {
 
 # Configure Subnet
 resource "azurerm_subnet" "predaysubnet" {
-  name                 = "default"
+  name                 = "subnet1"
   resource_group_name  = var.rg
   virtual_network_name = azurerm_virtual_network.predayvnet.name
   address_prefix       = "10.0.1.0/24"
 }
 
+# Web subnet
 resource "azurerm_subnet" "predaywebsubnet" {
   name                 = "web"
   resource_group_name  = var.rg
   virtual_network_name = azurerm_virtual_network.predayvnet.name
   address_prefix       = "10.0.2.0/24"
-  network_security_group_id = azurerm_network_security_group.nsgsecureweb.id  
-}
-
-resource "azurerm_subnet_network_security_group_association" "test" {
-  subnet_id                 = azurerm_subnet.predaywebsubnet.id
-  network_security_group_id = azurerm_network_security_group.nsgsecureweb.id
+  network_security_group_id = azurerm_network_security_group.predaysg.id  
 }
 
 resource "azurerm_network_security_group" "predaysg" {
-  name                = "default-rules"
+  name                = "web-rules"
   location            = var.location
   resource_group_name = var.rg
 
@@ -51,6 +47,6 @@ resource "azurerm_network_security_group" "predaysg" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "preday" {
-  subnet_id                 = azurerm_subnet.predaysubnet.id
+  subnet_id                 = azurerm_subnet.predaywebsubnet.id
   network_security_group_id = azurerm_network_security_group.predaysg.id
 }
