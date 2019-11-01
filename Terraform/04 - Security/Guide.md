@@ -262,7 +262,7 @@ Now with the required variables defined, you will update the vm.tf configuration
 
 Add Terraform data sources for the first two tasks using the [azurerm_key_vault](azurerm_key_vault) and [azurerm_key_vault_secret](azurerm_key_vault_secret).
 
-Finally for the third task, simply replace the string that is assigned to the value of the `admin_password` property of the `os_profile` in the `azurerm_virtual_machine` resource with a reference to the secret value as follows:
+For the third task, simply replace the string that is assigned to the value of the `admin_password` property of the `os_profile` in the `azurerm_virtual_machine` resource with a reference to the secret value as follows:
 
 ```terraform
 ...
@@ -272,6 +272,16 @@ os_profile {
   admin_password = data.azurerm_key_vault_secret.tf_pre-day.value
 }
 ...
+```
+
+The admin password is not a tracked property in the azurerm_virtual_machine resource so the changes that you have made will result in a plan that requires no changes, additions or deletions. To force the change, we will [taint](https://www.terraform.io/docs/commands/taint.html) the state for the VM resource. This will force Terraform destroy and recreate the resource. 
+
+>**NOTE** The above behavior is a result of older functionality of the underlying APIs and is something that will change in the next major release of azurerm provider [version 2.0](https://www.terraform.io/docs/providers/azurerm/guides/2.0-upgrade-guide.html).
+
+In Cloud Shell run the following command:
+
+```terraform
+terraform taint azurerm_virtual_machine.tf_pre-day
 ```
 
 Finally, as you have done in previous sections and labs:
