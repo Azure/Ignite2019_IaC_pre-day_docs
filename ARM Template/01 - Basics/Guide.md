@@ -1,4 +1,4 @@
-# LAB 1 - Azure Resource Manager Templates
+# ARM Templates - LAB 1
 
 This lab will walk through using Azure Resource Manager Templates to deploy resources to an Azure Resource Group.  Start by using the azuredeploy.json file and make the changes documented below to complete the lab.
 
