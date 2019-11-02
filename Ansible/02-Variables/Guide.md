@@ -149,7 +149,7 @@ Expand to see how you can create a VM using SSH key to access the host.
 
 You can go to [Azure portal](https://portal.azure.com) to verify that you have created the resources.
 
-> **CODE**: To view all of the completed code for this part of the lab, go [here](/Code/lab2.yml).
+> **CODE**: To view all of the completed code for this part of the lab, go [here](Code/lab2.yml).
 
 ## Registering variables and working with conditionals
 
