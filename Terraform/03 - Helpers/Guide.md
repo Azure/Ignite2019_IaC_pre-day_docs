@@ -134,7 +134,7 @@ dynamic "security_rule" {
 ## CHEAT SHEET
 <details>
 <summary>
-Expand for updated vnet.tf code
+Expand for updated vnet.tf code (network security group part only)
 </summary>
 
 ```terraform
