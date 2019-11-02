@@ -12,7 +12,7 @@ As mentioned in previous lab, the VS Code Ansible extension provides better inte
 
 1. Hit `F1`; type "Ansible: copy folder to Remote Host"
 1. Follow the prompt to provide the source directory
-1. Select from the list of hosts. (You can refer to instruction in the **Beore you start** section in Lab 4 if you have not set up a remote host yet.)
+1. Select from the list of hosts. (You can refer to instruction in the **Before you start** section in Lab 4 if you have not set up a remote host yet.)
 1. Next, specify the target folder. You can keep it the same as your local directory
 
 Run your playbook by right clicking your `.yml` file and select **Run playbook remotely via SSH**
@@ -297,6 +297,8 @@ keyed_groups:
 
 3. Use **Putty** to SSH into the ansibleVM. Ansible DNS Name, user id and password can be found in the **Environment Details tab**.
 
+![Putty](../../images/putty.png "Putty")
+
 3. Change directory to where `myazure_rm.yml` is located. 
 
 4. Run the following command to view the populated inventory:
@@ -322,8 +324,8 @@ You should see something like this:
 
 ```
 
-Since we use SSH password instead of key for this workshop, you need to add the host's fingerprint to your known_hosts file. 
-
+We use SSH password instead of key for this workshop. To test connection to the VMs, you need to either first SSH into the front-end and back-end VMs or add the host's fingerprint to your known_hosts file by performing the following steps:
+ 
 1. Go to Azure portal, copy the public IP address of your front-end VM 
 
 ![Get Public IP](../../images/fe-publicIP.png "Copy VM public IP")
