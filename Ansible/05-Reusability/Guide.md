@@ -299,9 +299,9 @@ keyed_groups:
 
 ![Putty](../../images/putty.png "Putty")
 
-3. Change directory to where `myazure_rm.yml` is located. 
+4. Change directory to where `myazure_rm.yml` is located. 
 
-4. Run the following command to view the populated inventory:
+5. Run the following command to view the populated inventory:
 
 ```bash
 ansible-inventory -i myazure_rm.yml --graph
