@@ -149,7 +149,7 @@ Expand to see how you can create a VM using SSH key to access the host.
 
 You can go to [Azure portal](https://portal.azure.com) to verify that you have created the resources.
 
-> **CODE**: To view all of the completed code for this part of the lab, go [here](code/lab2.yml).
+> **CODE**: To view all of the completed code for this part of the lab, go [here](Code/lab2.yml).
 
 ## Registering variables and working with conditionals
 
@@ -203,7 +203,7 @@ This [playbook sample](https://github.com/Azure-Samples/ansible-playbooks/blob/m
 ansible-playbook xxx.yml -e "myResource_group=XXXXXX myVM=XXXXXX"
 ```
 
-- you can also define variables in an included file. Use the `vars_files` keyword and modify your playbook by like so:
+- you can also define variables in an included file. Use the `vars_files` keyword and modify your playbook like so:
 
 ```yaml
 - hosts: localhost

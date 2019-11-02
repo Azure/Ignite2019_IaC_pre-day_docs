@@ -38,7 +38,7 @@ You can also hit `F1` to explicitly copy files to remote host:
 1. If you have already set up the remote host, you will find the SSH host in the list for selection.
 1. Next, specify the target folder. You can keep it the same as your local directory.
 
-Run your playbook by right clicking your .yml file and select **Run playbook remotely via SSH**
+Run your playbook by right clicking your .yml file and select **Run playbook remotely via SSH**.
 
 ![Run in remote host](../../images/vs-host.png "Run in remote SSH host")
 
@@ -72,7 +72,7 @@ While preparing for this workshop, we discovered we do not have a module for ret
 
 We will be adding a new module called azure_rm_keyvaultsecret_info in future release. For the purpose of this lab, we will embed the new module using the `roles` keyword. (Roles will be explained in Lab 5.)
 
-1. You will perform an extra step in this lab to copy the preview version of azure_rm_keyvaultsecret_info to your environment. Copy `azure_rm_keyvaultsecret_info.py` in `modules/library`(code/modules/library) to `clouddrive/ansible-playbooks/modules/library`. Make sure you keep the same folder structure `modules/library`
+1. You will perform an extra step in this lab to copy the preview version of azure_rm_keyvaultsecret_info to your environment. Copy `azure_rm_keyvaultsecret_info.py` in `modules/library`(code/modules/library) to `<<target folder>>/modules/library`. Make sure you keep the same folder structure `modules/library`
 2. In the header, add:
 
 ```yml
@@ -143,7 +143,7 @@ Expand to see how you can pass secret retrieved from Key Vault to the next task
     azure_rm_virtualmachine:
       resource_group: "{{ myResource_group }}"
       name: "{{ myVM }}"
-      admin_username: "testuser"
+      admin_username: "testadmin"
       admin_password: " {{ output.secret.value }}"
       vm_size: Standard_B1ms
       network_interfaces: "{{ myNIC }}"
