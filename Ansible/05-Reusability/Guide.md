@@ -393,7 +393,7 @@ testrole
 
 [Ansible Galaxy or Galaxy](https://docs.ansible.com/ansible/latest/reference_appendices/galaxy.html), is a free site for finding, downloading, and sharing community developed roles. Downloading roles from Galaxy is a great way to jumpstart your automation projects.
 
-You can also use the ansible_galaxy command line tool to create new roles by running:
+You can also use the ansible-galaxy command line tool to create new roles by running:
 
 ```bash
 $ ansible-galaxy init role_name
