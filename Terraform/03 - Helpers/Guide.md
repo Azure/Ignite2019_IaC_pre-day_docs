@@ -3,7 +3,7 @@ In the previous lessons, you have created a Virtual Network, a subnet, and a Vir
 
 By default, all inbound traffic originating from outside of your Virtual Network into your subnet is denied, while your Virtual Machine has outbound Internet access. These default rules might be acceptable if you had just one subnet in your entire cloud infrastructure, but that is certainly not a real-world scenario. One of the common scenarios in cloud infrastructure is to have infrastructure tiers, such as database tier, backend tier, and a web tier, all with their own set of security policies. Let's update our infrastructure with a new subnet representing the web tier (we'll just focus on that in this lesson and leave other possible scenarios for now) and then we will secure it.
 
-## Update vnet.tf
+## Update vnet.tf - Part 1
 Using the same process as in Lesson 2, go ahead and add another subnet to the Virtual Network you created with the following properties:
 
 ```
@@ -46,100 +46,124 @@ resource "azurerm_managed_disk" "mydatadisks" {
 }
 ```
 
-Note the use of the count property to specify the number of data disks we need, and then the use of count.index, which returns the running value for the count, to give a unique name for each data disk.
+Note the use of the ```count``` property to specify the number of data disks we need, and then the use of count.index, which returns the running value for the count, to give a unique name for each data disk.
 
 The simple example above works for the infrastructure that is not parameterized the way you learned in Lesson 2; it would be preferred if we isolated as many  parameters as possible for easier maintenance, and then iterated over those parameters. Let's do this with the security rules we want to introduce for the "web" subnet we created in this lesson.
 
+Another important point is that with the release of Terraform v.0.12 earlier this year, there's a newer way of creating sets of identical infrastructure instead of using the ```count`` property. You will see just how to do it in the next two sections.
+
 ## Define security rules
-Network security rules in Azure allow you to define which traffic can pass to and from your cloud infrastructure. The network security rules for the "web" subnet are pretty straightforward: we want to deny all inbound Internet traffic except for http and https protocols. Since the rules are evaluated based on the priority value, we want to make sure that Allow rules for http and https get higher priority than the Deny rule. Let's go ahead and paste the security rules variable into our variables.tf code (note that this variable is of type list):
+Network security rules in Azure allow you to define which traffic can pass to and from your cloud infrastructure. Those rules fall into two categories: network traffic could either be allowed or denied. For example, the network security rules for the "web" subnet are pretty straightforward: we want to deny all inbound Internet traffic except for http and https protocols. Since the rules are evaluated based on the priority value, we want to make sure that Allow rules for http and https get higher priority than the Deny rule for everything else. Let's go ahead and paste the security rules variable declaration into our variables.tf code (note that this variable is of type list):
 
 ```terraform
-variable "custom_rules" {
-  description = "Security rules for the network security group"
+variable "security_group_rules" {
   type        = list(object({
     name                  = string
     priority              = number
+    protocol              = string
+    destinationPortRange  = string
     direction             = string
     access                = string
-    protocol              = string
-    destination_port_range= string
   }))
-  default     = []
+  description = "List of security group rules"
 }
 ```
 
-and then provide the value for that list in variables.tf
+and then provide the values for the security_group_rules list in terraform.tfvars
 
 ```terraform
-custom_rules               = [
+security_group_rules = [
       {
-        name                   = "http"
-        priority               = "100"
-        direction              = "Inbound"
-        access                 = "Allow"
-        protocol               = "tcp"
-        destination_port_range = "80"
-        description            = "HTTP"
-      },      
-      {
-        name                   = "https"
-        priority               = "101"
-        direction              = "Inbound"
-        access                 = "Allow"
-        protocol               = "tcp"
-        destination_port_range = "443"
-        description            = "HTTPS"
+          name                  = "http"
+          priority              = 100
+          protocol              = "tcp"
+          destinationPortRange  = "80"
+          direction             = "Inbound"
+          access                = "Allow"
       },
-      { 
-        name                   = "deny-the-rest"
-        priority               = "300"
-        direction              = "Inbound"
-        access                 = "Deny"
-        protocol               = "tcp"
-        destination_port_range = "0-65535"
-        description            = "Deny all others"
-      }
-    ]
+      {
+          name                  = "https"
+          priority              = 150
+          protocol              = "tcp"
+          destinationPortRange  = "443"
+          direction             = "Inbound"
+          access                = "Allow"
+      },
+      {
+          name                  = "deny-the-rest"
+          priority              = 200
+          protocol              = "*"
+          destinationPortRange  = "0-65535"
+          direction             = "Inbound"
+          access                = "Deny"
+      },
+  ]
 ```
 
-Note the use of "[]" to define the variable as type list - a list of security rules.
+Note the use of "[]" to define the variable as type list - a list of security rules in this case.
 
-## Create networksecurity.tf
-With rules defined in our variable, it is time to use iterators and helper functions to define the Azure resources based on those variables. First, we'll use the helper *length* function - this function returns the number of elements in the list, which is the number of rules we have created. We will also use the *lookup* helper function to retrieve value from the list.
+## Edit vnet.tf - Part 2
+With rules defined in our variable, it is time to use iterators and helper functions to define the Azure resources based on those variables. First, we'll use the helper *lower* function - this function returns the lower-case representation of the string we pass into it. We will also use the *title* helper function that capitalizes just the first letter of the string passed in.
 
-Next, go ahead and create a new file called networksecurity.tf and paste the following code in there. Since network security rules in Azure must be associated with the network security group, we must first create a network security group. Go ahead and create it via the following code:
+Since network security rules in Azure must be associated with the network security group, we first need to create a network security group. Inside vnet.tf, go ahead and add the following code:
 
 ```terraform
 resource "azurerm_network_security_group" "nsgsecureweb" {
   name                = "secureweb"
   location            = var.location
   resource_group_name = var.rg
+
+
 }
 ```
 
-While the code might look intimidating at first, keep in mind that what we're doing with that code is looking up certain values from the list of values we created earlier in the ```custom_rules``` variable.
+Next, you will use the ```dynamic``` keyword (example below) to associate the security rules you've defined inside terraform.tfvars file with the network security group you've just created. Add the following block inside the "azurerm_network_security_group" and use the ```for_each = var.security_group_rules``` iterator to create a set of security rules for that NSG.
 
 ```terraform
-resource "azurerm_network_security_rule" "custom_rules" {
-  count                       = length(var.custom_rules)
-  name                        = lookup(var.custom_rules[count.index], "name", "default_rule_name")
-  priority                    = lookup(var.custom_rules[count.index], "priority")
-  direction                   = lookup(var.custom_rules[count.index], "direction", "Any")
-  access                      = lookup(var.custom_rules[count.index], "access", "Allow")
-  protocol                    = lookup(var.custom_rules[count.index], "protocol", "*")
-  source_port_range           = lookup(var.custom_rules[count.index], "source_port_range", "0-65535" )
-  destination_port_range      = lookup(var.custom_rules[count.index], "destination_port_range", "0-65535")
-  source_address_prefix       = lookup(var.custom_rules[count.index], "source_address_prefix", "*")
-  destination_address_prefix  = lookup(var.custom_rules[count.index], "destination_address_prefix", "*")
-  description                 = lookup(var.custom_rules[count.index], "description", "Security rule")
-  resource_group_name         = var.rg
-  network_security_group_name = azurerm_network_security_group.nsgsecureweb.name
+dynamic "security_rule" {
+    for_each = var.security_group_rules
+
+    content {
+      name                       = lower(security_rule.value.name)
+      ....
+      ....
+    }
 }
 ```
+
+## CHEAT SHEET
+<details>
+<summary>
+Expand for updated vnet.tf code
+</summary>
+
+```terraform
+resource "azurerm_network_security_group" "predaysg" {
+  name                = "web-rules"
+  location            = var.location
+  resource_group_name = var.rg
+
+  dynamic "security_rule" {
+    for_each = var.security_group_rules
+
+    content {
+      name                       = lower(security_rule.value.name)
+      priority                   = security_rule.value.priority
+      direction                  = title(security_rule.value.direction)
+      access                     = title(security_rule.value.access)
+      protocol                   = title(security_rule.value.protocol)
+      source_port_range          = "*"
+      destination_port_range     = security_rule.value.destinationPortRange
+      source_address_prefix      = "*"
+      destination_address_prefix = "VirtualNetwork"
+    }
+  }
+}
+```
+</details>
 
 With network rules created and associated to the network security group, we proceed to final step - associating network security group with the web subnet.
 
-## Update vnet.tf - Part 2
 Update the web subnet definition to use the "nsgsecureweb" security group we created, like this:
 
 ```terraform
@@ -260,5 +284,5 @@ Finally, confirm that you do want the changes deployed.
 
 You can also review the complete code we have created for this section in the [Code folder](https://github.com/Azure/Ignite2019_IaC_pre-day_docs/tree/master/Terraform/03%20-%20Helpers/code).
 
-Congratulations, you have just secured your infrastructure and learnt to use iterators and helpers to to it for maintainability and scalability in the future! In the next section, you will learn how to further secure your infrastructure using Azure Key Vault.
+Congratulations, you have just secured your infrastructure and learnt to use iterators and helpers to prepare it for maintainability and scalability in the future! In the next section, you will learn how to further secure your infrastructure using Azure Key Vault.
 
