@@ -87,7 +87,7 @@ resource "azurerm_network_interface" "predaynic" {
 ## Create vm.tf
 Again, following the pattern of creating a separate file for each resource, create a new file and call it ```vm.tf```. You will put all the code related to virtual machine in this file.
 
-Now, using [Terraform Azure provider documentation for virtual machined](https://www.terraform.io/docs/providers/azurerm/r/virtual_machine.html), locate the block of code that creates a virtual machine with the following parameters:
+Now, using [Terraform Azure provider documentation for virtual machine](https://www.terraform.io/docs/providers/azurerm/r/virtual_machine.html), locate the block of code that creates a virtual machine with the following parameters:
 
 ```terraform
   name                  = "tfignitepredayvm"
@@ -247,4 +247,4 @@ Finally, confirm that you do want the changes deployed.
 
 You can also review the complete code we have created for this section in the [Code folder](https://github.com/Azure/Ignite2019_IaC_pre-day_docs/tree/master/Terraform/02%20-%20Variables/Code).
 
-Congratulations, you have just created the virtual machine with a network interface in Azure and associated it to the existing VM! In the next section, you will learn how to secure your infrastructure using Terraform while also learning about iterators in helper functions in HCL.
+Congratulations, you have just created the virtual machine with a network interface in Azure and associated it to the existing VM! In the next sections, you will learn how to secure your infrastructure using Terraform while also learning about iterators in helper functions in HCL.

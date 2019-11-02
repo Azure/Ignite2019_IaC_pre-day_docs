@@ -35,8 +35,8 @@ resource "azurerm_network_security_group" "predaysg" {
     content {
       name                       = lower(security_rule.value.name)
       priority                   = security_rule.value.priority
-      direction                  = "Inbound"
-      access                     = "Allow"
+      direction                  = title(security_rule.value.direction)
+      access                     = title(security_rule.value.access)
       protocol                   = title(security_rule.value.protocol)
       source_port_range          = "*"
       destination_port_range     = security_rule.value.destinationPortRange
