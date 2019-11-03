@@ -79,6 +79,8 @@ Before deploying the template, run the following command to preview the changes 
 
 Format the code (SHIFT+ALT+F), inspect your template for errors and save the file.  Then in your command window, verify that your current directory is set to the directory used for this lab before running the following commands.
 
+> **NOTE:** Set the current directory to the 03-Helpers folder for this lab
+
 ```PowerShell
 Connect-AzAccount
 ```
@@ -90,6 +92,8 @@ New-AzResourceGroupDeploymentWhatif -ResourceGroupName IoC-02-000000 -TemplateUr
 ```
 
 When the command finishes you will see the output of the command showing that a Network Security Group will be added as a result of this deployment.
+
+> **NOTE:** If you see an error running the WhatIf command or have closed your PowerShell window since the first section, open a new PowerShell window and import the whatif modules.
 
 ## Deploy the Template
 

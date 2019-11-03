@@ -7,7 +7,7 @@ This lab will walk through using Azure Resource Manager Templates to deploy reso
 To start the lab, clone the repo that contains the lab content.  
 
 - Open Visual Studio Code from the desktop
-- Press F1 and type "Git Clone" in the command box and press **Enter**
+- Press F1 and type **Git Clone** in the command box and press **Enter**
 - For the repository URL enter: https://github.com/Azure/Ignite2019_IaC_pre-day_docs and press **Enter**
 - Select a location for the repo, and open the folder when prompted by VS Code
 
@@ -16,8 +16,8 @@ To start the lab, clone the repo that contains the lab content.
 For this lab there will be a ***preview*** of the "WhatIf" feature for ARM Templates.  Before running any commands import the preview modules for PowerShell.
 
 - Open a PowerShell command window
-- Change the current directory to the directory used for cloning the lab repo, if you used the default this will be C:\Users\demouser\Ignite2019_IaC_pre-day_docs\ARM Template>
-- Run the script to import the preview modules: import.ps1
+- Change the current directory to the directory used for cloning the lab repo, if you used the default this will be **C:\Users\demouser\Ignite2019_IaC_pre-day_docs\ARM Template**
+- Run the script to import the preview modules: **import.ps1**
 
 > **NOTE:** If you close the PowerShell window you will need to re-run these commands before using the WhatIf feature.
 
