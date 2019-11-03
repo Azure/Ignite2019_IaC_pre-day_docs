@@ -123,7 +123,7 @@ Expand to see how you use loop to create the NSG rules
     loop: "{{ NSGlist }}"
 ```
 
-- the NSG rule list `NSGlist` can be defined as a list of hashes:
+- the NSG rule list `NSGlist` can be defined as a list of hash:
     -  `[{ name: 'Allow-SSH', access: 'Allow', protocol: 'Tcp', direction: 'Inbound', priority: '300', port: '22', source_address_prefix: 'Internet'},{ name: 'Allow-HTTP', access: 'Allow', protocol: 'Tcp', direction: 'Inbound', priority: '100', port: '80', source_address_prefix: 'Internet'}]`
     -  I prefer to do it this way for readability:
     

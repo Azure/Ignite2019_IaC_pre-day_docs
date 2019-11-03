@@ -15,7 +15,7 @@ As mentioned in previous lab, the VS Code Ansible extension provides better inte
 1. Select from the list of hosts. (You can refer to instruction in the **Before you start** section in Lab 4 if you have not set up a remote host yet.)
 1. Next, specify the target folder. You can keep it the same as your local directory
 
-Run your playbook by right clicking your `.yml` file and select **Run playbook remotely via SSH**
+Run your playbook by right clicking your `.yml` file and select **Run playbook remotely via SSH**.
 
 ## Reusing task(s) in your playbook
 
@@ -401,7 +401,7 @@ $ ansible-galaxy init role_name
 
 Roles may also include modules and other plugin types. In Lab 4, you saw how we embedded a development version of an Azure module as part of a role. You can use the same mechanism to distribute in-house developed plugin.
 
-For further exploration, the [AKS role](https://galaxy.ansible.com/azure/aks) we shared in Ansible Galaxy is a good example on how you can reuse and share common configurations and tasks to provision AKS cluster in your organization.
+For further exploration, the [AKS role](https://galaxy.ansible.com/azure/aks) we shared in Ansible Galaxy is a good example on how you can reuse and share common configurations and tasks to provision AKS clusters in your organization.
 
 To create an AKS with monitoring enabled:
 

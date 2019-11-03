@@ -27,7 +27,7 @@ We recommend using VS Code for creating playbooks and running your playbook in C
 
 ## Create a resource group
 
-A resource group is a logical container in which Azure resources are deployed and managed. Use the [auzre_rm_resourcegroup](https://docs.ansible.com/ansible/latest/modules/azure_rm_resourcegroup_module.html) module to create a resource group.
+A resource group is a logical container in which Azure resources are deployed and managed. Use the [azure_rm_resourcegroup](https://docs.ansible.com/ansible/latest/modules/azure_rm_resourcegroup_module.html) module to create a resource group.
 
 ```yml
   - name: Create a resource group
@@ -115,7 +115,7 @@ localhost                  : ok=2    changed=1    unreachable=0    failed=0    s
 Subnets enable you to segment the virtual network into one or more sub-networks and allocate a portion of the virtual network's address space to each subnet. Add to existing playbook, subnet "172.16.10.0/24".
 
 1. Add as the next task to your existing playbook and use [azure_rm_subnet](https://docs.ansible.com/ansible/latest/modules/azure_rm_subnet_module.html) module to create the subnet.
-2. Run your playbook in Cloud Shell again. Note that since you didn't change anything in previous task and the virtual already exists, all three (three because of the 1st "Gathering Facts" task) are ok, only one changed is made.
+2. Run your playbook in Cloud Shell again. All Azure modules (except azure_rm_deployment) are implemented to support idempotency. Since you didn't change anything in previous task and the virtual already exists, all three (three because of the 1st "Gathering Facts" task) are `ok`; only one changed is made.
 
 #### Cheat Sheet: subnet
 <details>
