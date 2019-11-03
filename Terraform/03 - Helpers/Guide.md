@@ -138,7 +138,7 @@ Expand for updated vnet.tf code (network security group part only)
 </summary>
 
 ```terraform
-resource "azurerm_network_security_group" "predaysg" {
+resource "azurerm_network_security_group" "nsgsecureweb" {
   name                = "web-rules"
   location            = var.location
   resource_group_name = var.rg
