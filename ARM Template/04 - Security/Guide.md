@@ -25,10 +25,16 @@ Format the code using SHIFT+ALT+F if needed and save the file.
 
 Verify that your current directory is set to the directory used for this lab before running the following commands.
 
+> **NOTE:** Depending on your version of Azure Powershell the parameter name for the **template parameters file** maybe be either ***TemplateParameters*** or ***TemplateParametersFile***
+
 PowerShell
 
 ```PowerShell
 New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile azuredeploy.json -TemplateParameters azuredeploy.parameters.json -Verbose
+```
+
+```PowerShell
+New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile azuredeploy.json -TemplateParametersFile azuredeploy.parameters.json -Verbose
 ```
 
 Azure CLI
@@ -80,10 +86,16 @@ Next, follow the steps below to update the resourceId to identify the KeyVault f
 
 Before deploying the template, use VS Code to inspect your template for errors.  Format the code if necessary using SHIFT+ALT+F in VS Code.  Then in your command window, verify that your current directory is set to the directory used for this lab before running the following commands.  You should see no prompts for parameter values since all values should be in the parameters file.
 
+> **NOTE:** Depending on your version of Azure Powershell the parameter name for the **template parameters file** maybe be either ***TemplateParameters*** or ***TemplateParametersFile***
+
 PowerShell
 
 ```PowerShell
 New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile azuredeploy.json -TemplateParameters azuredeploy.parameters.json -Verbose
+```
+
+```PowerShell
+New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile azuredeploy.json -TemplateParametersFile azuredeploy.parameters.json -Verbose
 ```
 
 Azure CLI
