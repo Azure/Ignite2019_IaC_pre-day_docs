@@ -9,7 +9,7 @@ resource "azurerm_virtual_network" "predayvnet" {
 
 # Configure Subnet
 resource "azurerm_subnet" "predaysubnet" {
-  name                 = "subnet1"
+  name                 = "default"
   resource_group_name  = var.rg
   virtual_network_name = azurerm_virtual_network.predayvnet.name
   address_prefix       = "10.0.1.0/24"
