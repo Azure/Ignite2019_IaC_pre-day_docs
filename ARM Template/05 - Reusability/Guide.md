@@ -130,7 +130,7 @@ Before deploying the template, use VS Code to inspect your template for errors. 
 PowerShell
 
 ```PowerShell
-New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile azuredeploy.json -TemplateParametersFile azuredeploy.parameters.json -Verbose
+New-AzResourceGroupDeployment -ResourceGroupName IoC-02-000000 -TemplateFile azuredeploy.json -TemplateParameters azuredeploy.parameters.json -Verbose
 ```
 
 Azure CLI
