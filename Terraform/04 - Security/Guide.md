@@ -142,27 +142,27 @@ Expand for full variables.tf code
 
 ```terraform
 variable "rg" {
-  type        = "string"
+  type        = string
   description = "Name of Lab resource group to provision resources to."
 }
 
 variable "secret_id" {
-  type        = "string"
+  type        = string
   description = "name of secret containing admin password for vms"
 }
 
 variable "labUser" {
-  type        = "string"
+  type        = string
   description = "Username for lab account"
 }
 
 variable "tenant_id" {
-  type        = "string"
+  type        = string
   description = "Id for tenant"
 }
 
 variable "key_vault" {
-  type        = "string"
+  type        = string
   description = "Name of the pre-existing key vault instance"
 }
 ```
@@ -321,27 +321,27 @@ Expand for full variables.tf code
 
 ```terraform
 variable "rg" {
-  type        = "string"
+  type        = string
   description = "Name of Lab resource group to provision resources to."
 }
 
 variable "rg2" {
-  type        = "string"
+  type        = string
   description = "Name of Lab resource group where key vault exists."
 }
 
 variable "location" {
-  type        = "string"
+  type        = string
   description = "Azure region to put resources in"
 }
 
 variable "secret_id" {
-  type        = "string"
+  type        = string
   description = "name of secret containing admin password for vms"
 }
 
 variable "key_vault" {
-  type        = "string"
+  type        = string
   description = "Name of the pre-existing key vault instance"
 }
 
