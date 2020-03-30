@@ -110,7 +110,7 @@ Expand to see how you can get a key vault secret
     register: output
 
 - debug:
-      var: output.secret.value
+      var: output['secrets'][0]['secret']
 ```
 
 </details>
@@ -144,7 +144,7 @@ Expand to see how you can pass secret retrieved from Key Vault to the next task
       resource_group: "{{ myResource_group }}"
       name: "{{ myVM }}"
       admin_username: "testadmin"
-      admin_password: " {{ output.secret.value }}"
+      admin_password: " {{ output['secrets'][0]['secret'] }}"
       vm_size: Standard_B1ms
       network_interfaces: "{{ myNIC }}"
       image:
