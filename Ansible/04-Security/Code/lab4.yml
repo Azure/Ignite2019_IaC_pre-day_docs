@@ -92,7 +92,7 @@
       resource_group: "{{ myResource_group }}"
       name: "{{ myVM }}"
       admin_username: "testadmin"
-      admin_password: " {{ output.secret.value }}"
+      admin_password: " {{ output['secrets'][0]['secret'] }}"
       vm_size: Standard_B1ms
       network_interfaces: "{{ myNIC }}"
       image:
