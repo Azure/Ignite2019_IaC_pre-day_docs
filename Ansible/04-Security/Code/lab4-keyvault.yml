@@ -25,4 +25,4 @@
     register: output
 
   - debug:
-      var: output.secret.value
+      var: output['secrets'][0]['secret']
